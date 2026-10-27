@@ -277,8 +277,9 @@ jobs:
   # write-only into that one folder). Dormant until the repository variable DEPLOY_HOST is set.
   deploy:
     needs: [version, launcher]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.DEPLOY_HOST != ''
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
+    environment: dow2
     env:
       V: ${{ needs.version.outputs.number }}
     steps:
