@@ -116,6 +116,15 @@ jobs:
         if: matrix.os == 'ubuntu-22.04'
         run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev libsoup-3.0-dev librsvg2-dev patchelf
       - run: cargo install tauri-cli --version "^2" --locked
+      - name: Require built-in mirrors for a release build
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          if [ -z "${ELITE_MIRRORS// }" ]; then
+            echo "::error::ELITE_MIRRORS is empty - a launcher built without mirrors cannot reach the update server; set the repository secret ELITE_MIRRORS before deploying."
+            exit 1
+          fi
+          echo "Built-in mirrors: present"
       - name: Build
         working-directory: app
         run: cargo tauri build ${{ matrix.args }}

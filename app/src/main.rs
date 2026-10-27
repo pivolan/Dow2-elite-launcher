@@ -585,6 +585,12 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
                 files.extend(v.into_iter().take(12).map(|x| x.1));
             }
         }
+        // инкремент: метки «сколько уже отправлено» по каждому растущему .log (data_dir/log_sent.json)
+        let marks: serde_json::Map<String, Value> = std::fs::read(data_dir().join("log_sent.json")).ok()
+            .and_then(|b| serde_json::from_slice::<Value>(&b).ok())
+            .and_then(|v| v.as_object().cloned())
+            .unwrap_or_default();
+        let mut newmarks: serde_json::Map<String, Value> = serde_json::Map::new();
         let mut n = 0; let mut total = 0usize;
         for f in files {
             let Ok(b) = std::fs::read(&f) else { continue };
@@ -597,13 +603,28 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
                 out += &base64::engine::general_purpose::STANDARD.encode(&b);
                 total += b.len() * 4 / 3;
             } else {
-                // отчёты Windows бывают в UTF-16
-                let text = if b.len() >= 2 && b[0] == 0xFF && b[1] == 0xFE {
+                let is_u16 = b.len() >= 2 && b[0] == 0xFF && b[1] == 0xFE;
+                let key = f.display().to_string();
+                // растущие .log (и крупные .txt) шлём инкрементно: только добавленное с прошлой удачной отправки.
+                // ротацию/обрезание ловим по отпечатку начала файла; UTF-16-отчёты WER шлём целиком.
+                let incr = !is_u16 && (ext == "log" || (ext == "txt" && b.len() > (256 << 10)));
+                let prefix: String = b.iter().take(32).map(|x| format!("{:02x}", x)).collect();
+                let mut start = 0usize;
+                if incr {
+                    if let Some(a) = marks.get(&key).and_then(|v| v.as_array()) {
+                        let plen = a.first().and_then(|x| x.as_u64()).unwrap_or(0) as usize;
+                        if a.get(1).and_then(|x| x.as_str()) == Some(prefix.as_str()) && plen <= b.len() { start = plen; }
+                    }
+                    newmarks.insert(key.clone(), serde_json::json!([b.len() as u64, prefix]));
+                }
+                let text = if is_u16 {
                     let u: Vec<u16> = b[2..].chunks_exact(2).map(|c| u16::from_le_bytes([c[0], c[1]])).collect();
                     String::from_utf16_lossy(&u)
-                } else { String::from_utf8_lossy(&b).into_owned() };
+                } else { String::from_utf8_lossy(&b[start..]).into_owned() };
                 let tail = if text.len() > 4 << 20 { let mut k = text.len() - (4 << 20); while !text.is_char_boundary(k) { k += 1; } &text[k..] } else { &text[..] };
-                out += &format!("=== {} ({} bytes) ===\n", f.display(), b.len());
+                if incr && start > 0 && tail.is_empty() { continue; }   // с прошлой отправки ничего нового — файл не шлём
+                let tag = if start > 0 { format!(", +{} new", b.len() - start) } else { String::new() };
+                out += &format!("=== {} ({} bytes{}) ===\n", f.display(), b.len(), tag);
                 out += tail; total += tail.len();
             }
             out += "\n\n"; n += 1;
@@ -633,6 +654,8 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
             match ureq::post(&format!("{host}/stats/api/logs?who={who}")).set("Content-Type", "text/plain; charset=utf-8").send_bytes(out.as_bytes()) {
                 Ok(r) => {
                     let v: Value = serde_json::from_str(&r.into_string().unwrap_or_default()).unwrap_or_default();
+                    // запомним, докуда дошли по каждому растущему логу — в следующий раз только новый хвост
+                    let _ = std::fs::write(data_dir().join("log_sent.json"), serde_json::to_vec(&Value::Object(newmarks.clone())).unwrap_or_default());
                     return Ok(format!("{} ({} files)", v["id"].as_str().unwrap_or("ok"), n));
                 }
                 Err(e) => last = e.to_string(),
