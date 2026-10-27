@@ -133,7 +133,7 @@ jobs:
             Linux)
               cp target/release/bundle/appimage/*_amd64.AppImage "$out/EliteLauncher-$V.AppImage"
               cp target/release/bundle/deb/*_amd64.deb "$out/elite-launcher_${V}_amd64.deb"
-              git ls-files -co --exclude-standard | grep -v '^target' | grep -v private > srcfiles.txt
+              git ls-files | grep -v private > srcfiles.txt   # tracked-only: не тянуть собранные артефакты в src-зип
               python3 - "$V" <<'PY'
           import sys,zipfile
           V=sys.argv[1]
