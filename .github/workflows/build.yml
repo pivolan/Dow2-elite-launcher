@@ -33,6 +33,8 @@ jobs:
       build_ref: ${{ steps.version.outputs.build_ref }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - id: version
         env:
           EVENT: ${{ github.event_name }}
@@ -59,8 +61,16 @@ jobs:
                 echo "::warning::Release v$version already exists, nothing to publish"
               else
                 release=true
-                # main may have moved on without a new version: the release is built from the code the tag points to
-                if git ls-remote --exit-code --tags origin "refs/tags/v$version" >/dev/null; then build_ref="v$version"; fi
+                # main may have moved on without a new version: the release is built from the commit the tag points to,
+                # pinned by hash so a moved tag can't change it between jobs, and only if that commit is on main
+                if git rev-parse -q --verify "refs/tags/v$version" >/dev/null; then
+                  tag_sha="$(git rev-parse "v$version^{commit}")"
+                  if ! git merge-base --is-ancestor "$tag_sha" HEAD; then
+                    echo "::error::v$version points to ${tag_sha:0:7}, which is not on main: refusing to release it"
+                    exit 1
+                  fi
+                  build_ref="$tag_sha"
+                fi
               fi
             fi
           fi
