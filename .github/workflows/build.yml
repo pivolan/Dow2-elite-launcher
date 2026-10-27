@@ -115,6 +115,45 @@ jobs:
             target/**/release/bundle/appimage/*.AppImage
             target/**/release/bundle/dmg/*.dmg
           retention-days: 7
+      - name: Normalize installers for deploy
+        shell: bash
+        env:
+          V: ${{ needs.version.outputs.number }}
+        run: |
+          set -e
+          out=deploy; mkdir -p "$out"
+          case "${{ runner.os }}" in
+            Windows)
+              cp target/release/bundle/nsis/*_x64-setup.exe "$out/EliteLauncher-$V-setup.exe"
+              mkdir -p pz/EliteLauncher
+              cp target/release/elite-launcher.exe pz/EliteLauncher/EliteLauncher.exe
+              [ -f target/release/WebView2Loader.dll ] && cp target/release/WebView2Loader.dll pz/EliteLauncher/ || true
+              (cd pz && 7z a -tzip "../$out/EliteLauncher-$V-windows-portable.zip" EliteLauncher >/dev/null)
+              ;;
+            Linux)
+              cp target/release/bundle/appimage/*_amd64.AppImage "$out/EliteLauncher-$V.AppImage"
+              cp target/release/bundle/deb/*_amd64.deb "$out/elite-launcher_${V}_amd64.deb"
+              git ls-files -co --exclude-standard | grep -v '^target' | grep -v private > srcfiles.txt
+              python3 - "$V" <<'PY'
+          import sys,zipfile
+          V=sys.argv[1]
+          fs=[l.strip() for l in open('srcfiles.txt') if l.strip()]
+          z=zipfile.ZipFile('deploy/elite-launcher-src-%s.zip'%V,'w',zipfile.ZIP_DEFLATED)
+          for f in fs: z.write(f,'elite-launcher-%s/%s'%(V,f))
+          z.close()
+          PY
+              ;;
+            macOS)
+              ditto -c -k --keepParent "target/universal-apple-darwin/release/bundle/macos/Elite Launcher.app" "$out/EliteLauncher-$V-mac.zip"
+              ;;
+          esac
+          ls -la "$out"
+      - name: Upload deploy artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-${{ matrix.os }}
+          path: deploy/*
+          retention-days: 7
 
   publisher:
     strategy:
@@ -230,3 +269,47 @@ jobs:
           python3 scripts/release_notes.py notes "$VERSION" > release-notes.md
           find dist -type f \( -name '*.exe' -o -name '*.deb' -o -name '*.AppImage' -o -name '*.dmg' \) -print0 \
             | xargs -0 gh release create "$TAG" --title "Elite Launcher $VERSION" --notes-file release-notes.md --verify-tag
+
+  # After a merge to main: ship the installers to the download folder on the server (scoped rsync key,
+  # write-only into that one folder). Dormant until the repository variable DEPLOY_HOST is set.
+  deploy:
+    needs: [version, launcher]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.DEPLOY_HOST != ''
+    runs-on: ubuntu-24.04
+    env:
+      V: ${{ needs.version.outputs.number }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: deploy-*
+          merge-multiple: true
+          path: dist
+      - name: Build latest.json
+        run: |
+          cat > dist/latest.json <<EOF
+          {
+            "version": "$V",
+            "files": {
+              "win": "EliteLauncher-$V-setup.exe",
+              "win_portable": "EliteLauncher-$V-windows-portable.zip",
+              "linux": "EliteLauncher-$V.AppImage",
+              "deb": "elite-launcher_${V}_amd64.deb",
+              "mac": "EliteLauncher-$V-mac.zip",
+              "src": "elite-launcher-src-$V.zip"
+            }
+          }
+          EOF
+          ls -la dist
+      - name: Rsync to the download folder
+        env:
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          USER: ${{ vars.DEPLOY_USER }}
+          HOST: ${{ vars.DEPLOY_HOST }}
+        run: |
+          install -d -m700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/deploy_key; chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
+          rsync -rtvz --omit-dir-times \
+            -e "ssh -i $HOME/.ssh/deploy_key -o IdentitiesOnly=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts" \
+            dist/ "$USER@$HOST:"
