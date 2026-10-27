@@ -115,7 +115,7 @@ cd app && cargo tauri build                 # installer for the current OS
 cargo build --release -p elite-publish -p elite-cli
 ```
 
-Linux needs `libwebkit2gtk-4.1-dev libsoup-3.0-dev librsvg2-dev`. Windows packages can also be
+Linux needs `libwebkit2gtk-4.1-dev libsoup-3.0-dev librsvg2-dev libayatana-appindicator3-dev` (the last one for the tray icon). Windows packages can also be
 cross-built on Linux: `cargo tauri build --target x86_64-pc-windows-gnu --bundles nsis` (needs `mingw-w64`
 and `nsis`). macOS needs a Mac or the GitHub workflow. Without code signing Windows SmartScreen shows a
 warning on first start; signing is configured in `app/tauri.conf.json` (`bundle > windows`).

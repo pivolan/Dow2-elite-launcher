@@ -60,6 +60,10 @@ const T = {
     "usageTitle": "Anonymous usage count",
     "usage": "Count me as a launcher user",
     "usageNote": "Once a day the launcher sends a hash that changes every day, plus its version, OS and the Elite version. No names, Steam or hardware data; days can't be linked to each other.",
+    "trayTitle": "When the game starts",
+    "trayOnPlay": "Hide the launcher to the tray — the tray icon opens it again",
+    "trayOpen": "Open Elite Launcher",
+    "trayQuit": "Quit",
     "cacheNote": "switching back to them is instant",
     "mirror": "Extra mirror (optional)",
     "save": "Save",
@@ -153,6 +157,10 @@ const T = {
     "usageTitle": "Анонимная статистика",
     "usage": "Учитывать меня в числе пользователей лаунчера",
     "usageNote": "Раз в сутки лаунчер отправляет хеш, который каждый день новый, плюс свою версию, ОС и версию Elite. Никаких ников, Steam или данных о компьютере; связать дни между собой нельзя.",
+    "trayTitle": "При запуске игры",
+    "trayOnPlay": "Сворачивать лаунчер в трей — открыть снова можно по значку в трее",
+    "trayOpen": "Открыть Elite Launcher",
+    "trayQuit": "Выход",
     "cacheNote": "переключение на них — мгновенно",
     "mirror": "Дополнительное зеркало (необязательно)",
     "save": "Сохранить",
@@ -241,6 +249,10 @@ const T = {
     "usageTitle": "Estadística anónima",
     "usage": "Contarme como usuario del launcher",
     "usageNote": "Una vez al día el launcher envía un hash que cambia cada día, más su versión, el sistema y la versión de Elite. Sin nombres, sin Steam ni datos del equipo; los días no se pueden relacionar entre sí.",
+    "trayTitle": "Al iniciar el juego",
+    "trayOnPlay": "Ocultar el launcher en la bandeja — el icono de la bandeja lo vuelve a abrir",
+    "trayOpen": "Abrir Elite Launcher",
+    "trayQuit": "Salir",
     "cacheNote": "volver a ellas es instantáneo",
     "mirror": "Espejo adicional (opcional)",
     "save": "Guardar",
@@ -329,6 +341,10 @@ const T = {
     "usageTitle": "Statistiques anonymes",
     "usage": "Me compter parmi les utilisateurs du launcher",
     "usageNote": "Une fois par jour, le launcher envoie un hash qui change chaque jour, avec sa version, le système et la version d'Elite. Aucun nom, rien de Steam ni du PC ; les jours ne peuvent pas être reliés entre eux.",
+    "trayTitle": "Au lancement du jeu",
+    "trayOnPlay": "Réduire le launcher dans la zone de notification — l'icône le rouvre",
+    "trayOpen": "Ouvrir Elite Launcher",
+    "trayQuit": "Quitter",
     "cacheNote": "y revenir est instantané",
     "mirror": "Miroir supplémentaire (facultatif)",
     "save": "Enregistrer",
@@ -417,6 +433,10 @@ const T = {
     "usageTitle": "Anonyme Statistik",
     "usage": "Mich als Launcher-Nutzer mitzählen",
     "usageNote": "Einmal am Tag sendet der Launcher einen Hash, der sich täglich ändert, dazu seine Version, das System und die Elite-Version. Keine Namen, keine Steam- oder Hardwaredaten; Tage lassen sich nicht miteinander verknüpfen.",
+    "trayTitle": "Beim Spielstart",
+    "trayOnPlay": "Launcher in den Infobereich minimieren — das Symbol öffnet ihn wieder",
+    "trayOpen": "Elite Launcher öffnen",
+    "trayQuit": "Beenden",
     "cacheNote": "zurückwechseln geht sofort",
     "mirror": "Zusätzlicher Mirror (optional)",
     "save": "Speichern",
@@ -476,10 +496,18 @@ function toast(msg, err) {
 
 function channelOf(id) { return (S.config?.channels || []).find(c => c.id === id); }
 
+let trayLang = '';
+function syncTrayLabels() {
+  if (trayLang === lang) return;
+  trayLang = lang;
+  invoke('set_tray_labels', { open: t('trayOpen'), quit: t('trayQuit') }).catch(() => {});
+}
+
 function render() {
   lang = S.lang || (navigator.language || 'en').slice(0, 2);
   if (!T[lang]) lang = 'en';
   document.documentElement.lang = lang;
+  syncTrayLabels();
   document.querySelectorAll('[data-t]').forEach(e => e.textContent = t(e.dataset.t));
   document.querySelectorAll('[data-tp]').forEach(e => e.placeholder = t(e.dataset.tp));
   const cfg = S.config || {};
@@ -613,6 +641,7 @@ function render() {
   $('lang').value = S.lang || '';
   $('cache').value = String(S.cache_mb);
   $('usage').checked = S.usage_stats !== false;
+  $('trayOnPlay').checked = S.tray_on_play !== false;
   $('mirror').value = S.extra_mirror || '';
   $('mirrorInfo').textContent = t('mirrors', { n: S.mirror_count });
   $('repair').disabled = S.busy || S.game_running || !S.installed_version;
@@ -710,6 +739,7 @@ $('browse').onclick = pickDir;
 $('openDir').onclick = () => invoke('open_game_dir').catch(e => toast(e, true));
 $('lang').onchange = e => invoke('set_setting', { key: 'lang', value: e.target.value }).then(reload);
 $('usage').onchange = e => invoke('set_setting', { key: 'usage_stats', value: e.target.checked }).then(reload);
+$('trayOnPlay').onchange = e => invoke('set_setting', { key: 'tray_on_play', value: e.target.checked }).then(reload);
 $('cache').onchange = e => invoke('set_setting', { key: 'cache_mb', value: +e.target.value }).then(reload);
 $('saveMirror').onclick = () => invoke('set_setting', { key: 'extra_mirror', value: $('mirror').value.trim() }).then(refresh);
 $('repair').onclick = () => startUpdate(true);

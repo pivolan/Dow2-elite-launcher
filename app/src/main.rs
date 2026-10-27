@@ -16,7 +16,9 @@ use std::path::PathBuf;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
-use tauri::{AppHandle, Emitter, Manager, State};
+use tauri::menu::{MenuBuilder, MenuItem, MenuItemBuilder};
+use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
+use tauri::{AppHandle, Emitter, Manager, State, Wry};
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
 
@@ -54,6 +56,8 @@ struct Settings {
     /// Feedback chat: random id that ties the player's messages together (kept across restarts), and the name they gave.
     fb_uid: String,
     fb_name: String,
+    /// Hide the window to the tray once the game starts. None = on.
+    tray_on_play: Option<bool>,
 }
 
 struct App {
@@ -66,6 +70,26 @@ struct App {
     last_error: Mutex<String>,
     /// Version id → bytes a switch to it would download (0 = instant). Filled in the background.
     costs: Mutex<BTreeMap<String, u64>>,
+}
+
+/// Tray menu items, relabelled from the window when the language changes.
+struct Tray {
+    open: MenuItem<Wry>,
+    quit: MenuItem<Wry>,
+}
+
+fn show_window(app: &AppHandle) {
+    if let Some(w) = app.get_webview_window("main") {
+        let _ = w.unminimize();
+        let _ = w.show();
+        let _ = w.set_focus();
+    }
+}
+
+#[tauri::command]
+fn set_tray_labels(tray: State<'_, Tray>, open: String, quit: String) {
+    let _ = tray.open.set_text(open);
+    let _ = tray.quit.set_text(quit);
 }
 
 /// Work out how much each version would download (manifests are fetched once and cached for good).
@@ -253,6 +277,7 @@ fn get_status(app: State<'_, App>) -> Value {
             })).collect::<Vec<_>>(),
         })).collect::<Vec<_>>(),
         "usage_stats": s.usage_stats.unwrap_or(true),
+        "tray_on_play": s.tray_on_play.unwrap_or(true),
         "costs": app.costs.lock().unwrap().clone(),
         "prev_channel": s.prev_channel.filter(|p| p != &channel && cfgd.channels.iter().any(|c| &c.id == p)),
         "main_channel": cfgd.channels.iter().find(|c| c.default).map(|c| c.id.clone()).unwrap_or_default(),
@@ -324,6 +349,7 @@ fn set_setting(app: State<'_, App>, key: String, value: Value) {
         "extra_mirror" => s.extra_mirror = value.as_str().unwrap_or("").to_string(),
         "cache_mb" => s.cache_mb = value.as_u64(),
         "usage_stats" => s.usage_stats = value.as_bool(),
+        "tray_on_play" => s.tray_on_play = value.as_bool(),
         "dismiss" => {
             if let Some(id) = value.as_str() {
                 s.dismissed.push(id.to_string());
@@ -703,7 +729,17 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
 
 /// Start the game. Never blocked by a pending update.
 #[tauri::command]
-fn play(app: State<'_, App>) -> Result<(), String> {
+fn play(app: State<'_, App>, handle: AppHandle) -> Result<(), String> {
+    start_game(&app)?;
+    if app.settings.lock().unwrap().tray_on_play.unwrap_or(true) {
+        if let Some(w) = handle.get_webview_window("main") {
+            let _ = w.hide();
+        }
+    }
+    Ok(())
+}
+
+fn start_game(app: &App) -> Result<(), String> {
     if app.busy.load(Ordering::Relaxed) {
         return Err("files are being updated, wait a few seconds".into());
     }
@@ -894,6 +930,30 @@ fn main() {
                     let _ = hg.emit("game_running", now);
                 }
             });
+            let open = MenuItemBuilder::with_id("open", "Open Elite Launcher").build(app)?;
+            let quit = MenuItemBuilder::with_id("quit", "Quit").build(app)?;
+            let menu = MenuBuilder::new(app).items(&[&open, &quit]).build()?;
+            let mut tray = TrayIconBuilder::new()
+                .tooltip("Elite Launcher")
+                .menu(&menu)
+                .show_menu_on_left_click(false)
+                .on_menu_event(|app, event| match event.id().as_ref() {
+                    "open" => show_window(app),
+                    "quit" => app.exit(0),
+                    _ => {}
+                })
+                // Linux delivers no tray clicks, only the menu: "Open" is there for it
+                .on_tray_icon_event(|tray, event| {
+                    if let TrayIconEvent::Click { button: MouseButton::Left, button_state: MouseButtonState::Up, .. } = event {
+                        show_window(tray.app_handle());
+                    }
+                });
+            if let Some(icon) = app.default_window_icon() {
+                tray = tray.icon(icon.clone());
+            }
+            tray.build(app)?;
+            app.manage(Tray { open, quit });
+
             let h = app.handle().clone();
             // once now (after the window is up) and then every few hours for launchers left open over midnight
             std::thread::spawn(move || loop {
@@ -905,7 +965,7 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             get_status, refresh, set_channel, switch_to, send_logs, set_comp_option, set_setting, set_component, remove_conflicts, pick_game_dir, open_url, open_game_dir, start_update, cancel_update, play,
-            fb_info, fb_set_name, fb_send, fb_thread
+            fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels
         ])
         .run(tauri::generate_context!())
         .expect("error while running Elite Launcher");
