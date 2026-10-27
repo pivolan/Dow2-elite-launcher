@@ -60,6 +60,8 @@ struct App {
     settings: Mutex<Settings>,
     config: Mutex<Option<LauncherConfig>>,
     busy: AtomicBool,
+    /// DOW2.exe is running (checked every few seconds): its files are locked, add-ons and updates wait for it to close.
+    game_running: AtomicBool,
     cancel: Mutex<Option<Arc<AtomicBool>>>,
     last_error: Mutex<String>,
     /// Version id → bytes a switch to it would download (0 = instant). Filled in the background.
@@ -180,6 +182,31 @@ fn current_channel(app: &App, cfg: &LauncherConfig, installed: &update::State) -
         .unwrap_or_default()
 }
 
+/// Is the game (DOW2.exe) running? Its DLLs are locked then: add-ons can not be switched or updated under it.
+fn is_game_running() -> bool {
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+        std::process::Command::new("tasklist")
+            .args(["/FI", "IMAGENAME eq DOW2.exe", "/NH", "/FO", "CSV"])
+            .creation_flags(0x0800_0000) // CREATE_NO_WINDOW
+            .output()
+            .map(|o| String::from_utf8_lossy(&o.stdout).to_ascii_lowercase().contains("\"dow2.exe\""))
+            .unwrap_or(false)
+    }
+    #[cfg(not(windows))]
+    {
+        std::process::Command::new("pgrep").args(["-fi", "dow2\\.exe"]).output().map(|o| o.status.success()).unwrap_or(false)
+    }
+}
+
+fn ensure_game_closed(app: &App) -> Result<(), String> {
+    if app.game_running.load(Ordering::Relaxed) {
+        return Err("the game is running: close it to change add-ons or update".into());
+    }
+    Ok(())
+}
+
 /// Everything the window needs to draw itself.
 #[tauri::command]
 fn get_status(app: State<'_, App>) -> Value {
@@ -209,6 +236,7 @@ fn get_status(app: State<'_, App>) -> Value {
         "update_available": !installed.version.is_empty() && target.as_ref().is_some_and(|t| t.version != installed.version),
         "launcher_update": launcher_update,
         "busy": app.busy.load(Ordering::Relaxed),
+        "game_running": app.game_running.load(Ordering::Relaxed),
         "last_error": app.last_error.lock().unwrap().clone(),
         "cache_mb": s.cache_mb.unwrap_or(DEFAULT_CACHE_MB),
         "extra_mirror": s.extra_mirror,
@@ -307,10 +335,12 @@ fn set_setting(app: State<'_, App>, key: String, value: Value) {
 }
 
 #[tauri::command]
-fn set_component(app: State<'_, App>, id: String, on: bool) {
+fn set_component(app: State<'_, App>, id: String, on: bool) -> Result<(), String> {
+    ensure_game_closed(&app)?;
     let mut s = app.settings.lock().unwrap();
     s.components.insert(id, on);
     save_settings(&s);
+    Ok(())
 }
 
 /// Write every component option to its ini file (only for installed components).
@@ -327,7 +357,8 @@ fn apply_options(dir: &std::path::Path, cfg: &LauncherConfig, s: &Settings) {
 
 /// Tick/untick an option of an add-on: saved and written to the game folder right away (takes effect on next game start).
 #[tauri::command]
-fn set_comp_option(app: State<'_, App>, comp: String, opt: String, on: bool) {
+fn set_comp_option(app: State<'_, App>, comp: String, opt: String, on: bool) -> Result<(), String> {
+    ensure_game_closed(&app)?;
     let s = {
         let mut s = app.settings.lock().unwrap();
         s.comp_options.insert(format!("{comp}.{opt}"), on);
@@ -337,6 +368,7 @@ fn set_comp_option(app: State<'_, App>, comp: String, opt: String, on: bool) {
     if let (Some(dir), Some(cfg)) = (game_dir(&app), app.config.lock().unwrap().clone()) {
         apply_options(&dir, &cfg, &s);
     }
+    Ok(())
 }
 
 /// Hand-installed copies of a component that are in the game folder right now (see Component::conflicts).
@@ -368,6 +400,7 @@ fn drop_conflicting(dir: &std::path::Path, cfg: &LauncherConfig) {
 /// package's loader (winmm.dll + readmes) once its dow2-patches folder has no DLLs left.
 #[tauri::command]
 fn remove_conflicts(app: State<'_, App>, id: String) -> Result<Vec<String>, String> {
+    ensure_game_closed(&app)?;
     let dir = game_dir(&app).ok_or("game folder not found")?;
     let cfg = app.config.lock().unwrap().clone().unwrap_or_default();
     let c = cfg.components.iter().find(|c| c.id == id).ok_or("unknown add-on")?;
@@ -464,6 +497,7 @@ fn open_game_dir(app: State<'_, App>, handle: AppHandle) -> Result<(), String> {
 fn start_update(app: AppHandle, repair: bool, components_only: Option<bool>) -> Result<(), String> {
     let components_only = components_only.unwrap_or(false);
     let st = app.state::<App>();
+    ensure_game_closed(&st)?;
     if st.busy.swap(true, Ordering::SeqCst) {
         return Err("already running".into());
     }
@@ -673,6 +707,9 @@ fn play(app: State<'_, App>) -> Result<(), String> {
     if app.busy.load(Ordering::Relaxed) {
         return Err("files are being updated, wait a few seconds".into());
     }
+    if app.game_running.load(Ordering::Relaxed) {
+        return Err("the game is already running".into());
+    }
     let dir = game_dir(&app).ok_or("game folder not found")?;
     let cfg = app.config.lock().unwrap().clone().unwrap_or_default();
     drop_conflicting(&dir, &cfg);
@@ -842,11 +879,21 @@ fn main() {
             settings: Mutex::new(settings),
             config: Mutex::new(config),
             busy: AtomicBool::new(false),
+            game_running: AtomicBool::new(is_game_running()),
             cancel: Mutex::new(None),
             last_error: Mutex::new(String::new()),
             costs: Mutex::new(BTreeMap::new()),
         })
         .setup(|app| {
+            // watch the game: the window locks add-ons while it runs and picks pending updates up once it closes
+            let hg = app.handle().clone();
+            std::thread::spawn(move || loop {
+                std::thread::sleep(Duration::from_secs(3));
+                let now = is_game_running();
+                if hg.state::<App>().game_running.swap(now, Ordering::SeqCst) != now {
+                    let _ = hg.emit("game_running", now);
+                }
+            });
             let h = app.handle().clone();
             // once now (after the window is up) and then every few hours for launchers left open over midnight
             std::thread::spawn(move || loop {

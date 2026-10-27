@@ -1,0 +1,2 @@
+- The launcher now sees when the game is running: add-on checkboxes, repair and version switching are locked, Play shows "Game is running", and pending add-on updates are installed as soon as the game closes. This prevents "access denied" errors on locked files such as Relay.dll.
+- Replacing a file that is in use falls back to renaming the old copy aside, and the error now says the game may be running.

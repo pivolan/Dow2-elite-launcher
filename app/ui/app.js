@@ -25,6 +25,8 @@ const T = {
     "play": "Play",
     "install": "Install Elite",
     "updating": "Updating…",
+    "running": "Game is running",
+    "gameRunningAddons": "The game is running: close it to change add-ons. Updates are installed once it closes.",
     "installed": "Installed",
     "current": "You have: {v}",
     "notInstalled": "Elite is not installed yet",
@@ -116,6 +118,8 @@ const T = {
     "play": "Играть",
     "install": "Установить Elite",
     "updating": "Обновление…",
+    "running": "Игра запущена",
+    "gameRunningAddons": "Игра запущена: закройте её, чтобы менять дополнения. Обновления установятся после закрытия.",
     "installed": "Установлена",
     "current": "У вас: {v}",
     "notInstalled": "Elite ещё не установлен",
@@ -207,6 +211,8 @@ const T = {
     "play": "Jugar",
     "install": "Instalar Elite",
     "updating": "Actualizando…",
+    "running": "Juego en marcha",
+    "gameRunningAddons": "El juego está en marcha: ciérralo para cambiar los complementos. Las actualizaciones se instalan al cerrarlo.",
     "installed": "Instalada",
     "current": "Tienes: {v}",
     "notInstalled": "Elite aún no está instalado",
@@ -293,6 +299,8 @@ const T = {
     "play": "Jouer",
     "install": "Installer Elite",
     "updating": "Mise à jour…",
+    "running": "Jeu en cours",
+    "gameRunningAddons": "Le jeu est lancé : fermez-le pour modifier les modules. Les mises à jour s’installent à sa fermeture.",
     "installed": "Installée",
     "current": "Vous avez : {v}",
     "notInstalled": "Elite n'est pas encore installé",
@@ -379,6 +387,8 @@ const T = {
     "play": "Spielen",
     "install": "Elite installieren",
     "updating": "Aktualisiere…",
+    "running": "Spiel läuft",
+    "gameRunningAddons": "Das Spiel läuft: schließe es, um Add-ons zu ändern. Updates werden nach dem Schließen installiert.",
     "installed": "Installiert",
     "current": "Installiert: {v}",
     "notInstalled": "Elite ist noch nicht installiert",
@@ -523,7 +533,7 @@ function render() {
     const hint = cost === undefined ? t('needDl') : cost === 0 ? t('instant') : t('upTo', { s: mb(cost) });
     const tags = (isMain ? `<span class="tag main">${esc(t('main'))}</span>` : '') + (L(c.badge) && !isMain ? `<span class="tag beta">${esc(L(c.badge))}</span>` : '');
     const right = isActive ? `<span class="tag ok">✓ ${esc(t('active'))}</span>`
-      : `<button class="btn sw" data-id="${esc(c.id)}" ${S.busy || !S.game_found || !S.config_loaded ? 'disabled' : ''}>${esc(S.installed_version ? t('switchBtn') : t('installBtn'))}<small>${esc(hint)}</small></button>`;
+      : `<button class="btn sw" data-id="${esc(c.id)}" ${S.busy || S.game_running || !S.game_found || !S.config_loaded ? 'disabled' : ''}>${esc(S.installed_version ? t('switchBtn') : t('installBtn'))}<small>${esc(hint)}</small></button>`;
     return `<div class="ch ${isActive ? 'act' : ''} ${isMain ? 'main' : ''}"><div class="nm"><b>${esc(L(c.name) || c.id)}</b>${tags}
       <small>${esc(isMain ? t('mainNote') : L(c.description))}</small></div>${right}</div>`;
   };
@@ -541,8 +551,10 @@ function render() {
       + (c.latest && c.latest !== c.installed ? ' <span class="tag">→ v' + esc(vshort(c, c.latest)) + '</span>' : '');
   const comps = S.components || [];
   $('compBox').classList.toggle('hidden', !comps.length);
-  $('components').innerHTML = comps.map(c => `<label class="comp"><input type="checkbox" data-id="${esc(c.id)}" ${c.enabled ? 'checked' : ''} ${S.busy ? 'disabled' : ''}><div><b>${esc(L(c.name) || c.id)}${compVer(c)}</b><small>${esc(L(c.description))}</small>${c.enabled && (c.conflicts || []).length ? `<small class="warn">${esc(t('conflictActive'))}</small>` : ''}</div></label>`
-    + (c.options || []).map(o => `<label class="opt"><input type="checkbox" data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${o.on ? 'checked' : ''} ${!c.enabled || S.busy ? 'disabled' : ''}><span>${esc(L(o.name) || o.id)}</span></label>`).join('')).join('');
+  const lockC = S.busy || S.game_running;   // the game holds the add-on files while it runs
+  $('components').innerHTML = (S.game_running ? `<small class="warn" style="display:block;margin:0 0 10px">${esc(t('gameRunningAddons'))}</small>` : '')
+    + comps.map(c => `<label class="comp"><input type="checkbox" data-id="${esc(c.id)}" ${c.enabled ? 'checked' : ''} ${lockC ? 'disabled' : ''}><div><b>${esc(L(c.name) || c.id)}${compVer(c)}</b><small>${esc(L(c.description))}</small>${c.enabled && (c.conflicts || []).length ? `<small class="warn">${esc(t('conflictActive'))}</small>` : ''}</div></label>`
+    + (c.options || []).map(o => `<label class="opt"><input type="checkbox" data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${o.on ? 'checked' : ''} ${!c.enabled || lockC ? 'disabled' : ''}><span>${esc(L(o.name) || o.id)}</span></label>`).join('')).join('');
   $('components').querySelectorAll('input[data-opt]').forEach(cb => cb.onchange = () =>
     invoke('set_comp_option', { comp: cb.dataset.comp, opt: cb.dataset.opt, on: cb.checked }).then(reload).catch(e => toast(e, true)));
   $('components').querySelectorAll('input[data-id]').forEach(cb => cb.onchange = async () => {
@@ -577,6 +589,7 @@ function render() {
   play.classList.remove('install');
   $('cancel').classList.toggle('hidden', !S.busy);
   if (S.busy) { play.textContent = t('updating'); play.classList.add('install'); play.disabled = true; }
+  else if (S.game_running) { play.textContent = t('running'); play.disabled = true; }
   else if (!S.game_found) { play.textContent = t('play'); play.disabled = true; }
   else if (!S.installed_version) { play.textContent = t('install'); play.classList.add('install'); play.disabled = !S.config_loaded; }
   else { play.textContent = t('play'); play.disabled = false; }
@@ -602,7 +615,7 @@ function render() {
   $('usage').checked = S.usage_stats !== false;
   $('mirror').value = S.extra_mirror || '';
   $('mirrorInfo').textContent = t('mirrors', { n: S.mirror_count });
-  $('repair').disabled = S.busy || !S.installed_version;
+  $('repair').disabled = S.busy || S.game_running || !S.installed_version;
   $('about').textContent = `Elite Launcher ${S.launcher_version} · ${S.os}`;
   $('hdrVer').textContent = S.launcher_version ? `v${S.launcher_version}` : '';
 }
@@ -644,7 +657,7 @@ async function refresh() {
   try { S = await invoke('refresh'); render(); } catch (e) { toast(e, true); return; }
   // add-ons follow their checkboxes on their own: install missing ones, remove unticked ones
   const comps = S.components || [];
-  if (S.installed_version && !S.busy && comps.some(c => { const want = c.enabled && !(c.conflicts || []).length; return want !== !!c.installed || (want && c.latest && c.installed && c.installed !== c.latest); })) {
+  if (S.installed_version && !S.busy && !S.game_running && comps.some(c => { const want = c.enabled && !(c.conflicts || []).length; return want !== !!c.installed || (want && c.latest && c.installed && c.installed !== c.latest); })) {
     try { await invoke('start_update', { repair: false, componentsOnly: true }); S.busy = true; render(); } catch (e) { /* will retry next refresh */ }
   }
 }
@@ -673,6 +686,7 @@ listen('net', e => {
   else if (a[0] === 'try') { if (netActive) $('statusText').textContent = t('netTry', { host: a[1], k: a[2], n: a[3] }); }
   else if (a[0] === 'fail') { $('statusText').textContent = t('netFail', { host: a[1] }); }
 });
+listen('game_running', e => { if (!S) return; S.game_running = e.payload; render(); if (!e.payload) refresh(); });
 listen('progress', e => { netActive = false; prog = e.payload; if (S) { S.busy = true; renderProgress(prog); } });
 listen('update_done', async e => {
   await reload();
