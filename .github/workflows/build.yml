@@ -30,6 +30,7 @@ jobs:
       number: ${{ steps.version.outputs.number }}
       tag: ${{ steps.version.outputs.tag }}
       release: ${{ steps.version.outputs.release }}
+      build_ref: ${{ steps.version.outputs.build_ref }}
     steps:
       - uses: actions/checkout@v4
       - id: version
@@ -49,19 +50,17 @@ jobs:
           # a GitHub Release (and SignPath signing) only on main: automatically for a new X.Y.0,
           # or by hand through "Run workflow" with the release box ticked
           release=false
+          build_ref="$GITHUB_SHA"
           if [ "$REF" = refs/heads/main ]; then
             if [ "$EVENT" = push ] && ! git ls-remote --exit-code --tags origin "refs/tags/v$version" >/dev/null; then
               case "$version" in *.0) release=true ;; esac
             elif [ "$EVENT" = workflow_dispatch ] && [ "$WANT_RELEASE" = true ]; then
-              # the release must be built from the tagged commit, not from later code that kept the same version
-              tag_sha="$(git ls-remote --tags origin "refs/tags/v$version^{}" "refs/tags/v$version" | head -1 | cut -f1)"
               if gh release view "v$version" >/dev/null 2>&1; then
                 echo "::warning::Release v$version already exists, nothing to publish"
-              elif [ -n "$tag_sha" ] && [ "$tag_sha" != "$(git rev-parse HEAD)" ]; then
-                echo "::error::v$version is tagged on ${tag_sha:0:7}, main is on $(git rev-parse --short HEAD): raise the version to release this code"
-                exit 1
               else
                 release=true
+                # main may have moved on without a new version: the release is built from the code the tag points to
+                if git ls-remote --exit-code --tags origin "refs/tags/v$version" >/dev/null; then build_ref="v$version"; fi
               fi
             fi
           fi
@@ -69,6 +68,7 @@ jobs:
             echo "number=$version"
             echo "tag=v$version"
             echo "release=$release"
+            echo "build_ref=$build_ref"
           } >> "$GITHUB_OUTPUT"
           echo "Version **$version**, GitHub Release in this run: **$release**" >> "$GITHUB_STEP_SUMMARY"
 
@@ -96,6 +96,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.version.outputs.build_ref }}
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.os == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
@@ -221,6 +223,8 @@ jobs:
             echo "STORE=$RUNNER_TEMP/store"
           } >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.version.outputs.build_ref }}
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - uses: actions/download-artifact@v4

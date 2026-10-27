@@ -139,8 +139,7 @@ Other languages can sit next to `en.md` later (`ru.md`, …); only `en.md` is re
 | `deploy` | only on `main`: the installers go to the download folder on the server (dormant until `DEPLOY_HOST` is set) |
 
 Tags are set by CI, not by hand. A release for a patch version is published by hand: Actions → build → *Run workflow* on
-`main` with *release* ticked. It works only while the version tag points to the current `main`, so that the release is
-built from the tagged code; otherwise raise the version first.
+`main` with *release* ticked. The release is built from the code its version tag points to, even if `main` has moved on.
 
 ## Formats (stable — changing them needs a new launcher)
 
