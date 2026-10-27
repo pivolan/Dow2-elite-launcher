@@ -1109,6 +1109,14 @@ fn main() {
             });
             Ok(())
         })
+        // minimising always hides to the tray; the tray icon (or its "Open" item) brings the window back
+        .on_window_event(|window, event| {
+            if matches!(event, tauri::WindowEvent::Resized(_) | tauri::WindowEvent::Focused(false))
+                && window.is_minimized().unwrap_or(false)
+            {
+                let _ = window.hide();
+            }
+        })
         .invoke_handler(tauri::generate_handler![
             get_status, refresh, set_channel, switch_to, send_logs, set_comp_option, set_setting, set_component, remove_conflicts, pick_game_dir, open_url, open_game_dir, start_update, cancel_update, play,
             fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels, launcher_check, launcher_install

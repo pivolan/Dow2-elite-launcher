@@ -768,7 +768,7 @@ function render() {
   const showUpd = !!(target && S.installed_version && target.version !== S.installed_version && !S.busy && !S.game_running && !S.last_error);
   $('updateBtn').classList.toggle('hidden', !showUpd);
   if (showUpd) { $('updateBtn').textContent = t('updateNow'); $('updateBtn').onclick = () => switchTo(target.id); }
-  if (!S.busy) {
+  if (!S.busy && !LU?.installing) {
     $('bar').classList.add('hidden');
     $('statusText').classList.toggle('err', !!(S.last_error && S.config_loaded));
     const cost = showUpd ? (S.costs || {})[target.version] : 0;
@@ -863,8 +863,15 @@ listen('net', e => {
 listen('launcher_progress', e => {
   if (!LU) return;
   const { done, total } = e.payload;
-  LU.pct = total ? Math.min(100, Math.round(100 * done / total)) + '%' : mb(done);
+  const pct = total ? Math.min(100, Math.round(100 * done / total)) : 0;
+  LU.pct = total ? pct + '%' : mb(done);
   renderLauncherBanner();
+  // the same bar at the bottom as for Elite and add-on updates
+  $('bar').classList.remove('hidden');
+  $('barFill').style.width = pct + '%';
+  $('statusText').classList.remove('err');
+  $('statusText').innerHTML = esc(t('launcherUpdating', { p: '' })) + ` <b>${esc(LU.pct)}</b>`;
+  $('statusMeta').textContent = total ? `${mb(done)} / ${mb(total)}` : mb(done);
 });
 listen('news', () => { if (S) reload(); });
 listen('game_running', e => { if (!S) return; S.game_running = e.payload; render(); if (!e.payload) refresh(); });

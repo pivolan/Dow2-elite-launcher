@@ -2,5 +2,5 @@
 - Add-ons are compact switches; the description, version and notes are behind "?", and an add-on's own options show up under it once it is on.
 - News come back to the home screen: the team's posts plus the release notes of the launcher and Dow2-patches from GitHub, without anyone writing them by hand.
 - The launcher updates itself: "Update the launcher" downloads the new version, checks its signature, installs it and restarts (not for the portable zip).
-- Tray icon: the launcher hides to the tray when the game starts and opens again from the icon (can be turned off in the settings).
+- Tray icon: minimising the launcher hides it to the tray, and so does starting the game (that one can be turned off in the settings); the icon opens it again, its menu also quits.
 - Game paths are shown without the `\\?\` prefix.
