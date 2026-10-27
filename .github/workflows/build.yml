@@ -63,7 +63,7 @@ jobs:
           - os: ubuntu-22.04
             args: "--bundles deb,appimage"
           - os: macos-latest
-            args: "--target universal-apple-darwin --bundles dmg"
+            args: "--target universal-apple-darwin --bundles app,dmg"
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -144,7 +144,10 @@ jobs:
           PY
               ;;
             macOS)
-              ditto -c -k --keepParent "target/universal-apple-darwin/release/bundle/macos/Elite Launcher.app" "$out/EliteLauncher-$V-mac.zip"
+              app=$(find target -type d -name '*.app' -path '*/bundle/macos/*' | head -1)
+              [ -n "$app" ] || app=$(find target -type d -name '*.app' | head -1)
+              echo "app bundle: $app"
+              ditto -c -k --keepParent "$app" "$out/EliteLauncher-$V-mac.zip"
               ;;
           esac
           ls -la "$out"
