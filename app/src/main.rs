@@ -21,12 +21,16 @@ use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent}
 use tauri::{AppHandle, Emitter, Manager, State, Wry};
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
+use tauri_plugin_updater::UpdaterExt;
 
 /// Mirrors compiled into the launcher; launcher.json can add more. Order = preference.
 /// Use hosts from different providers/domains so the launcher can start even if one is blocked.
 /// Built-in mirrors, set at build time: `ELITE_MIRRORS="https://a/;https://b/" cargo build`.
 /// Not stored in the repository; more mirrors can come later from the signed launcher.json.
 const BUILTIN_MIRRORS: &str = match option_env!("ELITE_MIRRORS") { Some(v) => v, None => "" };
+/// Public key of the launcher self-update (tauri-plugin-updater), set at build time from the
+/// TAURI_SIGNING_PUBLIC_KEY secret. Empty in local builds: the launcher then only links to the download page.
+const UPDATER_PUBKEY: &str = match option_env!("TAURI_SIGNING_PUBLIC_KEY") { Some(v) => v, None => "" };
 const DEFAULT_CACHE_MB: u64 = 6144;
 
 #[derive(Clone, Default, Serialize, Deserialize)]
@@ -70,6 +74,10 @@ struct App {
     last_error: Mutex<String>,
     /// Version id → bytes a switch to it would download (0 = instant). Filled in the background.
     costs: Mutex<BTreeMap<String, u64>>,
+    /// Newer launcher found by `launcher_check`, installed by `launcher_install`.
+    launcher_update: Mutex<Option<tauri_plugin_updater::Update>>,
+    /// Release notes from GitHub (see fetch_release_news), shown as news next to the ones from launcher.json.
+    release_news: Mutex<Vec<Value>>,
 }
 
 /// Tray menu items, relabelled from the window when the language changes.
@@ -224,6 +232,55 @@ fn is_game_running() -> bool {
     }
 }
 
+/// Can this copy replace itself? Not without the updater key, and not the portable zip: there is no installer
+/// next to it, and the Windows update (the NSIS installer) would put a second copy into AppData instead.
+fn self_update_supported() -> bool {
+    if UPDATER_PUBKEY.trim().is_empty() {
+        return false;
+    }
+    let Ok(exe) = std::env::current_exe() else { return false };
+    if cfg!(windows) {
+        exe.parent().is_some_and(|d| d.join("uninstall.exe").is_file())
+    } else if cfg!(target_os = "macos") {
+        exe.to_string_lossy().contains(".app/Contents/MacOS/")
+    } else {
+        // AppImage, or the .deb in /usr/bin (the updater asks for the password to install it)
+        std::env::var_os("APPIMAGE").is_some() || exe.starts_with("/usr")
+    }
+}
+
+/// Is a newer launcher published (updater.json on the latest GitHub Release, see build.yml)?
+/// {version, notes} or null; offline or no release yet is not an error for the player.
+#[tauri::command]
+async fn launcher_check(app: AppHandle) -> Option<Value> {
+    if !self_update_supported() {
+        return None;
+    }
+    let upd = app.updater().ok()?.check().await.ok()??;
+    let info = json!({"version": upd.version, "notes": upd.body});
+    *app.state::<App>().launcher_update.lock().unwrap() = Some(upd);
+    Some(info)
+}
+
+/// Download the new launcher, check its signature, install it and start it. On Windows the installer
+/// closes this window itself; elsewhere we restart into the new copy.
+#[tauri::command]
+async fn launcher_install(app: AppHandle) -> Result<(), String> {
+    let upd = app.state::<App>().launcher_update.lock().unwrap().clone().ok_or("no launcher update found")?;
+    let h = app.clone();
+    let mut done = 0u64;
+    upd.download_and_install(
+        move |n, total| {
+            done += n as u64;
+            let _ = h.emit("launcher_progress", json!({"done": done, "total": total}));
+        },
+        || {},
+    )
+    .await
+    .map_err(|e| e.to_string())?;
+    app.restart()
+}
+
 fn ensure_game_closed(app: &App) -> Result<(), String> {
     if app.game_running.load(Ordering::Relaxed) {
         return Err("the game is running: close it to change add-ons or update".into());
@@ -278,6 +335,7 @@ fn get_status(app: State<'_, App>) -> Value {
         })).collect::<Vec<_>>(),
         "usage_stats": s.usage_stats.unwrap_or(true),
         "tray_on_play": s.tray_on_play.unwrap_or(true),
+        "release_news": app.release_news.lock().unwrap().clone(),
         "costs": app.costs.lock().unwrap().clone(),
         "prev_channel": s.prev_channel.filter(|p| p != &channel && cfgd.channels.iter().any(|c| &c.id == p)),
         "main_channel": cfgd.channels.iter().find(|c| c.default).map(|c| c.id.clone()).unwrap_or_default(),
@@ -868,6 +926,75 @@ async fn fb_thread(app: AppHandle) -> Result<Value, String> {
     }).await.map_err(|e| e.to_string())?
 }
 
+/// Repositories whose GitHub Releases become news: CI makes every release from the changelog,
+/// so a new launcher or patch set shows up in the news without anyone writing it by hand.
+const NEWS_REPOS: [&str; 2] = ["pivolan/Dow2-elite-launcher", "pivolan/Dow2-patches"];
+
+/// The latest releases of NEWS_REPOS as news: {date, title, items, url}, newest first.
+/// None when GitHub can't be reached: the cached copy (news.json) stays.
+fn fetch_release_news() -> Option<Vec<Value>> {
+    let mut out = Vec::new();
+    for repo in NEWS_REPOS {
+        let body = ureq::get(&format!("https://api.github.com/repos/{repo}/releases?per_page=4"))
+            .set("Accept", "application/vnd.github+json")
+            .set("User-Agent", &format!("EliteLauncher/{LAUNCHER_VERSION}"))
+            .timeout(Duration::from_secs(15))
+            .call()
+            .ok()?
+            .into_string()
+            .ok()?;
+        let list: Vec<Value> = serde_json::from_str(&body).ok()?;
+        for r in list.iter().filter(|r| r["draft"] != true && r["prerelease"] != true) {
+            let s = |k: &str| r[k].as_str().unwrap_or("").to_string();
+            let title = if s("name").is_empty() { s("tag_name") } else { s("name") };
+            out.push(json!({
+                "date": s("published_at").chars().take(10).collect::<String>(),
+                "title": title,
+                "items": release_items(&s("body")),
+                "url": s("html_url"),
+            }));
+        }
+    }
+    out.sort_by(|a, b| b["date"].as_str().cmp(&a["date"].as_str()));
+    Some(out)
+}
+
+/// The list items of a release body ("- …", continuation lines joined), markdown cut down to plain text.
+fn release_items(body: &str) -> Vec<String> {
+    let mut items: Vec<String> = Vec::new();
+    let mut in_item = false;
+    for line in body.lines() {
+        let l = line.trim();
+        if let Some(x) = l.strip_prefix("- ").or_else(|| l.strip_prefix("* ")) {
+            items.push(x.to_string());
+            in_item = true;
+        } else if in_item && !l.is_empty() && line.starts_with(' ') {
+            if let Some(last) = items.last_mut() {
+                last.push(' ');
+                last.push_str(l);
+            }
+        } else {
+            in_item = false;
+        }
+    }
+    items.iter().map(|i| plain_text(i)).take(8).collect()
+}
+
+/// `[text](url)` → text, no `**` or backticks: the window shows these as text, not HTML.
+fn plain_text(md: &str) -> String {
+    let mut out = String::new();
+    let mut rest = md;
+    while let Some(open) = rest.find('[') {
+        let Some(mid) = rest[open..].find("](").map(|i| open + i) else { break };
+        let Some(close) = rest[mid..].find(')').map(|i| mid + i) else { break };
+        out.push_str(&rest[..open]);
+        out.push_str(&rest[open + 1..mid]);
+        rest = &rest[close + 1..];
+    }
+    out.push_str(rest);
+    out.replace("**", "").replace('`', "")
+}
+
 /// Anonymous usage count: at most one request per day, sent to the log hosts, carrying only
 /// sha256(random local secret + day number) cut to 128 bits, the launcher version, the OS and the installed Elite version.
 /// The hash changes every day, so even the server can't tell whether two days came from the same install.
@@ -911,6 +1038,7 @@ fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_updater::Builder::new().pubkey(UPDATER_PUBKEY).build())
         .manage(App {
             settings: Mutex::new(settings),
             config: Mutex::new(config),
@@ -919,6 +1047,10 @@ fn main() {
             cancel: Mutex::new(None),
             last_error: Mutex::new(String::new()),
             costs: Mutex::new(BTreeMap::new()),
+            launcher_update: Mutex::new(None),
+            release_news: Mutex::new(
+                std::fs::read(data_dir().join("news.json")).ok().and_then(|b| serde_json::from_slice(&b).ok()).unwrap_or_default(),
+            ),
         })
         .setup(|app| {
             // watch the game: the window locks add-ons while it runs and picks pending updates up once it closes
@@ -954,6 +1086,20 @@ fn main() {
             tray.build(app)?;
             app.manage(Tray { open, quit });
 
+            // release notes as news: now and every hour; the window redraws when they change
+            let hn = app.handle().clone();
+            std::thread::spawn(move || loop {
+                if let Some(news) = fetch_release_news() {
+                    let st = hn.state::<App>();
+                    let changed = *st.release_news.lock().unwrap() != news;
+                    if changed {
+                        let _ = std::fs::write(data_dir().join("news.json"), serde_json::to_vec(&news).unwrap_or_default());
+                        *st.release_news.lock().unwrap() = news;
+                        let _ = hn.emit("news", ());
+                    }
+                }
+                std::thread::sleep(Duration::from_secs(3600));
+            });
             let h = app.handle().clone();
             // once now (after the window is up) and then every few hours for launchers left open over midnight
             std::thread::spawn(move || loop {
@@ -965,7 +1111,7 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             get_status, refresh, set_channel, switch_to, send_logs, set_comp_option, set_setting, set_component, remove_conflicts, pick_game_dir, open_url, open_game_dir, start_update, cancel_update, play,
-            fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels
+            fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels, launcher_check, launcher_install
         ])
         .run(tauri::generate_context!())
         .expect("error while running Elite Launcher");

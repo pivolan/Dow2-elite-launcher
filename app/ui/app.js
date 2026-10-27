@@ -101,7 +101,20 @@ const T = {
     "sendLogsNote": "sends the logs of the add-ons and the game (lobby stats, observer lag, Continue button) to the developer",
     "logsSent": "Logs sent, thank you! Reference: {id}",
     "sending": "Sending…",
-    "sendLogsHome": "📋 Send logs to the developer"
+    "sendLogsHome": "Send logs to the developer",
+    "versions": "Versions",
+    "archiveH": "Archive",
+    "installedTag": "installed",
+    "notInstalledShort": "not installed",
+    "addonInfo": "About: {name}",
+    "addonVer": "Version {v}",
+    "addonNext": "version {v} comes with the next update",
+    "addonLater": "takes effect the next time the game starts",
+    "launcherNew": "Elite Launcher {v} is out",
+    "launcherUpdateBtn": "Update the launcher",
+    "launcherUpdating": "Updating the launcher… {p}",
+    "launcherFail": "Could not update the launcher: {e}",
+    "noNews": "No news yet"
   },
   ru: {
     "fbTitle": "Написать разработчикам",
@@ -198,7 +211,20 @@ const T = {
     "sendLogsNote": "отправляет разработчику логи дополнений и игры (статистика лобби, тормоза обсервера, кнопка Continue)",
     "logsSent": "Логи отправлены, спасибо! Номер: {id}",
     "sending": "Отправляю…",
-    "sendLogsHome": "📋 Отправить логи разработчику"
+    "sendLogsHome": "Отправить логи разработчику",
+    "versions": "Версии",
+    "archiveH": "Архив",
+    "installedTag": "установлена",
+    "notInstalledShort": "не установлена",
+    "addonInfo": "Подробнее: {name}",
+    "addonVer": "Версия {v}",
+    "addonNext": "версия {v} встанет со следующим обновлением",
+    "addonLater": "действует со следующего запуска игры",
+    "launcherNew": "Вышел Elite Launcher {v}",
+    "launcherUpdateBtn": "Обновить лаунчер",
+    "launcherUpdating": "Обновляю лаунчер… {p}",
+    "launcherFail": "Не удалось обновить лаунчер: {e}",
+    "noNews": "Новостей пока нет"
   },
   es: {
     "fbTitle": "Escribir a los desarrolladores",
@@ -290,7 +316,20 @@ const T = {
     "sendLogsNote": "envía al desarrollador los registros de los complementos y del juego (estadísticas del lobby, lag del observador, botón Continue)",
     "logsSent": "Registros enviados, ¡gracias! Referencia: {id}",
     "sending": "Enviando…",
-    "sendLogsHome": "📋 Enviar registros al desarrollador"
+    "sendLogsHome": "Enviar registros al desarrollador",
+    "versions": "Versiones",
+    "archiveH": "Archivo",
+    "installedTag": "instalada",
+    "notInstalledShort": "no instalada",
+    "addonInfo": "Detalles: {name}",
+    "addonVer": "Versión {v}",
+    "addonNext": "la versión {v} llega con la próxima actualización",
+    "addonLater": "se aplica la próxima vez que inicies el juego",
+    "launcherNew": "Ya está Elite Launcher {v}",
+    "launcherUpdateBtn": "Actualizar el launcher",
+    "launcherUpdating": "Actualizando el launcher… {p}",
+    "launcherFail": "No se pudo actualizar el launcher: {e}",
+    "noNews": "Aún no hay noticias"
   },
   fr: {
     "fbTitle": "Écrire aux développeurs",
@@ -382,7 +421,20 @@ const T = {
     "sendLogsNote": "envoie au développeur les journaux des modules et du jeu (statistiques du lobby, lag de l'observateur, bouton Continue)",
     "logsSent": "Journaux envoyés, merci ! Référence : {id}",
     "sending": "Envoi…",
-    "sendLogsHome": "📋 Envoyer les journaux au développeur"
+    "sendLogsHome": "Envoyer les journaux au développeur",
+    "versions": "Versions",
+    "archiveH": "Archives",
+    "installedTag": "installée",
+    "notInstalledShort": "non installée",
+    "addonInfo": "Détails : {name}",
+    "addonVer": "Version {v}",
+    "addonNext": "la version {v} arrive avec la prochaine mise à jour",
+    "addonLater": "s’applique au prochain lancement du jeu",
+    "launcherNew": "Elite Launcher {v} est disponible",
+    "launcherUpdateBtn": "Mettre à jour le launcher",
+    "launcherUpdating": "Mise à jour du launcher… {p}",
+    "launcherFail": "Impossible de mettre à jour le launcher : {e}",
+    "noNews": "Pas encore d’actualités"
   },
   de: {
     "fbTitle": "An die Entwickler schreiben",
@@ -474,7 +526,20 @@ const T = {
     "sendLogsNote": "schickt dem Entwickler die Logs der Erweiterungen und des Spiels (Lobby-Statistik, Beobachter-Lag, Continue-Knopf)",
     "logsSent": "Logs gesendet, danke! Nummer: {id}",
     "sending": "Sende…",
-    "sendLogsHome": "📋 Logs an den Entwickler senden"
+    "sendLogsHome": "Logs an den Entwickler senden",
+    "versions": "Versionen",
+    "archiveH": "Archiv",
+    "installedTag": "installiert",
+    "notInstalledShort": "nicht installiert",
+    "addonInfo": "Details: {name}",
+    "addonVer": "Version {v}",
+    "addonNext": "Version {v} kommt mit dem nächsten Update",
+    "addonLater": "gilt ab dem nächsten Spielstart",
+    "launcherNew": "Elite Launcher {v} ist da",
+    "launcherUpdateBtn": "Launcher aktualisieren",
+    "launcherUpdating": "Launcher wird aktualisiert… {p}",
+    "launcherFail": "Launcher konnte nicht aktualisiert werden: {e}",
+    "noNews": "Noch keine Neuigkeiten"
   },
 };
 
@@ -488,6 +553,12 @@ const mb = b => b >= 1e9 ? (b / 1e9).toFixed(2) + ' GB' : (b / 1e6).toFixed(b < 
 const mbps = b => b >= 1e6 ? (b / 1e6).toFixed(1) + ' MB/s' : Math.max(1, Math.round(b / 1e3)) + ' KB/s';
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const open = url => url && invoke('open_url', { url }).catch(e => toast(e, true));
+// Windows long-path prefix from canonicalize() is noise for the player: \\?\G:\Steam → G:\Steam
+const winPath = p => String(p || '').replace(/\\\\\?\\/g, '');
+const day = d => {
+  const x = new Date(String(d).slice(0, 10) + 'T12:00:00');
+  return isNaN(x) ? d : x.toLocaleDateString(lang, { day: 'numeric', month: 'long', year: x.getFullYear() === new Date().getFullYear() ? undefined : 'numeric' });
+};
 
 function toast(msg, err) {
   const el = $('toast'); el.textContent = String(msg); el.className = 'toast' + (err ? ' err' : '');
@@ -495,6 +566,66 @@ function toast(msg, err) {
 }
 
 function channelOf(id) { return (S.config?.channels || []).find(c => c.id === id); }
+
+function verOpen(on) {
+  $('verList').classList.toggle('hidden', !on);
+  $('verBtn').classList.toggle('on', on);
+}
+
+// details of an add-on next to its "?": description, version, a hand-installed copy in the game folder
+function popAddon(btn, c) {
+  const pop = $('pop');
+  if (!c || (pop.dataset.id === c.id && !pop.classList.contains('hidden'))) return popClose();
+  const v = x => 'v' + String(x || '').replace(new RegExp('^' + c.id + '-'), '');
+  const ver = c.installed ? t('addonVer', { v: v(c.installed) }) + (c.latest && c.latest !== c.installed ? ', ' + t('addonNext', { v: v(c.latest) }) : '')
+    : c.latest ? t('addonVer', { v: v(c.latest) }) : '';
+  pop.innerHTML = `<b>${esc(L(c.name) || c.id)}</b>` + (L(c.description) ? `<p>${esc(L(c.description))}</p>` : '')
+    + `<div class="v">${esc([ver, t('addonLater')].filter(Boolean).join(' · '))}</div>`
+    + (c.enabled && (c.conflicts || []).length ? `<div class="w">${esc(t('conflictActive'))}</div>` : '');
+  pop.dataset.id = c.id;
+  pop.classList.remove('hidden');
+  document.querySelectorAll('.qm.on').forEach(x => x.classList.remove('on'));
+  btn.classList.add('on');
+  // to the left of the add-on panel, level with the row, so it covers none of the switches
+  const r = btn.getBoundingClientRect(), panel = btn.closest('.panel').getBoundingClientRect();
+  pop.style.left = Math.max(8, panel.left - pop.offsetWidth - 8) + 'px';
+  pop.style.top = Math.max(8, Math.min(window.innerHeight - pop.offsetHeight - 8, r.top - 12)) + 'px';
+}
+function popClose() {
+  $('pop').classList.add('hidden');
+  $('pop').dataset.id = '';
+  document.querySelectorAll('.qm.on').forEach(x => x.classList.remove('on'));
+}
+
+// launcher self-update, offered and never forced. LU: a newer launcher this copy can install itself (launcher_check);
+// without it the launcher_update of launcher.json links to the download page, as before.
+let LU = null;
+function renderLauncherBanner() {
+  const lu = S.launcher_update, v = LU ? LU.version : lu?.version, b = $('launcherBanner');
+  b.classList.toggle('hidden', !v);
+  if (!v) return;
+  b.classList.toggle('link', !LU);
+  $('launcherBtn').classList.toggle('hidden', !LU || !!LU.installing);
+  if (LU) {
+    $('launcherText').textContent = LU.installing ? t('launcherUpdating', { p: LU.pct || '' }) : t('launcherNew', { v });
+    $('launcherBtn').textContent = t('launcherUpdateBtn');
+    $('launcherBtn').disabled = !!S.busy;
+    $('launcherBtn').onclick = launcherInstall;
+    b.onclick = null;
+  } else {
+    $('launcherText').textContent = L(lu.text) || t('launcherUpdate', { v });
+    b.onclick = () => open(lu.url);
+  }
+}
+async function launcherCheck() {
+  try { const r = await invoke('launcher_check'); if (r && !LU?.installing) LU = r; } catch (e) { /* offline: try again later */ }
+  if (S) renderLauncherBanner();
+}
+async function launcherInstall() {
+  LU.installing = true; LU.pct = ''; renderLauncherBanner();
+  try { await invoke('launcher_install'); }   // the launcher restarts into the new version
+  catch (e) { LU.installing = false; renderLauncherBanner(); toast(t('launcherFail', { e }), true); }
+}
 
 let trayLang = '';
 function syncTrayLabels() {
@@ -514,10 +645,7 @@ function render() {
   $('title').textContent = L(cfg.title) || 'Elite Mod';
   $('subtitle').textContent = L(cfg.subtitle) || 'Dawn of War II · Retribution';
 
-  // launcher self-update: offered, never forced
-  const lu = S.launcher_update;
-  $('launcherBanner').classList.toggle('hidden', !lu);
-  if (lu) { $('launcherBanner').textContent = L(lu.text) || t('launcherUpdate', { v: lu.version }); $('launcherBanner').onclick = () => open(lu.url); }
+  renderLauncherBanner();
 
   // announcements
   const today = new Date().toISOString().slice(0, 10);
@@ -529,13 +657,26 @@ function render() {
     open(el.dataset.url);
   });
 
-  // news
-  $('news').innerHTML = (cfg.news || []).map((n, i) => `<div class="item" data-i="${i}"><div class="d">${esc(n.date)}</div><div class="t">${esc(L(n.title))}</div><div class="x">${esc(L(n.text))}</div></div>`).join('')
-    || `<div class="installed">${esc(S.config_loaded ? '' : t('connecting'))}</div>`;
-  $('news').querySelectorAll('.item').forEach(el => el.onclick = () => open(cfg.news[+el.dataset.i].url));
+  // news: the team's posts from launcher.json and the release notes of the launcher and the patches, newest first
+  const news = (cfg.news || []).map(n => ({ date: n.date || '', title: L(n.title), text: L(n.text), url: n.url }))
+    .concat((S.release_news || []).map(n => ({ date: n.date, title: n.title, items: n.items || [], url: n.url })))
+    .sort((x, y) => String(y.date).localeCompare(String(x.date))).slice(0, 12);
+  $('news').innerHTML = news.map(n => (n.url ? `<a class="news-item" href="#" data-url="${esc(n.url)}">` : '<div class="news-item">')
+    + `<div class="t">${esc(n.title)}</div>` + (n.date ? `<div class="d">${esc(day(n.date))}</div>` : '')
+    + (n.text ? `<div class="x">${esc(n.text)}</div>` : '')
+    + (n.items && n.items.length ? `<ul>${n.items.slice(0, 3).map(x => `<li>${esc(x)}</li>`).join('')}${n.items.length > 3 ? '<li>…</li>' : ''}</ul>` : '')
+    + (n.url ? '</a>' : '</div>')).join('')
+    || `<div class="news-empty">${esc(S.config_loaded ? t('noNews') : t('connecting'))}</div>`;
+  $('news').querySelectorAll('[data-url]').forEach(el => el.onclick = e => { e.preventDefault(); open(el.dataset.url); });
   const more = cfg.news_more;
   $('newsMore').classList.toggle('hidden', !more?.url);
-  if (more?.url) { $('newsMore').textContent = L(more.title) || t('allNews'); $('newsMore').onclick = () => open(more.url); }
+  if (more?.url) { $('newsMore').textContent = (L(more.title) || t('allNews')) + ' ›'; $('newsMore').onclick = () => open(more.url); }
+
+  // links
+  const links = cfg.links || [];
+  $('linksBox').classList.toggle('hidden', !links.length);
+  $('links').innerHTML = links.map((l, i) => `<button data-i="${i}">${esc(L(l.title))}</button>`).join('');
+  $('links').querySelectorAll('button').forEach(b => b.onclick = () => open(links[+b.dataset.i].url));
 
   // game / steam missing → guide the player
   const setup = $('setup');
@@ -551,38 +692,47 @@ function render() {
     $('pick').onclick = pickDir; $('rescan').onclick = reload;
   } else setup.classList.add('hidden');
 
-  // versions: main one marked, the installed one marked, every other one switches in one click
+  // versions: a picker above Play; the main one marked, the installed one ticked, any other one switches in one click
   const chans = cfg.channels || [];
   const activeCh = chans.find(c => c.version === S.installed_version && c.id === S.installed_channel) || chans.find(c => c.version === S.installed_version);
   const mainCh = chans.find(c => c.id === S.main_channel);
-  const row = c => {
+  const locked = S.busy || S.game_running || !S.game_found || !S.config_loaded;
+  const item = c => {
     const isActive = activeCh && c.id === activeCh.id, isMain = c.id === S.main_channel;
     const cost = (S.costs || {})[c.version];
-    const hint = cost === undefined ? t('needDl') : cost === 0 ? t('instant') : t('upTo', { s: mb(cost) });
+    const hint = isActive ? '✓ ' + t('installedTag') : cost === undefined ? t('needDl') : cost === 0 ? t('instant') : t('upTo', { s: mb(cost) });
     const tags = (isMain ? `<span class="tag main">${esc(t('main'))}</span>` : '') + (L(c.badge) && !isMain ? `<span class="tag beta">${esc(L(c.badge))}</span>` : '');
-    const right = isActive ? `<span class="tag ok">✓ ${esc(t('active'))}</span>`
-      : `<button class="btn sw" data-id="${esc(c.id)}" ${S.busy || S.game_running || !S.game_found || !S.config_loaded ? 'disabled' : ''}>${esc(S.installed_version ? t('switchBtn') : t('installBtn'))}<small>${esc(hint)}</small></button>`;
-    return `<div class="ch ${isActive ? 'act' : ''} ${isMain ? 'main' : ''}"><div class="nm"><b>${esc(L(c.name) || c.id)}</b>${tags}
-      <small>${esc(isMain ? t('mainNote') : L(c.description))}</small></div>${right}</div>`;
+    const note = isMain ? t('mainNote') : L(c.description);
+    return `<button class="vi ${isActive ? 'act' : ''}" data-id="${esc(c.id)}" ${isActive || locked ? 'disabled' : ''}><span class="nm"><b>${esc(L(c.name) || c.id)}</b>${tags}`
+      + `${note ? `<small>${esc(note)}</small>` : ''}</span><span class="cost ${isActive || cost === 0 ? 'ok' : ''}">${esc(hint)}</span></button>`;
   };
   const live = chans.filter(c => !c.archive), arch = chans.filter(c => c.archive);
-  $('channels').innerHTML = live.map(row).join('') + (arch.length ? `<details class="arch" ${arch.some(c => activeCh && c.id === activeCh.id) ? 'open' : ''}><summary>${esc(t('archive', { n: arch.length }))}</summary>${arch.map(row).join('')}</details>` : '');
-  $('channels').querySelectorAll('.sw').forEach(b => b.onclick = () => switchTo(b.dataset.id));
-  $('installed').innerHTML = activeCh
-    ? esc(t('youPlay', { name: L(activeCh.name) })) + (mainCh && activeCh.id !== mainCh.id ? ' <span class="warn">' + esc(t('notMain', { name: L(mainCh.name) })) + '</span>' : '')
-    : esc(S.installed_version ? t('current', { v: S.installed_version }) : (S.game_found ? t('notInstalled') : ''));
+  $('verList').innerHTML = `<div class="lh">${esc(t('versions'))}</div>` + live.map(item).join('')
+    + (arch.length ? `<div class="lh">${esc(t('archiveH'))}</div>` + arch.map(item).join('') : '');
+  $('verList').querySelectorAll('.vi:not(:disabled)').forEach(b => b.onclick = () => { verOpen(false); switchTo(b.dataset.id); });
+  const shown = activeCh || (!S.installed_version && mainCh);
+  $('verBtn').innerHTML = shown
+    ? `<b>${esc(L(shown.name) || shown.id)}</b><small class="${activeCh ? 'ok' : ''}">${esc(activeCh ? '✓ ' + t('installedTag') : t('notInstalledShort'))}</small>`
+    : `<b>${esc(S.installed_version || '—')}</b>${S.installed_version ? `<small class="ok">✓ ${esc(t('installedTag'))}</small>` : ''}`;
+  $('verBtn').disabled = !chans.length;
+  if (!chans.length) verOpen(false);
+  const notMain = activeCh && mainCh && activeCh.id !== mainCh.id;
+  $('verWarn').classList.toggle('hidden', !notMain);
+  if (notMain) $('verWarn').textContent = t('youPlay', { name: L(activeCh.name) }) + ' ' + t('notMain', { name: L(mainCh.name) });
 
-  // add-ons (components)
-  const vshort = (c, v) => String(v || '').replace(new RegExp('^' + c.id + '-'), '');
-  const compVer = c => !c.installed ? (c.enabled && c.latest ? ' <span class="tag">→ v' + esc(vshort(c, c.latest)) + '</span>' : '')
-    : ' <span class="tag ok">v' + esc(vshort(c, c.installed)) + '</span>'
-      + (c.latest && c.latest !== c.installed ? ' <span class="tag">→ v' + esc(vshort(c, c.latest)) + '</span>' : '');
+  // add-ons: a switch each, the details behind "?"; an add-on's own options show up under it once it is on
   const comps = S.components || [];
   $('compBox').classList.toggle('hidden', !comps.length);
   const lockC = S.busy || S.game_running;   // the game holds the add-on files while it runs
-  $('components').innerHTML = (S.game_running ? `<small class="warn" style="display:block;margin:0 0 10px">${esc(t('gameRunningAddons'))}</small>` : '')
-    + comps.map(c => `<label class="comp"><input type="checkbox" data-id="${esc(c.id)}" ${c.enabled ? 'checked' : ''} ${lockC ? 'disabled' : ''}><div><b>${esc(L(c.name) || c.id)}${compVer(c)}</b><small>${esc(L(c.description))}</small>${c.enabled && (c.conflicts || []).length ? `<small class="warn">${esc(t('conflictActive'))}</small>` : ''}</div></label>`
-    + (c.options || []).map(o => `<label class="opt"><input type="checkbox" data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${o.on ? 'checked' : ''} ${!c.enabled || lockC ? 'disabled' : ''}><span>${esc(L(o.name) || o.id)}</span></label>`).join('')).join('');
+  const nameHtml = c => { const n = L(c.name) || c.id, m = n.match(/^(.+?)\s*\(([^()]+)\)$/); return m ? `${esc(m[1])}<small>${esc(m[2])}</small>` : esc(n); };
+  $('components').innerHTML = (S.game_running ? `<div class="addon-note">${esc(t('gameRunningAddons'))}</div>` : '')
+    + comps.map(c => `<div class="addon ${c.enabled ? '' : 'off'}"><div class="addon-row"><span class="addon-name" title="${esc(L(c.name) || c.id)}">${nameHtml(c)}</span>`
+      + (c.enabled && (c.conflicts || []).length ? `<span class="addon-warn" title="${esc(t('conflictActive'))}">!</span>` : '')
+      + `<button class="qm ${$('pop').dataset.id === c.id ? 'on' : ''}" data-info="${esc(c.id)}" aria-label="${esc(t('addonInfo', { name: L(c.name) || c.id }))}">?</button>`
+      + `<label class="switch"><input type="checkbox" role="switch" data-id="${esc(c.id)}" aria-label="${esc(L(c.name) || c.id)}" ${c.enabled ? 'checked' : ''} ${lockC ? 'disabled' : ''}><i></i></label></div>`
+      + (c.enabled && (c.options || []).length ? '<div class="addon-opts">' + c.options.map(o => `<label class="addon-opt"><input type="checkbox" data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${o.on ? 'checked' : ''} ${lockC ? 'disabled' : ''}>${esc(L(o.name) || o.id)}</label>`).join('') + '</div>' : '')
+      + '</div>').join('');
+  $('components').querySelectorAll('.qm').forEach(b => b.onclick = e => { e.stopPropagation(); popAddon(b, comps.find(c => c.id === b.dataset.info)); });
   $('components').querySelectorAll('input[data-opt]').forEach(cb => cb.onchange = () =>
     invoke('set_comp_option', { comp: cb.dataset.comp, opt: cb.dataset.opt, on: cb.checked }).then(reload).catch(e => toast(e, true)));
   $('components').querySelectorAll('input[data-id]').forEach(cb => cb.onchange = async () => {
@@ -598,21 +748,8 @@ function render() {
     if (S.installed_version) { try { await invoke('start_update', { repair: false, componentsOnly: true }); S.busy = true; render(); } catch (e) { toast(e, true); } }
     else reload();
   });
-  // links
-  $('links').innerHTML = (cfg.links || []).map((l, i) => `<button data-i="${i}">${esc(L(l.title))}</button>`).join('');
-  $('links').querySelectorAll('button').forEach(b => b.onclick = () => open(cfg.links[+b.dataset.i].url));
 
-  // update banner (non-blocking)
-  const target = channelOf(S.installed_channel) || channelOf(S.channel);
-  const showUpd = target && S.installed_version && target.version !== S.installed_version && !S.busy;
-  $('updateBanner').classList.toggle('hidden', !showUpd);
-  if (showUpd) {
-    $('updateText').textContent = (L(cfg.update_text) || t('switchTo', { name: '{name}' })).replace('{name}', L(target.name)).replace('{version}', target.version);
-    $('updateBtn').textContent = t('updateNow');
-    $('updateBtn').onclick = () => switchTo(target.id);
-  }
-
-  // footer
+  // Play
   const play = $('play');
   play.classList.remove('install');
   $('cancel').classList.toggle('hidden', !S.busy);
@@ -622,22 +759,29 @@ function render() {
   else if (!S.installed_version) { play.textContent = t('install'); play.classList.add('install'); play.disabled = !S.config_loaded; }
   else { play.textContent = t('play'); play.disabled = false; }
   play.onclick = () => (S.installed_version ? doPlay() : switchTo(S.main_channel || S.channel));
-  $('playWhat').textContent = S.busy ? '' : activeCh ? L(activeCh.name) : (!S.installed_version && mainCh ? L(mainCh.name) : '');
   const prev = channelOf(S.prev_channel || '');
   $('quick').classList.toggle('hidden', !prev || S.busy || !S.installed_version);
   if (prev) { $('quick').textContent = t('back', { name: L(prev.name) }); $('quick').onclick = () => switchTo(prev.id); }
 
+  // status line; a newer version of the installed one is offered here (never forced)
+  const target = channelOf(S.installed_channel) || channelOf(S.channel);
+  const showUpd = !!(target && S.installed_version && target.version !== S.installed_version && !S.busy && !S.game_running && !S.last_error);
+  $('updateBtn').classList.toggle('hidden', !showUpd);
+  if (showUpd) { $('updateBtn').textContent = t('updateNow'); $('updateBtn').onclick = () => switchTo(target.id); }
   if (!S.busy) {
     $('bar').classList.add('hidden');
+    $('statusText').classList.toggle('err', !!(S.last_error && S.config_loaded));
+    const cost = showUpd ? (S.costs || {})[target.version] : 0;
     $('statusText').innerHTML = S.last_error && !S.config_loaded ? esc(t('offline'))
-      : S.last_error ? esc(S.last_error)
+      : S.last_error ? esc(winPath(S.last_error))
+      : showUpd ? `<b>${esc((L(cfg.update_text) || t('switchTo', { name: '{name}' })).replace('{name}', L(target.name)).replace('{version}', target.version))}</b>` + (cost ? ' · ' + esc(t('upTo', { s: mb(cost) })) : '')
       : S.installed_version ? esc(t('ready', { v: activeCh ? L(activeCh.name).replace(/^Elite\s+/i, '') : S.installed_version })) : (S.config_loaded ? '' : esc(t('connecting')));
     const hint = L(cfg.launch?.[S.os]?.hint);
-    $('statusMeta').textContent = [hint, S.game_dir || ''].filter(Boolean).join(' · ');
+    $('statusMeta').textContent = [hint, winPath(S.game_dir)].filter(Boolean).join(' · ');
   }
 
   // settings
-  $('gameDir').textContent = S.game_dir || '—';
+  $('gameDir').textContent = winPath(S.game_dir) || '—';
   $('lang').value = S.lang || '';
   $('cache').value = String(S.cache_mb);
   $('usage').checked = S.usage_stats !== false;
@@ -646,7 +790,7 @@ function render() {
   $('mirrorInfo').textContent = t('mirrors', { n: S.mirror_count });
   $('repair').disabled = S.busy || S.game_running || !S.installed_version;
   $('about').textContent = `Elite Launcher ${S.launcher_version} · ${S.os}`;
-  $('hdrVer').textContent = S.launcher_version ? `v${S.launcher_version}` : '';
+  $('hdrVer').textContent = S.launcher_version ? `Launcher ${S.launcher_version}` : '';
 }
 
 function renderProgress(p) {
@@ -662,6 +806,7 @@ function renderProgress(p) {
     } else { dlPrev = { b: p.downloaded, t: now }; }
     if (speedEMA > 0) spd = ` · ${mbps(speedEMA)}`;
   }
+  $('statusText').classList.remove('err');
   $('statusText').innerHTML = (p.phase === 'checking' ? esc(t('checking', { p: pct })) : esc(t('downloading', { file: p.file.split('/').pop() })) + ` <b>${pct}%</b>`) + spd;
   $('statusMeta').textContent = t('meta', { dl: mb(p.downloaded), re: mb(p.reused), fc: mb(p.from_cache), m: p.mirror });
 }
@@ -715,6 +860,13 @@ listen('net', e => {
   else if (a[0] === 'try') { if (netActive) $('statusText').textContent = t('netTry', { host: a[1], k: a[2], n: a[3] }); }
   else if (a[0] === 'fail') { $('statusText').textContent = t('netFail', { host: a[1] }); }
 });
+listen('launcher_progress', e => {
+  if (!LU) return;
+  const { done, total } = e.payload;
+  LU.pct = total ? Math.min(100, Math.round(100 * done / total)) + '%' : mb(done);
+  renderLauncherBanner();
+});
+listen('news', () => { if (S) reload(); });
 listen('game_running', e => { if (!S) return; S.game_running = e.payload; render(); if (!e.payload) refresh(); });
 listen('progress', e => { netActive = false; prog = e.payload; if (S) { S.busy = true; renderProgress(prog); } });
 listen('update_done', async e => {
@@ -753,9 +905,19 @@ async function sendLogs(btn, label) {
   finally { btn.disabled = false; btn.textContent = t(label); }
 }
 $('sendLogs').onclick = () => sendLogs($('sendLogs'), 'sendLogs');
-$('sendLogsHome').onclick = () => sendLogs($('sendLogsHome'), 'sendLogsHome');
+$('sendLogsHome').onclick = () => sendLogs($('sendLogsHome'), 'sendLogs');
+
+$('verBtn').onclick = e => { e.stopPropagation(); verOpen($('verList').classList.contains('hidden')); };
+document.addEventListener('click', e => {
+  if (!$('verList').contains(e.target)) verOpen(false);
+  if (!$('pop').contains(e.target)) popClose();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { verOpen(false); popClose(); } });
+window.addEventListener('resize', popClose);
 
 reload().then(refresh);
+launcherCheck();
+setInterval(launcherCheck, 6 * 3600 * 1000);
 setInterval(() => { if (S && !S.busy) refresh(); }, 15 * 60 * 1000);   // pick up new versions and announcements
 
 

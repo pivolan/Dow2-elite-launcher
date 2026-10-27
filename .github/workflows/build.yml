@@ -20,6 +20,9 @@ env:
   ELITE_MIRRORS: ${{ secrets.ELITE_MIRRORS }}
   # where "Send logs" uploads to (secret): "https://a;https://b"
   ELITE_LOG_HOSTS: ${{ secrets.ELITE_LOG_HOSTS }}
+  # public half of the launcher self-update key (`cargo tauri signer generate`), compiled into the launcher;
+  # the private half (TAURI_SIGNING_PRIVATE_KEY) is passed only to the steps that sign
+  TAURI_SIGNING_PUBLIC_KEY: ${{ secrets.TAURI_SIGNING_PUBLIC_KEY }}
 
 jobs:
   version:
@@ -30,6 +33,20 @@ jobs:
       release: ${{ steps.version.outputs.release }}
       build_ref: ${{ steps.version.outputs.build_ref }}
     steps:
+      # A launcher built without these can't reach the mirrors, send logs or update itself: no build at all then.
+      - name: Required secrets
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+        run: |
+          missing=""
+          for k in ELITE_MIRRORS ELITE_LOG_HOSTS TAURI_SIGNING_PUBLIC_KEY TAURI_SIGNING_PRIVATE_KEY; do
+            [ -n "$(printenv "$k" | tr -d '[:space:]')" ] || missing="$missing $k"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secrets:$missing. Add them in Settings > Secrets and variables > Actions > Repository secrets (not in an environment: the build jobs don't use one)."
+            exit 1
+          fi
+          echo "Required secrets: present"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -114,18 +131,17 @@ jobs:
         if: matrix.os == 'ubuntu-22.04'
         run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev libsoup-3.0-dev librsvg2-dev libayatana-appindicator3-dev patchelf
       - run: cargo install tauri-cli --version "^2" --locked
-      - name: Require built-in mirrors for a release build
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        shell: bash
-        run: |
-          if [ -z "${ELITE_MIRRORS// }" ]; then
-            echo "::error::ELITE_MIRRORS is empty - a launcher built without mirrors cannot reach the update server; set the repository secret ELITE_MIRRORS before deploying."
-            exit 1
-          fi
-          echo "Built-in mirrors: present"
+      # Self-update artifacts (the installer / AppImage / .deb / .app.tar.gz plus a .sig) are signed with the updater
+      # key; the public key goes into the bundler config here, so the repository and local builds don't need it.
       - name: Build
         working-directory: app
-        run: cargo tauri build ${{ matrix.args }}
+        shell: bash
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          printf '{"bundle":{"createUpdaterArtifacts":true},"plugins":{"updater":{"pubkey":"%s"}}}' "$TAURI_SIGNING_PUBLIC_KEY" > "$RUNNER_TEMP/updater.conf.json"
+          cargo tauri build ${{ matrix.args }} --config "$RUNNER_TEMP/updater.conf.json"
       - uses: actions/upload-artifact@v4
         with:
           name: elite-launcher-${{ matrix.os }}
@@ -145,6 +161,7 @@ jobs:
           case "${{ runner.os }}" in
             Windows)
               cp target/release/bundle/nsis/*_x64-setup.exe "$out/EliteLauncher-$V-setup.exe"
+              cp target/release/bundle/nsis/*_x64-setup.exe.sig "$out/EliteLauncher-$V-setup.exe.sig"
               mkdir -p pz/EliteLauncher
               cp target/release/elite-launcher.exe pz/EliteLauncher/EliteLauncher.exe
               [ -f target/release/WebView2Loader.dll ] && cp target/release/WebView2Loader.dll pz/EliteLauncher/ || true
@@ -152,7 +169,9 @@ jobs:
               ;;
             Linux)
               cp target/release/bundle/appimage/*_amd64.AppImage "$out/EliteLauncher-$V.AppImage"
+              cp target/release/bundle/appimage/*_amd64.AppImage.sig "$out/EliteLauncher-$V.AppImage.sig"
               cp target/release/bundle/deb/*_amd64.deb "$out/elite-launcher_${V}_amd64.deb"
+              cp target/release/bundle/deb/*_amd64.deb.sig "$out/elite-launcher_${V}_amd64.deb.sig"
               git ls-files | grep -v private > srcfiles.txt   # tracked-only: не тянуть собранные артефакты в src-зип
               python3 - "$V" <<'PY'
           import sys,zipfile
@@ -168,6 +187,10 @@ jobs:
               [ -n "$app" ] || app=$(find target -type d -name '*.app' | head -1)
               echo "app bundle: $app"
               ditto -c -k --keepParent "$app" "$out/EliteLauncher-$V-mac.zip"
+              # the self-update replaces the whole .app from this archive
+              upd=$(find target -name '*.app.tar.gz' -path '*/bundle/macos/*' | head -1)
+              cp "$upd" "$out/EliteLauncher-$V-mac.app.tar.gz"
+              cp "$upd.sig" "$out/EliteLauncher-$V-mac.app.tar.gz.sig"
               ;;
           esac
           ls -la "$out"
@@ -198,7 +221,13 @@ jobs:
       - name: Use the signed Windows files
         if: matrix.os == 'windows-latest' && vars.SIGNPATH_ORGANIZATION_ID != '' && needs.version.outputs.release == 'true'
         shell: bash
-        run: cp -f signed/* deploy/
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          cp -f signed/* deploy/
+          # SignPath changed the installer: sign it for the self-update again, over the final file
+          cargo tauri signer sign "deploy/EliteLauncher-${{ needs.version.outputs.number }}-setup.exe"
       - name: Upload deploy artifact
         uses: actions/upload-artifact@v4
         with:
@@ -326,6 +355,9 @@ jobs:
             echo "**Code signing policy:** [CODE_SIGNING.md](https://github.com/$REPO/blob/main/CODE_SIGNING.md)." \
               "Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org)."
           } > release-notes.md
+          # what the launcher's self-update reads (releases/latest/download/updater.json); the .sig files go into it
+          python3 scripts/updater_manifest.py "$VERSION" "https://github.com/$REPO/releases/download/$TAG" dist > dist/updater.json
+          rm -f dist/*.sig
           gh release create "$TAG" dist/* --title "Elite Launcher $VERSION" --notes-file release-notes.md --verify-tag
 
   # After a merge to main: ship the installers to the download folder on the server (scoped rsync key,
@@ -345,6 +377,7 @@ jobs:
           path: dist
       - name: Build latest.json
         run: |
+          rm -f dist/*.sig   # self-update signatures only matter in updater.json on the GitHub Release
           cat > dist/latest.json <<EOF
           {
             "version": "$V",

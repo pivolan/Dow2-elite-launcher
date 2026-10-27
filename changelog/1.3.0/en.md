@@ -1,0 +1,6 @@
+- New home screen: news and links on the left, the chat with the developers in the middle, add-ons, the version picker and Play on the right.
+- Add-ons are compact switches; the description, version and notes are behind "?", and an add-on's own options show up under it once it is on.
+- News come back to the home screen: the team's posts plus the release notes of the launcher and Dow2-patches from GitHub, without anyone writing them by hand.
+- The launcher updates itself: "Update the launcher" downloads the new version, checks its signature, installs it and restarts (not for the portable zip).
+- The tray icon from 1.2.x: the launcher hides to the tray when the game starts (can be turned off in the settings).
+- Game paths are shown without the `\\?\` prefix.
