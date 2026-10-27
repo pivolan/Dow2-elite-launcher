@@ -151,6 +151,7 @@ built from the tagged code; otherwise raise the version first.
 
 License: MIT.
 
-## Code signing
+## Code signing policy
 
-Windows builds are signed for free by SignPath Foundation, see [CODE_SIGNING.md](CODE_SIGNING.md) (includes the privacy policy).
+Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+Team roles, which files are signed and the privacy policy: [CODE_SIGNING.md](CODE_SIGNING.md).
