@@ -1,8 +1,6 @@
 name: build
+# push/pull_request triggers are off for now: builds and deploys only by a manual run
 on:
-  push:
-    branches: ["**"]
-  pull_request:
   workflow_dispatch:
     inputs:
       release:
