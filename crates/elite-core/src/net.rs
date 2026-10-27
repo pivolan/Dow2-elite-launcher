@@ -12,6 +12,8 @@ pub struct Mirrors {
     agent: ureq::Agent,
     pub downloaded: Arc<AtomicU64>,
     pub cancel: Arc<AtomicBool>,
+    /// Optional sink for network-phase status (which mirror is being tried / failed over), so the UI can show it.
+    pub on_status: Option<Box<dyn Fn(String) + Send>>,
 }
 
 #[derive(Debug)]
@@ -51,6 +53,7 @@ impl Mirrors {
             agent,
             downloaded: Arc::new(AtomicU64::new(0)),
             cancel: Arc::new(AtomicBool::new(false)),
+            on_status: None,
         }
     }
 
@@ -83,6 +86,9 @@ impl Mirrors {
             if self.dead[i].load(Ordering::Relaxed) && k < n - 1 {
                 continue;
             }
+            if let Some(cb) = &self.on_status {
+                cb(format!("try\t{}\t{}\t{}", host_of(&self.bases[i]), k + 1, n));
+            }
             match f(&self.bases[i]) {
                 Ok(v) => {
                     self.current.store(i, Ordering::Relaxed);
@@ -91,6 +97,9 @@ impl Mirrors {
                 }
                 Err((not_found, e)) => {
                     last = format!("{}: {e}", host_of(&self.bases[i]));
+                    if let Some(cb) = &self.on_status {
+                        cb(format!("fail\t{}\t{}", host_of(&self.bases[i]), e));
+                    }
                     if !not_found {
                         self.dead[i].store(true, Ordering::Relaxed);
                     }

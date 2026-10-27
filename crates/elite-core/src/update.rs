@@ -212,14 +212,25 @@ pub fn load_manifest(game: &Game, m: &Mirrors, version: &str) -> Result<Manifest
 
 /// Upper bound of what switching to `man` would download: files that differ from the installed
 /// ones and are not in the local version cache. 0 = the switch is instant (works offline).
-pub fn switch_cost(game: &Game, man: &Manifest) -> u64 {
+pub fn switch_cost(game: &Game, old: Option<&Manifest>, man: &Manifest) -> u64 {
     let st = game.load_state();
     let have: std::collections::HashMap<&str, &str> = st.files.iter().map(|f| (f.path.as_str(), f.sha.as_str())).collect();
     let cache = game.cache_dir();
-    man.files.iter().filter(|f| {
+    // chunk hashes of the currently-installed version per file, to estimate the real delta (not full files)
+    let old_chunks: std::collections::HashMap<&str, std::collections::HashSet<u64>> = old
+        .map(|o| o.files.iter().map(|f| (f.path.as_str(), f.chunks.iter().map(|c| c.hash).collect())).collect())
+        .unwrap_or_default();
+    man.files.iter().map(|f| {
         let h = hex(&f.sha);
-        have.get(f.path.as_str()) != Some(&h.as_str()) && !cache.join(&h).is_file()
-    }).map(|f| f.size).sum()
+        if have.get(f.path.as_str()) == Some(&h.as_str()) || cache.join(&h).is_file() {
+            return 0; // already have this exact file (on disk or in local cache)
+        }
+        match old_chunks.get(f.path.as_str()) {
+            // only chunks absent from the installed version's file get downloaded
+            Some(oldset) => f.chunks.iter().filter(|c| !oldset.contains(&c.hash)).map(|c| c.len as u64).sum(),
+            None => f.size, // nothing to diff against -> full file
+        }
+    }).sum()
 }
 
 // ---------- version cache ----------

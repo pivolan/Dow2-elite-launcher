@@ -87,9 +87,13 @@ fn compute_costs(app: &AppHandle) {
         }
     }
     let mut out = BTreeMap::new();
+    let old_man = {
+        let v = g.load_state().version;
+        if v.is_empty() { None } else { update::load_manifest(&g, &m, &v).ok() }
+    };
     for c in &cfg.channels {
         if let Ok(man) = update::load_manifest(&g, &m, &c.version) {
-            out.insert(c.version.clone(), update::switch_cost(&g, &man));
+            out.insert(c.version.clone(), update::switch_cost(&g, old_man.as_ref(), &man));
         }
     }
     *st.costs.lock().unwrap() = out;
@@ -233,8 +237,10 @@ async fn refresh(app: AppHandle) -> Result<Value, String> {
     let st = app.state::<App>();
     let s = st.settings.lock().unwrap().clone();
     let cached = st.config.lock().unwrap().clone();
+    let appn = app.clone();
     let res = tauri::async_runtime::spawn_blocking(move || {
-        let m = mirrors(&s, cached.as_ref());
+        let mut m = mirrors(&s, cached.as_ref());
+        m.on_status = Some(Box::new(move |msg| { let _ = appn.emit("net", msg); }));
         update::fetch_config(&m).map(|r| (r, m.current_base()))
     })
     .await
@@ -474,11 +480,16 @@ fn start_update(app: AppHandle, repair: bool, components_only: Option<bool>) -> 
     let channel = current_channel(&st, &cfg, &g.load_state());
     let version = cfg.channels.iter().find(|c| c.id == channel).map(|c| c.version.clone()).unwrap_or_default();
     let s = st.settings.lock().unwrap().clone();
-    let m = mirrors(&s, Some(&cfg));
+    let mut m = mirrors(&s, Some(&cfg));
     *st.cancel.lock().unwrap() = Some(m.cancel.clone());
+    {
+        let appn = app.clone();
+        m.on_status = Some(Box::new(move |msg| { let _ = appn.emit("net", msg); }));
+    }
     st.last_error.lock().unwrap().clear();
     let app2 = app.clone();
     std::thread::spawn(move || {
+        let _ = app2.emit("net", "start".to_string());
         let mut last = Instant::now() - Duration::from_secs(1);
         let mut emit = |p: &update::Progress| {
             if p.phase == "done" || last.elapsed() > Duration::from_millis(120) {

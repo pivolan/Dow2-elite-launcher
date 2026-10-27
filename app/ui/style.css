@@ -125,3 +125,5 @@ input[type=number]{color:var(--bone)}
 .fb-send textarea{flex:1;resize:none;background:#0e0c09;border:1px solid var(--line2);color:var(--bone);padding:6px 8px;font:inherit;user-select:text}
 .fb-btns{display:flex;flex-direction:column;gap:6px}.fb-btns button{margin:0}
 .btn-gold{background:linear-gradient(#3a2a12,#22190c);border:1px solid var(--line2);color:var(--gold2);padding:7px 14px;cursor:pointer;font:700 12px Cinzel,serif;letter-spacing:1px}
+
+.hdr-ver{font:700 10px Cinzel,serif;letter-spacing:2px;color:var(--muted);margin-top:2px}

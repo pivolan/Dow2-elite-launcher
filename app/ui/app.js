@@ -32,9 +32,14 @@ const T = {
     "switchTo": "Switch to {name} — download the changes",
     "updateNow": "Update now",
     "checking": "Checking files… {p}%",
+    "netChecking": "Checking connection to the server…",
+    "netTry": "Mirror {k}/{n}: {host}…",
+    "netFail": "{host} is not responding, trying the next one…",
     "downloading": "Updating {file}",
     "meta": "Downloaded {dl} · reused from disk {re} · from local cache {fc} · mirror {m}",
     "done": "Done: {n} file(s) updated, downloaded {dl}",
+    "doneLine": "Done ✓",
+    "metaDone": "Downloaded {dl} · reused from disk {re} · from cache {fc}",
     "upToDate": "Everything is up to date",
     "cancel": "Cancel",
     "cancelled": "Cancelled",
@@ -118,9 +123,14 @@ const T = {
     "switchTo": "Перейти на {name} — скачать изменения",
     "updateNow": "Обновить",
     "checking": "Проверка файлов… {p}%",
+    "netChecking": "Проверяю связь с сервером…",
+    "netTry": "Зеркало {k}/{n}: {host}…",
+    "netFail": "{host} не отвечает, пробую следующее…",
     "downloading": "Обновляю {file}",
     "meta": "Скачано {dl} · взято с диска {re} · из локального кэша {fc} · зеркало {m}",
     "done": "Готово: обновлено файлов {n}, скачано {dl}",
+    "doneLine": "Готово ✓",
+    "metaDone": "Скачано {dl} · взято с диска {re} · из кэша {fc}",
     "upToDate": "Всё актуально",
     "cancel": "Отмена",
     "cancelled": "Отменено",
@@ -445,6 +455,7 @@ let prog = null;       // last progress event
 const t = (k, vars = {}) => (T[lang][k] || T.en[k] || k).replace(/\{(\w+)\}/g, (_, v) => vars[v] ?? '');
 const L = x => x == null ? '' : typeof x === 'string' ? x : (x[lang] || x.en || Object.values(x)[0] || '');
 const mb = b => b >= 1e9 ? (b / 1e9).toFixed(2) + ' GB' : (b / 1e6).toFixed(b < 1e7 ? 2 : 1) + ' MB';
+const mbps = b => b >= 1e6 ? (b / 1e6).toFixed(1) + ' MB/s' : Math.max(1, Math.round(b / 1e3)) + ' KB/s';
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const open = url => url && invoke('open_url', { url }).catch(e => toast(e, true));
 
@@ -593,13 +604,23 @@ function render() {
   $('mirrorInfo').textContent = t('mirrors', { n: S.mirror_count });
   $('repair').disabled = S.busy || !S.installed_version;
   $('about').textContent = `Elite Launcher ${S.launcher_version} · ${S.os}`;
+  $('hdrVer').textContent = S.launcher_version ? `v${S.launcher_version}` : '';
 }
 
 function renderProgress(p) {
   $('bar').classList.remove('hidden');
   const pct = p.bytes_total ? Math.min(100, Math.round(100 * p.bytes_done / p.bytes_total)) : 0;
   $('barFill').style.width = pct + '%';
-  $('statusText').innerHTML = p.phase === 'checking' ? esc(t('checking', { p: pct })) : esc(t('downloading', { file: p.file.split('/').pop() })) + ` <b>${pct}%</b>`;
+  let spd = '';
+  if (p.phase !== 'checking') {
+    const now = performance.now();
+    if (dlPrev && p.downloaded >= dlPrev.b) {
+      const dt = (now - dlPrev.t) / 1000;
+      if (dt >= 0.25) { const bps = (p.downloaded - dlPrev.b) / dt; speedEMA = speedEMA ? speedEMA * 0.65 + bps * 0.35 : bps; dlPrev = { b: p.downloaded, t: now }; }
+    } else { dlPrev = { b: p.downloaded, t: now }; }
+    if (speedEMA > 0) spd = ` · ${mbps(speedEMA)}`;
+  }
+  $('statusText').innerHTML = (p.phase === 'checking' ? esc(t('checking', { p: pct })) : esc(t('downloading', { file: p.file.split('/').pop() })) + ` <b>${pct}%</b>`) + spd;
   $('statusMeta').textContent = t('meta', { dl: mb(p.downloaded), re: mb(p.reused), fc: mb(p.from_cache), m: p.mirror });
 }
 
@@ -644,12 +665,26 @@ async function doPlay() {
   try { await invoke('play'); toast(t('starting')); } catch (e) { toast(e, true); }
 }
 
-listen('progress', e => { prog = e.payload; if (S) { S.busy = true; renderProgress(prog); } });
+let netActive = false;
+let dlPrev = null, speedEMA = 0;
+listen('net', e => {
+  const a = String(e.payload).split('\t');
+  if (a[0] === 'start') { netActive = true; dlPrev = null; speedEMA = 0; if (S) S.busy = true; $('bar').classList.add('hidden'); $('statusText').textContent = t('netChecking'); $('statusMeta').textContent = ''; }
+  else if (a[0] === 'try') { if (netActive) $('statusText').textContent = t('netTry', { host: a[1], k: a[2], n: a[3] }); }
+  else if (a[0] === 'fail') { $('statusText').textContent = t('netFail', { host: a[1] }); }
+});
+listen('progress', e => { netActive = false; prog = e.payload; if (S) { S.busy = true; renderProgress(prog); } });
 listen('update_done', async e => {
   await reload();
   const r = e.payload;
-  if (r.ok) toast(r.summary.updated ? t('done', { n: r.summary.updated, dl: mb(r.summary.downloaded) }) : t('upToDate'));
-  else toast(r.cancelled ? t('cancelled') : r.error, !r.cancelled);
+  if (r.ok) {
+    toast(r.summary.updated ? t('done', { n: r.summary.updated, dl: mb(r.summary.downloaded) }) : t('upToDate'));
+    if (r.summary.updated) {
+      $('bar').classList.add('hidden');
+      $('statusText').innerHTML = `<b>${esc(t('doneLine'))}</b>`;
+      $('statusMeta').textContent = t('metaDone', { dl: mb(r.summary.downloaded), re: mb(r.summary.reused), fc: mb(r.summary.from_cache) });
+    }
+  } else toast(r.cancelled ? t('cancelled') : r.error, !r.cancelled);
 });
 
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => {

@@ -1,0 +1,3 @@
+- The launcher version is shown on the main screen.
+- A status line during an update: which mirror is being tried, the download speed, and the total downloaded when it finishes.
+- The download size for switching versions is accurate now: only the changed parts are counted, not whole files.
