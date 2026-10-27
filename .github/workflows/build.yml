@@ -4,6 +4,11 @@ on:
     branches: ["**"]
   pull_request:
   workflow_dispatch:
+    inputs:
+      release:
+        description: "Publish a GitHub Release for the current version (main only, also for X.Y.Z patch versions)"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -25,9 +30,17 @@ jobs:
       number: ${{ steps.version.outputs.number }}
       tag: ${{ steps.version.outputs.tag }}
       release: ${{ steps.version.outputs.release }}
+      build_ref: ${{ steps.version.outputs.build_ref }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - id: version
+        env:
+          EVENT: ${{ github.event_name }}
+          REF: ${{ github.ref }}
+          WANT_RELEASE: ${{ inputs.release }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           version="$(sed -n '/^\[workspace.package\]/,/^\[/s/^version *= *"\(.*\)"/\1/p' Cargo.toml)"
           tauri="$(python3 -c 'import json; print(json.load(open("app/tauri.conf.json"))["version"])')"
@@ -36,12 +49,38 @@ jobs:
             exit 1
           fi
           python3 scripts/release_notes.py check "$version"
+          # a GitHub Release (and SignPath signing) only on main: automatically for a new X.Y.0,
+          # or by hand through "Run workflow" with the release box ticked
+          release=false
+          build_ref="$GITHUB_SHA"
+          if [ "$REF" = refs/heads/main ]; then
+            if [ "$EVENT" = push ] && ! git ls-remote --exit-code --tags origin "refs/tags/v$version" >/dev/null; then
+              case "$version" in *.0) release=true ;; esac
+            elif [ "$EVENT" = workflow_dispatch ] && [ "$WANT_RELEASE" = true ]; then
+              if gh release view "v$version" >/dev/null 2>&1; then
+                echo "::warning::Release v$version already exists, nothing to publish"
+              else
+                release=true
+                # main may have moved on without a new version: the release is built from the commit the tag points to,
+                # pinned by hash so a moved tag can't change it between jobs, and only if that commit is on main
+                if git rev-parse -q --verify "refs/tags/v$version" >/dev/null; then
+                  tag_sha="$(git rev-parse "v$version^{commit}")"
+                  if ! git merge-base --is-ancestor "$tag_sha" HEAD; then
+                    echo "::error::v$version points to ${tag_sha:0:7}, which is not on main: refusing to release it"
+                    exit 1
+                  fi
+                  build_ref="$tag_sha"
+                fi
+              fi
+            fi
+          fi
           {
             echo "number=$version"
             echo "tag=v$version"
-            case "$version" in *.0) echo "release=true" ;; *) echo "release=false" ;; esac
+            echo "release=$release"
+            echo "build_ref=$build_ref"
           } >> "$GITHUB_OUTPUT"
-          echo "Version **$version**" >> "$GITHUB_STEP_SUMMARY"
+          echo "Version **$version**, GitHub Release in this run: **$release**" >> "$GITHUB_STEP_SUMMARY"
 
   core:
     runs-on: ubuntu-22.04
@@ -67,6 +106,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.version.outputs.build_ref }}
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.os == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
@@ -78,34 +119,6 @@ jobs:
       - name: Build
         working-directory: app
         run: cargo tauri build ${{ matrix.args }}
-      # Windows: подпись через SignPath Foundation (бесплатно для OSS). Включится, когда в репозитории будут
-      # секрет SIGNPATH_API_TOKEN и переменные SIGNPATH_ORGANIZATION_ID / SIGNPATH_PROJECT_SLUG.
-      - name: Upload unsigned Windows installer
-        if: matrix.os == 'windows-latest' && vars.SIGNPATH_ORGANIZATION_ID != ''
-        id: unsigned
-        uses: actions/upload-artifact@v4
-        with:
-          name: unsigned-windows
-          path: target/release/bundle/nsis/*.exe
-          retention-days: 7
-      - name: Sign with SignPath
-        if: matrix.os == 'windows-latest' && vars.SIGNPATH_ORGANIZATION_ID != ''
-        uses: signpath/github-action-submit-signing-request@v1
-        with:
-          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
-          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
-          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
-          signing-policy-slug: release-signing
-          github-artifact-id: ${{ steps.unsigned.outputs.artifact-id }}
-          wait-for-completion: true
-          output-artifact-directory: signed
-      - name: Upload signed Windows installer
-        if: matrix.os == 'windows-latest' && vars.SIGNPATH_ORGANIZATION_ID != ''
-        uses: actions/upload-artifact@v4
-        with:
-          name: elite-launcher-windows-signed
-          path: signed/*
-          retention-days: 7
       - uses: actions/upload-artifact@v4
         with:
           name: elite-launcher-${{ matrix.os }}
@@ -151,6 +164,34 @@ jobs:
               ;;
           esac
           ls -la "$out"
+      # Windows: подпись через SignPath Foundation (бесплатно для OSS). Включится, когда в репозитории будут
+      # секрет SIGNPATH_API_TOKEN и переменные SIGNPATH_ORGANIZATION_ID / SIGNPATH_PROJECT_SLUG.
+      # Only builds that become a GitHub Release are signed: SignPath needs a manual approval for every request.
+      - name: Upload unsigned Windows files
+        if: matrix.os == 'windows-latest' && vars.SIGNPATH_ORGANIZATION_ID != '' && needs.version.outputs.release == 'true'
+        id: unsigned
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-windows
+          path: |
+            deploy/*-setup.exe
+            deploy/*-windows-portable.zip
+          retention-days: 7
+      - name: Sign with SignPath
+        if: matrix.os == 'windows-latest' && vars.SIGNPATH_ORGANIZATION_ID != '' && needs.version.outputs.release == 'true'
+        uses: signpath/github-action-submit-signing-request@v1
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: release-signing
+          github-artifact-id: ${{ steps.unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signed
+      - name: Use the signed Windows files
+        if: matrix.os == 'windows-latest' && vars.SIGNPATH_ORGANIZATION_ID != '' && needs.version.outputs.release == 'true'
+        shell: bash
+        run: cp -f signed/* deploy/
       - name: Upload deploy artifact
         uses: actions/upload-artifact@v4
         with:
@@ -192,6 +233,8 @@ jobs:
             echo "STORE=$RUNNER_TEMP/store"
           } >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.version.outputs.build_ref }}
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - uses: actions/download-artifact@v4
@@ -231,16 +274,18 @@ jobs:
           rm -rf "$KEYS" "$DIST" "$STORE"
           git checkout -- keys/public.key
 
-  # After a merge to main: tag vX.Y.Z if it is new; for X.Y.0 also a GitHub Release with the installers.
+  # After a merge to main: tag vX.Y.Z if it is new. A GitHub Release with the installers (the same files as the
+  # download folder) for a new X.Y.0, or for any version through "Run workflow" with the release box ticked.
   release:
     needs: [version, publish]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || needs.version.outputs.release == 'true')
     runs-on: ubuntu-24.04
     permissions:
       contents: write
     env:
       TAG: ${{ needs.version.outputs.tag }}
       VERSION: ${{ needs.version.outputs.number }}
+      REPO: ${{ github.repository }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
@@ -260,18 +305,21 @@ jobs:
           git push origin "$TAG"
           echo "new=true" >> "$GITHUB_OUTPUT"
       - uses: actions/download-artifact@v4
-        if: steps.tag.outputs.new == 'true' && needs.version.outputs.release == 'true'
+        if: needs.version.outputs.release == 'true'
         with:
-          pattern: elite-launcher-*
+          pattern: deploy-*
+          merge-multiple: true
           path: dist
       - name: GitHub Release
-        if: steps.tag.outputs.new == 'true' && needs.version.outputs.release == 'true'
+        if: needs.version.outputs.release == 'true'
         run: |
-          # the signed Windows installer replaces the unsigned one when SignPath is set up
-          if [ -d dist/elite-launcher-windows-signed ]; then rm -rf dist/elite-launcher-windows-latest; fi
-          python3 scripts/release_notes.py notes "$VERSION" > release-notes.md
-          find dist -type f \( -name '*.exe' -o -name '*.deb' -o -name '*.AppImage' -o -name '*.dmg' \) -print0 \
-            | xargs -0 gh release create "$TAG" --title "Elite Launcher $VERSION" --notes-file release-notes.md --verify-tag
+          {
+            python3 scripts/release_notes.py notes "$VERSION"
+            echo
+            echo "**Code signing policy:** [CODE_SIGNING.md](https://github.com/$REPO/blob/main/CODE_SIGNING.md)." \
+              "Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org)."
+          } > release-notes.md
+          gh release create "$TAG" dist/* --title "Elite Launcher $VERSION" --notes-file release-notes.md --verify-tag
 
   # After a merge to main: ship the installers to the download folder on the server (scoped rsync key,
   # write-only into that one folder). Dormant until the repository variable DEPLOY_HOST is set.

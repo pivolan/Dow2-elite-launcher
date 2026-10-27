@@ -1,0 +1,47 @@
+Elite Launcher
+
+PRIVACY POLICY
+
+This program does not collect or send personal data on its own. It connects only to:
+
+- the update mirrors listed in its configuration, to download the signed configuration, news and game files;
+- the address shown on the "Send logs" button, and only when the user presses it: the log files of the game and of the
+  installed add-ons are uploaded so a developer can investigate a crash. The user can type a name to attach to the
+  upload; otherwise it is anonymous.
+
+- the same address for the feedback chat with the developers, only when the user writes there: the messages and pictures
+  the user sends, a random id kept in the launcher settings, the name the user chose to give (optional), and the
+  launcher, OS and Elite versions.
+- the same address once a day for an anonymous usage count, unless the user unticks it in Settings. The request
+  carries a hash that changes every day (SHA-256 of a random local secret and the day number, cut to 128 bits), the
+  launcher version, the operating system and the installed Elite version. The secret never leaves the computer, and
+  because the hash changes daily the server cannot link two days to the same install. No names, Steam, hardware or
+  account data. The server keeps only these fields per day and does not log IP addresses for this request.
+
+No tracking, no accounts.
+
+Code signing policy: https://github.com/pivolan/Dow2-elite-launcher/blob/main/CODE_SIGNING.md
+
+LICENSE
+
+MIT License
+
+Copyright (c) 2026 pivolan and Elite Launcher contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

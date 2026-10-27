@@ -132,12 +132,14 @@ Other languages can sit next to `en.md` later (`ru.md`, …); only `en.md` is re
 |---|---|
 | `version` | reads the version, fails when `Cargo.toml` and `app/tauri.conf.json` differ or `changelog/<version>/en.md` is missing |
 | `core` | builds and tests `elite-core`, `elite-publish`, `elite-cli` |
-| `launcher` | installers for Windows, Linux, macOS (artifacts, kept 7 days) |
+| `launcher` | installers for Windows, Linux, macOS (artifacts, kept 7 days); for a build that becomes a GitHub Release, the Windows installer and portable zip are signed through SignPath |
 | `publisher` | `elite-publish` and `elite-cli` for each OS |
 | `publish` | dry run: publishes the installers into a temporary store with a one-off key, signs a `launcher.json`, verifies all signatures, then deletes it all; the upload to the mirrors is skipped for now |
-| `release` | only on `main`: tags `vX.Y.Z` if it is new; for `X.Y.0` also a GitHub Release with the installers and the notes of every version since the previous `X.Y.0` |
+| `release` | only on `main`: tags `vX.Y.Z` if it is new; for a new `X.Y.0` also a GitHub Release with the files of the download folder, the notes of every version since the previous `X.Y.0` and the code signing policy |
+| `deploy` | only on `main`: the installers go to the download folder on the server (dormant until `DEPLOY_HOST` is set) |
 
-Tags are set by CI, not by hand.
+Tags are set by CI, not by hand. A release for a patch version is published by hand: Actions → build → *Run workflow* on
+`main` with *release* ticked. The release is built from the code its version tag points to, even if `main` has moved on.
 
 ## Formats (stable — changing them needs a new launcher)
 
@@ -148,6 +150,7 @@ Tags are set by CI, not by hand.
 
 License: MIT.
 
-## Code signing
+## Code signing policy
 
-Windows builds are signed for free by SignPath Foundation, see [CODE_SIGNING.md](CODE_SIGNING.md) (includes the privacy policy).
+Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+Team roles, which files are signed and the privacy policy: [CODE_SIGNING.md](CODE_SIGNING.md).

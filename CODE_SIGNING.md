@@ -3,20 +3,23 @@
 Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org).
 
 Only the Elite Launcher itself is signed: the Windows installer (`EliteLauncher-<version>-setup.exe`) and the program
-inside it (`elite-launcher.exe`, also shipped in the portable zip). They are built by GitHub Actions from the tagged
-source in this repository; nothing built on a developer's machine is signed. Elite Mod game files and the optional
+in the portable zip (`EliteLauncher-<version>-windows-portable.zip` → `EliteLauncher/EliteLauncher.exe`). They are built
+by GitHub Actions from the tagged source in this repository, and only builds that become a GitHub Release are signed;
+nothing built on a developer's machine is signed. Elite Mod game files and the optional
 add-ons the launcher can install are not part of this project and are not signed with this certificate.
 
 ## Team roles
 
 | Role | Members |
 |---|---|
-| Committers and reviewers | [pivolan](https://github.com/pivolan) |
-| Approvers (approve each signing request) | [pivolan](https://github.com/pivolan) |
+| Committers and reviewers | [pivolan](https://github.com/pivolan), [SiritosKon](https://github.com/SiritosKon) |
+| Approvers (approve each signing request) | [pivolan](https://github.com/pivolan), [SiritosKon](https://github.com/SiritosKon) |
 
 All team members use multi-factor authentication for GitHub and SignPath.
 
 ## Privacy policy
+
+The Windows installer shows this policy before installing (`app/installer-notice.txt`).
 
 This program does not collect or send personal data on its own. It connects only to:
 
@@ -25,6 +28,9 @@ This program does not collect or send personal data on its own. It connects only
   installed add-ons are uploaded so a developer can investigate a crash. The user can type a name to attach to the
   upload; otherwise it is anonymous.
 
+- the same address for the feedback chat with the developers, only when the user writes there: the messages and pictures
+  the user sends, a random id kept in the launcher settings, the name the user chose to give (optional), and the
+  launcher, OS and Elite versions.
 - the same address once a day for an anonymous usage count, unless the user unticks it in Settings. The request
   carries a hash that changes every day (SHA-256 of a random local secret and the day number, cut to 128 bits), the
   launcher version, the operating system and the installed Elite version. The secret never leaves the computer, and
