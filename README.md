@@ -20,7 +20,13 @@ always be started, update or not.
   instant (replaced files are kept in `<game>/.elite_cache`, only changed files, size limit in settings).
 - **Repair** button: re-checks every file and downloads only the damaged parts. This also brings
   back files that Steam's "Verify integrity" replaces (e.g. the sound-bug fix DLLs).
-- **News, announcements, links** shown on the home screen, all coming from the server.
+- **News, announcements, links** shown on the home screen, all coming from the server. The news also carry the
+  release notes of the launcher and of Dow2-patches, read from their GitHub Releases (made by CI from `changelog/`),
+  so nobody has to write those by hand; the last copy is kept for offline starts.
+- **Updates itself.** At start and every 15 minutes the launcher looks for a newer one on the latest GitHub Release
+  of the repository that built it (`updater.json`) and offers it with a banner; "Update the launcher" downloads it,
+  checks its signature, installs it and restarts. The portable zip and builds
+  without the updater key only get a link to the download page (`launcher_update` in launcher.json).
 - **Add-ons** (`components` in launcher.json) the player ticks on/off, e.g. *LobbyStats* (Relic rating
   in the lobby + host auto-kick filter). An add-on is published like any version; the launcher installs
   it, adds its DLL to `InjectedFiles=` in `Elite.launchconfig` and re-adds it after every Elite update.
@@ -75,7 +81,6 @@ fields are ignored, so old launchers keep working with newer configs. Texts are 
 ```jsonc
 {
   "schema": 1,
-  "title": "Elite Mod",
   "subtitle": "Dawn of War II · Retribution",
   "channels": [
     {"id": "stable", "name": "Elite 3.1", "version": "3.1", "default": true,
@@ -101,9 +106,12 @@ fields are ignored, so old launchers keep working with newer configs. Texts are 
 }
 ```
 
+- `subtitle` — the line next to "ELITE Launcher" in the header. `title` is not shown since 1.3.0 (launchers up to
+  1.2.x still put it in the header).
 - `update_text` — banner when the player's channel points to a newer version. `{name}`/`{version}` are replaced.
 - `announcements` — dismissable bars on top; `until` hides them after a date.
-- `launcher_update` — offers (never forces) a newer launcher.
+- `launcher_update` — offers (never forces) a newer launcher as a link to its download page. Installed launchers
+  built by CI find new versions on their own ("Updates itself" above); this is for the portable zip and old launchers.
 - Built-in mirrors are in `app/src/main.rs` (`BUILTIN_MIRRORS`). Put hosts from different
   providers/domains there, so the launcher can start even if one is blocked; add more later through `mirrors`.
 
@@ -115,7 +123,7 @@ cd app && cargo tauri build                 # installer for the current OS
 cargo build --release -p elite-publish -p elite-cli
 ```
 
-Linux needs `libwebkit2gtk-4.1-dev libsoup-3.0-dev librsvg2-dev`. Windows packages can also be
+Linux needs `libwebkit2gtk-4.1-dev libsoup-3.0-dev librsvg2-dev libayatana-appindicator3-dev` (the last one for the tray icon). Windows packages can also be
 cross-built on Linux: `cargo tauri build --target x86_64-pc-windows-gnu --bundles nsis` (needs `mingw-w64`
 and `nsis`). macOS needs a Mac or the GitHub workflow. Without code signing Windows SmartScreen shows a
 warning on first start; signing is configured in `app/tauri.conf.json` (`bundle > windows`).
@@ -126,17 +134,50 @@ The version lives in `Cargo.toml` (`[workspace.package] version`) and in `app/ta
 To ship one: raise the version in both, write its notes to `changelog/<version>/en.md` (a list of changes) and merge to `main`.
 Other languages can sit next to `en.md` later (`ru.md`, …); only `en.md` is required.
 
-`.github/workflows/build.yml` runs on every push and pull request:
+`.github/workflows/build.yml` runs on every push and on pull requests to `main`: on a branch it only builds and tests
+(nothing leaves CI); a push to `main` (a merged pull request) also ships — installers to the download folder, the tag,
+and for a new `X.Y.0` the GitHub Release the launchers update from. Work in branches, merge to `main` when it is ready.
+It needs these **repository secrets** (Settings → Secrets and variables → Actions → *Repository secrets*, not an
+environment); `main` fails right away without them, a fork's pull request builds without them as a check:
+
+| Secret | What |
+|---|---|
+| `ELITE_MIRRORS` | built-in mirrors, `https://a/;https://b/` |
+| `ELITE_LOG_HOSTS` | where "Send logs", the usage count and the chat go, `https://a;https://b` |
+| `TAURI_SIGNING_PRIVATE_KEY` | self-update key made with `cargo tauri signer generate -w elite-updater.key`: the content of `elite-updater.key` |
+| `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` | the key's password (optional: leave it out for a key without one) |
+
+The public half of that key is in the repository, `keys/updater.pub` (the content of `elite-updater.key.pub`), and is
+compiled into the launcher. Keep the private key out of the repository: installed launchers install any update signed
+with it. A new key pair means a new `keys/updater.pub`, and launchers built before it have to be updated by hand once.
+
+### Release builds outside CI (e.g. on the server)
+
+A launcher built anywhere else updates itself the same way, as long as the build is signed and an `updater.json`
+sits next to the installers:
+
+```bash
+export TAURI_SIGNING_PRIVATE_KEY=/path/to/elite-updater.key          # a path or the key itself
+export TAURI_SIGNING_PRIVATE_KEY_PASSWORD="$(cat /path/to/elite-updater.password)"
+DL=https://example.org/elite/dl                                         # public folder the installers go to
+cd app && cargo tauri build --config "{\"bundle\":{\"createUpdaterArtifacts\":true},\"plugins\":{\"updater\":{\"pubkey\":\"$(tr -d '[:space:]' < ../keys/updater.pub)\",\"endpoints\":[\"$DL/updater.json\"]}}}"
+# each installer now has <name>.sig next to it; put the installers and their .sig files into one folder, then
+python3 scripts/updater_manifest.py <version> "$DL" <folder> > <folder>/updater.json
+```
+
+Upload `updater.json` last, after the installers: launchers offer the new version as soon as they see it.
+An update reaches players only when the version in `updater.json` is higher than theirs.
+
 
 | Job | What |
 |---|---|
 | `version` | reads the version, fails when `Cargo.toml` and `app/tauri.conf.json` differ or `changelog/<version>/en.md` is missing |
 | `core` | builds and tests `elite-core`, `elite-publish`, `elite-cli` |
-| `launcher` | installers for Windows, Linux, macOS (artifacts, kept 7 days); for a build that becomes a GitHub Release, the Windows installer and portable zip are signed through SignPath |
+| `launcher` | installers for Windows, Linux, macOS (artifacts, kept 7 days), each with its self-update signature (`.sig`) and, for macOS, the `.app.tar.gz` the self-update installs; for a build that becomes a GitHub Release, the Windows installer and portable zip are signed through SignPath (and the installer's self-update signature is made again after that) |
 | `publisher` | `elite-publish` and `elite-cli` for each OS |
 | `publish` | dry run: publishes the installers into a temporary store with a one-off key, signs a `launcher.json`, verifies all signatures, then deletes it all; the upload to the mirrors is skipped for now |
-| `release` | only on `main`: tags `vX.Y.Z` if it is new; for a new `X.Y.0` also a GitHub Release with the files of the download folder, the notes of every version since the previous `X.Y.0` and the code signing policy |
-| `deploy` | only on `main`: the installers go to the download folder on the server (dormant until `DEPLOY_HOST` is set) |
+| `release` | only on `main`: tags `vX.Y.Z` if it is new; for a new `X.Y.0` also a GitHub Release with the files of the download folder, `updater.json` for the self-update (`scripts/updater_manifest.py`), the notes of every version since the previous `X.Y.0` and the code signing policy |
+| `deploy` | only on `main`: the installers and `latest.json` go to the download folder on the server (the site reads `latest.json` for its links); `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY`, `DEPLOY_KNOWN_HOSTS` in the `dow2` environment |
 
 Tags are set by CI, not by hand. A release for a patch version is published by hand: Actions → build → *Run workflow* on
 `main` with *release* ticked. The release is built from the code its version tag points to, even if `main` has moved on.

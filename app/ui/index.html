@@ -9,18 +9,29 @@
 <body>
 <div class="app">
   <header>
-    <div class="brand"><div class="logo" id="title">ELITE MOD</div><div class="sub" id="subtitle">Dawn of War II · Retribution</div><div class="hdr-ver" id="hdrVer"></div></div>
-    <nav><button class="tab on" data-view="home" data-t="home"></button><button class="tab" data-view="settings" data-t="settings"></button></nav>
+    <div class="brand"><span class="logo">ELITE Launcher</span><span class="hdr-ver" id="hdrVer"></span><span class="sub" id="subtitle">Dawn of War II · Retribution</span></div>
+    <div class="launcher-banner hidden" id="launcherBanner"><span id="launcherText"></span><button class="btn gold small hidden" id="launcherBtn"></button></div>
+    <nav><button class="tab on" data-view="home" data-t="home"></button><button class="tab" data-view="hotkeys" data-t="hotkeys"></button><button class="tab" data-view="settings" data-t="settings"></button></nav>
   </header>
 
-  <div class="banner launcher-banner hidden" id="launcherBanner"></div>
+  <main id="home" class="view home">
+    <aside class="col">
+      <section class="panel news-panel">
+        <div class="h" data-t="news"></div>
+        <div id="news" class="news-list"></div>
+        <button class="more hidden" id="newsMore"></button>
+      </section>
+      <section class="panel" id="linksBox">
+        <div class="h" data-t="links"></div>
+        <div id="links" class="links"></div>
+      </section>
+    </aside>
 
-  <main id="home" class="view">
-    <section class="left">
+    <section class="col">
       <div id="announcements"></div>
       <div id="setup" class="setup hidden"></div>
-      <div id="newsBox" class="panel news fb">
-        <div class="h" data-t="fbTitle"></div>
+      <div id="newsBox" class="panel fb">
+        <div class="h"><span data-t="fbTitle"></span><button class="btn gold logs-btn" id="sendLogsHome" data-t="sendLogs"></button></div>
         <div class="fb-who"><span data-t="fbName"></span> <input id="fbName" maxlength="48"><span class="fb-id" id="fbId"></span></div>
         <div id="fbMsgs" class="fb-msgs"></div>
         <div id="fbPics" class="fb-pics"></div>
@@ -29,25 +40,40 @@
           <div class="fb-btns"><button class="link-btn" id="fbAttach" data-t="fbAttach"></button><button class="btn-gold" id="fbSend" data-t="fbSend"></button></div>
         </div>
         <input type="file" id="fbFile" accept="image/*" multiple class="hidden">
-        <div id="news" class="hidden"></div><button class="link-btn hidden" id="newsMore"></button>
       </div>
     </section>
-    <aside class="right">
-      <div class="panel">
-        <div class="h" data-t="version"></div>
-        <div id="channels"></div>
-        <div class="installed" id="installed"></div>
-      </div>
-      <div class="panel" id="compBox">
+
+    <aside class="col">
+      <section class="panel addons hidden" id="compBox">
         <div class="h" data-t="components"></div>
-        <div id="components"></div>
+        <div id="components" class="addon-list"></div>
+      </section>
+      <div class="spacer"></div>
+      <div class="upd-box hidden" id="updBox"><div class="upd-text" id="updText"></div><button class="btn gold small" id="updateBtn"></button></div>
+      <div class="ver-warn hidden" id="verWarn"></div>
+      <div class="ver-pick">
+        <div class="ver-list hidden" id="verList"></div>
+        <button class="ver-btn" id="verBtn"></button>
       </div>
-      <div class="panel">
-        <div class="h" data-t="links"></div>
-        <div id="links" class="links"></div>
-        <button class="btn logs-home" id="sendLogsHome" data-t="sendLogsHome"></button>
-      </div>
+      <button class="play" id="play"></button>
     </aside>
+  </main>
+
+  <main id="hotkeys" class="view hidden">
+    <section class="panel hk">
+      <div class="h"><span data-t="hotkeys"></span><span class="hk-note" id="hkState"></span></div>
+      <div class="hk-top">
+        <label class="chk"><input type="checkbox" id="hkGrid"><span data-t="hkGrid"></span></label>
+        <span class="note" data-t="hkGridNote"></span>
+      </div>
+      <div class="hk-grid" id="hkGridBox"></div>
+      <div class="h small" data-t="hkMain"></div>
+      <div class="hk-list" id="hkMain"></div>
+      <details class="hk-all"><summary data-t="hkAll"></summary>
+        <input id="hkSearch" data-tp="hkSearch"><div class="hk-list" id="hkAllList"></div></details>
+      <div class="row hk-act"><button class="btn gold" id="hkSave" data-t="save"></button><button class="btn" id="hkReset" data-t="hkReset"></button>
+        <span class="note" data-t="hkHow"></span></div>
+    </section>
   </main>
 
   <main id="settings" class="view hidden">
@@ -56,7 +82,7 @@
       <label data-t="gameFolder"></label>
       <div class="row"><div class="path" id="gameDir"></div><button class="btn" id="browse" data-t="browse"></button><button class="btn" id="openDir" data-t="open"></button></div>
       <label data-t="language"></label>
-      <div class="row"><select id="lang"><option value="">Auto</option><option value="en">English</option><option value="ru">Русский</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option></select></div>
+      <div class="row"><select id="lang"><option value="">По умолчанию (Русский)</option><option value="en">English</option><option value="ru">Русский</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option></select></div>
       <label data-t="cache"></label>
       <div class="row"><select id="cache"><option value="0">0</option><option value="2048">2 GB</option><option value="6144">6 GB</option><option value="12288">12 GB</option></select><span class="note" data-t="cacheNote"></span></div>
       <label data-t="mirror"></label>
@@ -65,28 +91,29 @@
       <label data-t="usageTitle"></label>
       <div class="row"><label class="chk"><input type="checkbox" id="usage"><span data-t="usage"></span></label></div>
       <div class="note" data-t="usageNote"></div>
+      <label data-t="trayTitle"></label>
+      <div class="row"><label class="chk"><input type="checkbox" id="trayOnPlay"><span data-t="trayOnPlay"></span></label></div>
       <label data-t="repairTitle"></label>
       <div class="row"><button class="btn" id="repair" data-t="repair"></button><span class="note" data-t="repairNote"></span></div>
       <label data-t="diagTitle"></label>
       <div class="row"><input id="diagName" data-tp="diagName"><button class="btn gold" id="sendLogs" data-t="sendLogs"></button></div>
       <div class="note" data-t="sendLogsNote"></div>
+      <label data-t="unTitle"></label>
+      <div class="row"><button class="btn red" id="uninstall" data-t="unBtn"></button><span class="note" data-t="unNote"></span></div>
       <div class="about" id="about"></div>
     </section>
   </main>
 
-  <div class="banner update-banner hidden" id="updateBanner"><span id="updateText"></span><button class="btn gold" id="updateBtn"></button></div>
-
   <footer>
     <div class="status">
-      <div id="statusText"></div>
+      <div class="status-line"><span id="statusText"></span></div>
       <div class="bar hidden" id="bar"><i id="barFill"></i></div>
       <div class="meta" id="statusMeta"></div>
     </div>
-    <button class="btn hidden" id="cancel" data-t="cancel"></button>
-    <button class="btn quick hidden" id="quick"></button>
-    <div class="playbox"><button class="play" id="play"></button><div class="play-what" id="playWhat"></div></div>
+    <button class="btn small hidden" id="cancel" data-t="cancel"></button>
   </footer>
 </div>
+<div class="pop hidden" id="pop" role="dialog"></div>
 <div class="toast hidden" id="toast"></div>
 <script src="app.js"></script>
 </body>

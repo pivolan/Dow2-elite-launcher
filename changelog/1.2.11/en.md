@@ -1,0 +1,1 @@
+- Maintenance release: rebuilt installers so every download can reach the update and log servers.

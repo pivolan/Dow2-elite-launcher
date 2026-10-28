@@ -1,0 +1,1 @@
+- Sending logs is incremental now: only what was added since the last send goes up, so a big diagnostics log is no longer re-uploaded in full every time.

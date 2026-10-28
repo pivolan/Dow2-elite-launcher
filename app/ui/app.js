@@ -19,12 +19,37 @@ const T = {
     "fbTooBig": "Picture is too big (max 8 MB)",
     "home": "Home",
     "settings": "Settings",
+    "hotkeys": "Hotkeys",
+    "hkGrid": "Grid hotkeys (QWER / ASDF / ZXCV)",
+    "hkGridNote": "abilities and unit building by position on the keyboard instead of first letters; the same switch as Options → Grid Hotkeys in the game",
+    "hkMain": "Main commands",
+    "hkAll": "All keys",
+    "hkSearch": "Search: command or key",
+    "hkReset": "Game defaults",
+    "hkHow": "click a key, then press the new one (with Ctrl / Shift / Alt if you want); Esc cancels. Applies at the next game start.",
+    "hkSaved": "Hotkeys saved — they apply at the next game start",
+    "hkDup": "Same key twice: {k}",
+    "hkCustom": "your changes: {n}",
+    "hkNone": "game defaults",
+    "hkAb": "Abilities",
+    "hkUc1": "Build, row 1",
+    "hkUc2": "Build, row 2",
+    "hkUc3": "Build, row 3",
+    "hkPress": "press a key…",
+    "unTitle": "Remove Elite",
+    "unBtn": "Remove Elite completely",
+    "unNote": "the mod, all add-ons and the launcher's files in the game folder; then Steam checks the game and you have clean vanilla",
+    "unSure": "Sure? Press again to remove",
+    "unDone": "Elite removed ({n} files). Steam is checking the game files now",
     "news": "News",
     "version": "Version",
     "links": "Links",
     "play": "Play",
     "install": "Install Elite",
     "updating": "Updating…",
+    "running": "Game is running",
+    "gameRunningAddons": "The game is running: close it to change add-ons. Updates are installed once it closes.",
+    "inGameDir": "The launcher is in the Dawn of War II folder - this can crash the game. Move the launcher folder anywhere else (for example to Documents) and start it from there.",
     "installed": "Installed",
     "current": "You have: {v}",
     "notInstalled": "Elite is not installed yet",
@@ -58,6 +83,10 @@ const T = {
     "usageTitle": "Anonymous usage count",
     "usage": "Count me as a launcher user",
     "usageNote": "Once a day the launcher sends a hash that changes every day, plus its version, OS and the Elite version. No names, Steam or hardware data; days can't be linked to each other.",
+    "trayTitle": "When the game starts",
+    "trayOnPlay": "Hide the launcher to the tray — the tray icon opens it again",
+    "trayOpen": "Open Elite Launcher",
+    "trayQuit": "Quit",
     "cacheNote": "switching back to them is instant",
     "mirror": "Extra mirror (optional)",
     "save": "Save",
@@ -85,7 +114,6 @@ const T = {
     "upTo": "up to {s}",
     "needDl": "needs a download",
     "archive": "Archive versions ({n})",
-    "back": "⇄ Back to {name}",
     "youPlay": "You play {name}",
     "notMain": "— the lobbies play {name}",
     "switching": "Switching to {name}…",
@@ -95,7 +123,20 @@ const T = {
     "sendLogsNote": "sends the logs of the add-ons and the game (lobby stats, observer lag, Continue button) to the developer",
     "logsSent": "Logs sent, thank you! Reference: {id}",
     "sending": "Sending…",
-    "sendLogsHome": "📋 Send logs to the developer"
+    "sendLogsHome": "Send logs to the developer",
+    "versions": "Versions",
+    "archiveH": "Archive",
+    "installedTag": "installed",
+    "notInstalledShort": "not installed",
+    "addonInfo": "About: {name}",
+    "addonVer": "Version {v}",
+    "addonNext": "version {v} comes with the next update",
+    "addonLater": "takes effect the next time the game starts",
+    "launcherNew": "Elite Launcher {v} is out",
+    "launcherUpdateBtn": "Update the launcher",
+    "launcherUpdating": "Updating the launcher… {p}",
+    "launcherFail": "Could not update the launcher: {e}",
+    "noNews": "No news yet"
   },
   ru: {
     "fbTitle": "Написать разработчикам",
@@ -110,12 +151,37 @@ const T = {
     "fbTooBig": "Картинка слишком большая (до 8 МБ)",
     "home": "Главная",
     "settings": "Настройки",
+    "hotkeys": "Горячие клавиши",
+    "hkGrid": "Сетка клавиш (QWER / ASDF / ZXCV)",
+    "hkGridNote": "способности и постройка юнитов по положению на клавиатуре, а не по первым буквам; тот же переключатель, что «Параметры → Grid Hotkeys» в игре",
+    "hkMain": "Основные команды",
+    "hkAll": "Все клавиши",
+    "hkSearch": "Поиск: команда или клавиша",
+    "hkReset": "Как в игре по умолчанию",
+    "hkHow": "нажмите на клавишу, затем новую (можно с Ctrl / Shift / Alt); Esc — отмена. Действует со следующего запуска игры.",
+    "hkSaved": "Клавиши сохранены — заработают при следующем запуске игры",
+    "hkDup": "Одна клавиша дважды: {k}",
+    "hkCustom": "ваших изменений: {n}",
+    "hkNone": "как в игре по умолчанию",
+    "hkAb": "Способности",
+    "hkUc1": "Постройка, ряд 1",
+    "hkUc2": "Постройка, ряд 2",
+    "hkUc3": "Постройка, ряд 3",
+    "hkPress": "нажмите клавишу…",
+    "unTitle": "Удалить Elite",
+    "unBtn": "Удалить Elite полностью",
+    "unNote": "мод, все дополнения и файлы лаунчера в папке игры; затем Steam проверит игру — останется чистая ванила",
+    "unSure": "Точно? Нажмите ещё раз, чтобы удалить",
+    "unDone": "Elite удалён ({n} файлов). Steam сейчас проверяет файлы игры",
     "news": "Новости",
     "version": "Версия",
     "links": "Ссылки",
     "play": "Играть",
     "install": "Установить Elite",
     "updating": "Обновление…",
+    "running": "Игра запущена",
+    "gameRunningAddons": "Игра запущена: закройте её, чтобы менять дополнения. Обновления установятся после закрытия.",
+    "inGameDir": "Лаунчер лежит в папке с Dawn of War II — из-за этого игра может падать. Перенесите папку лаунчера в любое другое место (например, в «Документы») и запускайте оттуда.",
     "installed": "Установлена",
     "current": "У вас: {v}",
     "notInstalled": "Elite ещё не установлен",
@@ -149,6 +215,10 @@ const T = {
     "usageTitle": "Анонимная статистика",
     "usage": "Учитывать меня в числе пользователей лаунчера",
     "usageNote": "Раз в сутки лаунчер отправляет хеш, который каждый день новый, плюс свою версию, ОС и версию Elite. Никаких ников, Steam или данных о компьютере; связать дни между собой нельзя.",
+    "trayTitle": "При запуске игры",
+    "trayOnPlay": "Сворачивать лаунчер в трей — открыть снова можно по значку в трее",
+    "trayOpen": "Открыть Elite Launcher",
+    "trayQuit": "Выход",
     "cacheNote": "переключение на них — мгновенно",
     "mirror": "Дополнительное зеркало (необязательно)",
     "save": "Сохранить",
@@ -176,7 +246,6 @@ const T = {
     "upTo": "до {s}",
     "needDl": "нужно скачать",
     "archive": "Архивные версии ({n})",
-    "back": "⇄ Обратно на {name}",
     "youPlay": "У вас {name}",
     "notMain": "— в лобби играют на {name}",
     "switching": "Переключаю на {name}…",
@@ -186,7 +255,20 @@ const T = {
     "sendLogsNote": "отправляет разработчику логи дополнений и игры (статистика лобби, тормоза обсервера, кнопка Continue)",
     "logsSent": "Логи отправлены, спасибо! Номер: {id}",
     "sending": "Отправляю…",
-    "sendLogsHome": "📋 Отправить логи разработчику"
+    "sendLogsHome": "Отправить логи разработчику",
+    "versions": "Версии",
+    "archiveH": "Архив",
+    "installedTag": "установлена",
+    "notInstalledShort": "не установлена",
+    "addonInfo": "Подробнее: {name}",
+    "addonVer": "Версия {v}",
+    "addonNext": "версия {v} встанет со следующим обновлением",
+    "addonLater": "действует со следующего запуска игры",
+    "launcherNew": "Вышел Elite Launcher {v}",
+    "launcherUpdateBtn": "Обновить лаунчер",
+    "launcherUpdating": "Обновляю лаунчер… {p}",
+    "launcherFail": "Не удалось обновить лаунчер: {e}",
+    "noNews": "Новостей пока нет"
   },
   es: {
     "fbTitle": "Escribir a los desarrolladores",
@@ -201,12 +283,37 @@ const T = {
     "fbTooBig": "Imagen demasiado grande (máx. 8 MB)",
     "home": "Inicio",
     "settings": "Ajustes",
+    "hotkeys": "Hotkeys",
+    "hkGrid": "Grid hotkeys (QWER / ASDF / ZXCV)",
+    "hkGridNote": "abilities and unit building by position on the keyboard instead of first letters; the same switch as Options → Grid Hotkeys in the game",
+    "hkMain": "Main commands",
+    "hkAll": "All keys",
+    "hkSearch": "Search: command or key",
+    "hkReset": "Game defaults",
+    "hkHow": "click a key, then press the new one (with Ctrl / Shift / Alt if you want); Esc cancels. Applies at the next game start.",
+    "hkSaved": "Hotkeys saved — they apply at the next game start",
+    "hkDup": "Same key twice: {k}",
+    "hkCustom": "your changes: {n}",
+    "hkNone": "game defaults",
+    "hkAb": "Abilities",
+    "hkUc1": "Build, row 1",
+    "hkUc2": "Build, row 2",
+    "hkUc3": "Build, row 3",
+    "hkPress": "press a key…",
+    "unTitle": "Remove Elite",
+    "unBtn": "Remove Elite completely",
+    "unNote": "the mod, all add-ons and the launcher's files in the game folder; then Steam checks the game and you have clean vanilla",
+    "unSure": "Sure? Press again to remove",
+    "unDone": "Elite removed ({n} files). Steam is checking the game files now",
     "news": "Noticias",
     "version": "Versión",
     "links": "Enlaces",
     "play": "Jugar",
     "install": "Instalar Elite",
     "updating": "Actualizando…",
+    "running": "Juego en marcha",
+    "gameRunningAddons": "El juego está en marcha: ciérralo para cambiar los complementos. Las actualizaciones se instalan al cerrarlo.",
+    "inGameDir": "El launcher está en la carpeta de Dawn of War II: esto puede hacer que el juego se cierre. Mueve la carpeta del launcher a otro sitio y ábrelo desde allí.",
     "installed": "Instalada",
     "current": "Tienes: {v}",
     "notInstalled": "Elite aún no está instalado",
@@ -235,6 +342,10 @@ const T = {
     "usageTitle": "Estadística anónima",
     "usage": "Contarme como usuario del launcher",
     "usageNote": "Una vez al día el launcher envía un hash que cambia cada día, más su versión, el sistema y la versión de Elite. Sin nombres, sin Steam ni datos del equipo; los días no se pueden relacionar entre sí.",
+    "trayTitle": "Al iniciar el juego",
+    "trayOnPlay": "Ocultar el launcher en la bandeja — el icono de la bandeja lo vuelve a abrir",
+    "trayOpen": "Abrir Elite Launcher",
+    "trayQuit": "Salir",
     "cacheNote": "volver a ellas es instantáneo",
     "mirror": "Espejo adicional (opcional)",
     "save": "Guardar",
@@ -262,7 +373,6 @@ const T = {
     "upTo": "hasta {s}",
     "needDl": "requiere descarga",
     "archive": "Versiones archivadas ({n})",
-    "back": "⇄ Volver a {name}",
     "youPlay": "Juegas {name}",
     "notMain": "— en los lobbies se juega {name}",
     "switching": "Cambiando a {name}…",
@@ -272,7 +382,20 @@ const T = {
     "sendLogsNote": "envía al desarrollador los registros de los complementos y del juego (estadísticas del lobby, lag del observador, botón Continue)",
     "logsSent": "Registros enviados, ¡gracias! Referencia: {id}",
     "sending": "Enviando…",
-    "sendLogsHome": "📋 Enviar registros al desarrollador"
+    "sendLogsHome": "Enviar registros al desarrollador",
+    "versions": "Versiones",
+    "archiveH": "Archivo",
+    "installedTag": "instalada",
+    "notInstalledShort": "no instalada",
+    "addonInfo": "Detalles: {name}",
+    "addonVer": "Versión {v}",
+    "addonNext": "la versión {v} llega con la próxima actualización",
+    "addonLater": "se aplica la próxima vez que inicies el juego",
+    "launcherNew": "Ya está Elite Launcher {v}",
+    "launcherUpdateBtn": "Actualizar el launcher",
+    "launcherUpdating": "Actualizando el launcher… {p}",
+    "launcherFail": "No se pudo actualizar el launcher: {e}",
+    "noNews": "Aún no hay noticias"
   },
   fr: {
     "fbTitle": "Écrire aux développeurs",
@@ -287,12 +410,37 @@ const T = {
     "fbTooBig": "Image trop grande (max 8 Mo)",
     "home": "Accueil",
     "settings": "Paramètres",
+    "hotkeys": "Hotkeys",
+    "hkGrid": "Grid hotkeys (QWER / ASDF / ZXCV)",
+    "hkGridNote": "abilities and unit building by position on the keyboard instead of first letters; the same switch as Options → Grid Hotkeys in the game",
+    "hkMain": "Main commands",
+    "hkAll": "All keys",
+    "hkSearch": "Search: command or key",
+    "hkReset": "Game defaults",
+    "hkHow": "click a key, then press the new one (with Ctrl / Shift / Alt if you want); Esc cancels. Applies at the next game start.",
+    "hkSaved": "Hotkeys saved — they apply at the next game start",
+    "hkDup": "Same key twice: {k}",
+    "hkCustom": "your changes: {n}",
+    "hkNone": "game defaults",
+    "hkAb": "Abilities",
+    "hkUc1": "Build, row 1",
+    "hkUc2": "Build, row 2",
+    "hkUc3": "Build, row 3",
+    "hkPress": "press a key…",
+    "unTitle": "Remove Elite",
+    "unBtn": "Remove Elite completely",
+    "unNote": "the mod, all add-ons and the launcher's files in the game folder; then Steam checks the game and you have clean vanilla",
+    "unSure": "Sure? Press again to remove",
+    "unDone": "Elite removed ({n} files). Steam is checking the game files now",
     "news": "Actualités",
     "version": "Version",
     "links": "Liens",
     "play": "Jouer",
     "install": "Installer Elite",
     "updating": "Mise à jour…",
+    "running": "Jeu en cours",
+    "gameRunningAddons": "Le jeu est lancé : fermez-le pour modifier les modules. Les mises à jour s’installent à sa fermeture.",
+    "inGameDir": "Le launcher est dans le dossier de Dawn of War II : le jeu peut planter. Déplacez le dossier du launcher ailleurs et lancez-le depuis là.",
     "installed": "Installée",
     "current": "Vous avez : {v}",
     "notInstalled": "Elite n'est pas encore installé",
@@ -321,6 +469,10 @@ const T = {
     "usageTitle": "Statistiques anonymes",
     "usage": "Me compter parmi les utilisateurs du launcher",
     "usageNote": "Une fois par jour, le launcher envoie un hash qui change chaque jour, avec sa version, le système et la version d'Elite. Aucun nom, rien de Steam ni du PC ; les jours ne peuvent pas être reliés entre eux.",
+    "trayTitle": "Au lancement du jeu",
+    "trayOnPlay": "Réduire le launcher dans la zone de notification — l'icône le rouvre",
+    "trayOpen": "Ouvrir Elite Launcher",
+    "trayQuit": "Quitter",
     "cacheNote": "y revenir est instantané",
     "mirror": "Miroir supplémentaire (facultatif)",
     "save": "Enregistrer",
@@ -348,7 +500,6 @@ const T = {
     "upTo": "jusqu'à {s}",
     "needDl": "téléchargement nécessaire",
     "archive": "Versions archivées ({n})",
-    "back": "⇄ Revenir à {name}",
     "youPlay": "Vous jouez {name}",
     "notMain": "— les lobbies jouent {name}",
     "switching": "Passage à {name}…",
@@ -358,7 +509,20 @@ const T = {
     "sendLogsNote": "envoie au développeur les journaux des modules et du jeu (statistiques du lobby, lag de l'observateur, bouton Continue)",
     "logsSent": "Journaux envoyés, merci ! Référence : {id}",
     "sending": "Envoi…",
-    "sendLogsHome": "📋 Envoyer les journaux au développeur"
+    "sendLogsHome": "Envoyer les journaux au développeur",
+    "versions": "Versions",
+    "archiveH": "Archives",
+    "installedTag": "installée",
+    "notInstalledShort": "non installée",
+    "addonInfo": "Détails : {name}",
+    "addonVer": "Version {v}",
+    "addonNext": "la version {v} arrive avec la prochaine mise à jour",
+    "addonLater": "s’applique au prochain lancement du jeu",
+    "launcherNew": "Elite Launcher {v} est disponible",
+    "launcherUpdateBtn": "Mettre à jour le launcher",
+    "launcherUpdating": "Mise à jour du launcher… {p}",
+    "launcherFail": "Impossible de mettre à jour le launcher : {e}",
+    "noNews": "Pas encore d’actualités"
   },
   de: {
     "fbTitle": "An die Entwickler schreiben",
@@ -373,12 +537,37 @@ const T = {
     "fbTooBig": "Bild zu groß (max. 8 MB)",
     "home": "Start",
     "settings": "Einstellungen",
+    "hotkeys": "Hotkeys",
+    "hkGrid": "Grid hotkeys (QWER / ASDF / ZXCV)",
+    "hkGridNote": "abilities and unit building by position on the keyboard instead of first letters; the same switch as Options → Grid Hotkeys in the game",
+    "hkMain": "Main commands",
+    "hkAll": "All keys",
+    "hkSearch": "Search: command or key",
+    "hkReset": "Game defaults",
+    "hkHow": "click a key, then press the new one (with Ctrl / Shift / Alt if you want); Esc cancels. Applies at the next game start.",
+    "hkSaved": "Hotkeys saved — they apply at the next game start",
+    "hkDup": "Same key twice: {k}",
+    "hkCustom": "your changes: {n}",
+    "hkNone": "game defaults",
+    "hkAb": "Abilities",
+    "hkUc1": "Build, row 1",
+    "hkUc2": "Build, row 2",
+    "hkUc3": "Build, row 3",
+    "hkPress": "press a key…",
+    "unTitle": "Remove Elite",
+    "unBtn": "Remove Elite completely",
+    "unNote": "the mod, all add-ons and the launcher's files in the game folder; then Steam checks the game and you have clean vanilla",
+    "unSure": "Sure? Press again to remove",
+    "unDone": "Elite removed ({n} files). Steam is checking the game files now",
     "news": "Neuigkeiten",
     "version": "Version",
     "links": "Links",
     "play": "Spielen",
     "install": "Elite installieren",
     "updating": "Aktualisiere…",
+    "running": "Spiel läuft",
+    "gameRunningAddons": "Das Spiel läuft: schließe es, um Add-ons zu ändern. Updates werden nach dem Schließen installiert.",
+    "inGameDir": "Der Launcher liegt im Dawn-of-War-II-Ordner – das kann das Spiel abstürzen lassen. Verschiebe den Launcher-Ordner woandershin und starte ihn von dort.",
     "installed": "Installiert",
     "current": "Installiert: {v}",
     "notInstalled": "Elite ist noch nicht installiert",
@@ -407,6 +596,10 @@ const T = {
     "usageTitle": "Anonyme Statistik",
     "usage": "Mich als Launcher-Nutzer mitzählen",
     "usageNote": "Einmal am Tag sendet der Launcher einen Hash, der sich täglich ändert, dazu seine Version, das System und die Elite-Version. Keine Namen, keine Steam- oder Hardwaredaten; Tage lassen sich nicht miteinander verknüpfen.",
+    "trayTitle": "Beim Spielstart",
+    "trayOnPlay": "Launcher in den Infobereich minimieren — das Symbol öffnet ihn wieder",
+    "trayOpen": "Elite Launcher öffnen",
+    "trayQuit": "Beenden",
     "cacheNote": "zurückwechseln geht sofort",
     "mirror": "Zusätzlicher Mirror (optional)",
     "save": "Speichern",
@@ -434,7 +627,6 @@ const T = {
     "upTo": "bis {s}",
     "needDl": "Download nötig",
     "archive": "Archivversionen ({n})",
-    "back": "⇄ Zurück zu {name}",
     "youPlay": "Du spielst {name}",
     "notMain": "— die Lobbys spielen {name}",
     "switching": "Wechsle zu {name}…",
@@ -444,7 +636,20 @@ const T = {
     "sendLogsNote": "schickt dem Entwickler die Logs der Erweiterungen und des Spiels (Lobby-Statistik, Beobachter-Lag, Continue-Knopf)",
     "logsSent": "Logs gesendet, danke! Nummer: {id}",
     "sending": "Sende…",
-    "sendLogsHome": "📋 Logs an den Entwickler senden"
+    "sendLogsHome": "Logs an den Entwickler senden",
+    "versions": "Versionen",
+    "archiveH": "Archiv",
+    "installedTag": "installiert",
+    "notInstalledShort": "nicht installiert",
+    "addonInfo": "Details: {name}",
+    "addonVer": "Version {v}",
+    "addonNext": "Version {v} kommt mit dem nächsten Update",
+    "addonLater": "gilt ab dem nächsten Spielstart",
+    "launcherNew": "Elite Launcher {v} ist da",
+    "launcherUpdateBtn": "Launcher aktualisieren",
+    "launcherUpdating": "Launcher wird aktualisiert… {p}",
+    "launcherFail": "Launcher konnte nicht aktualisiert werden: {e}",
+    "noNews": "Noch keine Neuigkeiten"
   },
 };
 
@@ -458,6 +663,12 @@ const mb = b => b >= 1e9 ? (b / 1e9).toFixed(2) + ' GB' : (b / 1e6).toFixed(b < 
 const mbps = b => b >= 1e6 ? (b / 1e6).toFixed(1) + ' MB/s' : Math.max(1, Math.round(b / 1e3)) + ' KB/s';
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const open = url => url && invoke('open_url', { url }).catch(e => toast(e, true));
+// Windows long-path prefix from canonicalize() is noise for the player: \\?\G:\Steam → G:\Steam
+const winPath = p => String(p || '').replace(/\\\\\?\\/g, '');
+const day = d => {
+  const x = new Date(String(d).slice(0, 10) + 'T12:00:00');
+  return isNaN(x) ? d : x.toLocaleDateString(lang, { day: 'numeric', month: 'long', year: x.getFullYear() === new Date().getFullYear() ? undefined : 'numeric' });
+};
 
 function toast(msg, err) {
   const el = $('toast'); el.textContent = String(msg); el.className = 'toast' + (err ? ' err' : '');
@@ -466,20 +677,88 @@ function toast(msg, err) {
 
 function channelOf(id) { return (S.config?.channels || []).find(c => c.id === id); }
 
+function verOpen(on) {
+  $('verList').classList.toggle('hidden', !on);
+  $('verBtn').classList.toggle('on', on);
+}
+
+// details of an add-on next to its "?": description, version, a hand-installed copy in the game folder
+function popAddon(btn, c) {
+  const pop = $('pop');
+  if (!c || (pop.dataset.id === c.id && !pop.classList.contains('hidden'))) return popClose();
+  const v = x => 'v' + String(x || '').replace(new RegExp('^' + c.id + '-'), '');
+  const ver = c.installed ? t('addonVer', { v: v(c.installed) }) + (c.latest && c.latest !== c.installed ? ', ' + t('addonNext', { v: v(c.latest) }) : '')
+    : c.latest ? t('addonVer', { v: v(c.latest) }) : '';
+  pop.innerHTML = `<b>${esc(L(c.name) || c.id)}</b>` + (L(c.description) ? `<p>${esc(L(c.description))}</p>` : '')
+    + `<div class="v">${esc([ver, t('addonLater')].filter(Boolean).join(' · '))}</div>`
+    + (c.enabled && (c.conflicts || []).length ? `<div class="w">${esc(t('conflictActive'))}</div>` : '');
+  pop.dataset.id = c.id;
+  pop.classList.remove('hidden');
+  document.querySelectorAll('.qm.on').forEach(x => x.classList.remove('on'));
+  btn.classList.add('on');
+  // to the left of the add-on panel, level with the row, so it covers none of the switches
+  const r = btn.getBoundingClientRect(), panel = btn.closest('.panel').getBoundingClientRect();
+  pop.style.left = Math.max(8, panel.left - pop.offsetWidth - 8) + 'px';
+  pop.style.top = Math.max(8, Math.min(window.innerHeight - pop.offsetHeight - 8, r.top - 12)) + 'px';
+}
+function popClose() {
+  $('pop').classList.add('hidden');
+  $('pop').dataset.id = '';
+  document.querySelectorAll('.qm.on').forEach(x => x.classList.remove('on'));
+}
+
+// launcher self-update, offered and never forced. LU: a newer launcher this copy can install itself (launcher_check);
+// without it the launcher_update of launcher.json links to the download page, as before.
+let LU = null;
+function renderLauncherBanner() {
+  const lu = S.launcher_update, v = LU ? LU.version : lu?.version, b = $('launcherBanner');
+  if (S.in_game_dir) {                      // the launcher sits in the game folder: say so first, it breaks the game
+    b.classList.remove('hidden'); b.classList.remove('link'); $('launcherBtn').classList.add('hidden');
+    $('launcherText').textContent = t('inGameDir'); b.onclick = null; return;
+  }
+  b.classList.toggle('hidden', !v);
+  if (!v) return;
+  b.classList.toggle('link', !LU);
+  $('launcherBtn').classList.toggle('hidden', !LU || !!LU.installing);
+  if (LU) {
+    $('launcherText').textContent = LU.installing ? t('launcherUpdating', { p: LU.pct || '' }) : t('launcherNew', { v });
+    $('launcherBtn').textContent = t('launcherUpdateBtn');
+    $('launcherBtn').disabled = !!S.busy || !!S.game_running;
+    $('launcherBtn').onclick = launcherInstall;
+    b.onclick = null;
+  } else {
+    $('launcherText').textContent = L(lu.text) || t('launcherUpdate', { v });
+    b.onclick = () => open(lu.url);
+  }
+}
+async function launcherCheck() {
+  try { const r = await invoke('launcher_check'); if (r && !LU?.installing) LU = r; } catch (e) { /* offline: try again later */ }
+  if (S) renderLauncherBanner();
+}
+async function launcherInstall() {
+  LU.installing = true; LU.pct = ''; renderLauncherBanner();
+  try { await invoke('launcher_install'); }   // the launcher restarts into the new version
+  catch (e) { LU.installing = false; renderLauncherBanner(); toast(t('launcherFail', { e }), true); }
+}
+
+let trayLang = '';
+function syncTrayLabels() {
+  if (trayLang === lang) return;
+  trayLang = lang;
+  invoke('set_tray_labels', { open: t('trayOpen'), quit: t('trayQuit') }).catch(() => {});
+}
+
 function render() {
-  lang = S.lang || (navigator.language || 'en').slice(0, 2);
+  lang = S.lang || 'ru';                     // Russian unless the player picked another language in Settings
   if (!T[lang]) lang = 'en';
   document.documentElement.lang = lang;
+  syncTrayLabels();
   document.querySelectorAll('[data-t]').forEach(e => e.textContent = t(e.dataset.t));
   document.querySelectorAll('[data-tp]').forEach(e => e.placeholder = t(e.dataset.tp));
   const cfg = S.config || {};
-  $('title').textContent = L(cfg.title) || 'Elite Mod';
   $('subtitle').textContent = L(cfg.subtitle) || 'Dawn of War II · Retribution';
 
-  // launcher self-update: offered, never forced
-  const lu = S.launcher_update;
-  $('launcherBanner').classList.toggle('hidden', !lu);
-  if (lu) { $('launcherBanner').textContent = L(lu.text) || t('launcherUpdate', { v: lu.version }); $('launcherBanner').onclick = () => open(lu.url); }
+  renderLauncherBanner();
 
   // announcements
   const today = new Date().toISOString().slice(0, 10);
@@ -491,13 +770,26 @@ function render() {
     open(el.dataset.url);
   });
 
-  // news
-  $('news').innerHTML = (cfg.news || []).map((n, i) => `<div class="item" data-i="${i}"><div class="d">${esc(n.date)}</div><div class="t">${esc(L(n.title))}</div><div class="x">${esc(L(n.text))}</div></div>`).join('')
-    || `<div class="installed">${esc(S.config_loaded ? '' : t('connecting'))}</div>`;
-  $('news').querySelectorAll('.item').forEach(el => el.onclick = () => open(cfg.news[+el.dataset.i].url));
+  // news: the team's posts from launcher.json and the release notes of the launcher and the patches, newest first
+  const news = (cfg.news || []).map(n => ({ date: n.date || '', title: L(n.title), text: L(n.text), url: n.url }))
+    .concat((S.release_news || []).map(n => ({ date: n.date, title: n.title, items: n.items || [], url: n.url })))
+    .sort((x, y) => String(y.date).localeCompare(String(x.date))).slice(0, 12);
+  $('news').innerHTML = news.map(n => (n.url ? `<a class="news-item" href="#" data-url="${esc(n.url)}">` : '<div class="news-item">')
+    + `<div class="t">${esc(n.title)}</div>` + (n.date ? `<div class="d">${esc(day(n.date))}</div>` : '')
+    + (n.text ? `<div class="x">${esc(n.text)}</div>` : '')
+    + (n.items && n.items.length ? `<ul>${n.items.slice(0, 3).map(x => `<li>${esc(x)}</li>`).join('')}${n.items.length > 3 ? '<li>…</li>' : ''}</ul>` : '')
+    + (n.url ? '</a>' : '</div>')).join('')
+    || `<div class="news-empty">${esc(S.config_loaded ? t('noNews') : t('connecting'))}</div>`;
+  $('news').querySelectorAll('[data-url]').forEach(el => el.onclick = e => { e.preventDefault(); open(el.dataset.url); });
   const more = cfg.news_more;
   $('newsMore').classList.toggle('hidden', !more?.url);
-  if (more?.url) { $('newsMore').textContent = L(more.title) || t('allNews'); $('newsMore').onclick = () => open(more.url); }
+  if (more?.url) { $('newsMore').textContent = (L(more.title) || t('allNews')) + ' ›'; $('newsMore').onclick = () => open(more.url); }
+
+  // links
+  const links = cfg.links || [];
+  $('linksBox').classList.toggle('hidden', !links.length);
+  $('links').innerHTML = links.map((l, i) => `<button data-i="${i}">${esc(L(l.title))}</button>`).join('');
+  $('links').querySelectorAll('button').forEach(b => b.onclick = () => open(links[+b.dataset.i].url));
 
   // game / steam missing → guide the player
   const setup = $('setup');
@@ -513,36 +805,48 @@ function render() {
     $('pick').onclick = pickDir; $('rescan').onclick = reload;
   } else setup.classList.add('hidden');
 
-  // versions: main one marked, the installed one marked, every other one switches in one click
+  // versions: a picker above Play; the main one marked, the installed one ticked, any other one switches in one click
   const chans = cfg.channels || [];
   const activeCh = chans.find(c => c.version === S.installed_version && c.id === S.installed_channel) || chans.find(c => c.version === S.installed_version);
   const mainCh = chans.find(c => c.id === S.main_channel);
-  const row = c => {
+  const locked = S.busy || S.game_running || !S.game_found || !S.config_loaded;
+  const item = c => {
     const isActive = activeCh && c.id === activeCh.id, isMain = c.id === S.main_channel;
     const cost = (S.costs || {})[c.version];
-    const hint = cost === undefined ? t('needDl') : cost === 0 ? t('instant') : t('upTo', { s: mb(cost) });
+    const hint = isActive ? '✓ ' + t('installedTag') : cost === undefined ? t('needDl') : cost === 0 ? t('instant') : t('upTo', { s: mb(cost) });
     const tags = (isMain ? `<span class="tag main">${esc(t('main'))}</span>` : '') + (L(c.badge) && !isMain ? `<span class="tag beta">${esc(L(c.badge))}</span>` : '');
-    const right = isActive ? `<span class="tag ok">✓ ${esc(t('active'))}</span>`
-      : `<button class="btn sw" data-id="${esc(c.id)}" ${S.busy || !S.game_found || !S.config_loaded ? 'disabled' : ''}>${esc(S.installed_version ? t('switchBtn') : t('installBtn'))}<small>${esc(hint)}</small></button>`;
-    return `<div class="ch ${isActive ? 'act' : ''} ${isMain ? 'main' : ''}"><div class="nm"><b>${esc(L(c.name) || c.id)}</b>${tags}
-      <small>${esc(isMain ? t('mainNote') : L(c.description))}</small></div>${right}</div>`;
+    const note = isMain ? t('mainNote') : L(c.description);
+    return `<button class="vi ${isActive ? 'act' : ''}" data-id="${esc(c.id)}" ${isActive || locked ? 'disabled' : ''}><span class="nm"><b>${esc(L(c.name) || c.id)}</b>${tags}`
+      + `${note ? `<small>${esc(note)}</small>` : ''}</span><span class="cost ${isActive || cost === 0 ? 'ok' : ''}">${esc(hint)}</span></button>`;
   };
   const live = chans.filter(c => !c.archive), arch = chans.filter(c => c.archive);
-  $('channels').innerHTML = live.map(row).join('') + (arch.length ? `<details class="arch" ${arch.some(c => activeCh && c.id === activeCh.id) ? 'open' : ''}><summary>${esc(t('archive', { n: arch.length }))}</summary>${arch.map(row).join('')}</details>` : '');
-  $('channels').querySelectorAll('.sw').forEach(b => b.onclick = () => switchTo(b.dataset.id));
-  $('installed').innerHTML = activeCh
-    ? esc(t('youPlay', { name: L(activeCh.name) })) + (mainCh && activeCh.id !== mainCh.id ? ' <span class="warn">' + esc(t('notMain', { name: L(mainCh.name) })) + '</span>' : '')
-    : esc(S.installed_version ? t('current', { v: S.installed_version }) : (S.game_found ? t('notInstalled') : ''));
+  $('verList').innerHTML = `<div class="lh">${esc(t('versions'))}</div>` + live.map(item).join('')
+    + (arch.length ? `<div class="lh">${esc(t('archiveH'))}</div>` + arch.map(item).join('') : '');
+  $('verList').querySelectorAll('.vi:not(:disabled)').forEach(b => b.onclick = () => { verOpen(false); switchTo(b.dataset.id); });
+  const shown = activeCh || (!S.installed_version && mainCh);
+  $('verBtn').innerHTML = shown
+    ? `<b>${esc(L(shown.name) || shown.id)}</b><small class="${activeCh ? 'ok' : ''}">${esc(activeCh ? '✓ ' + t('installedTag') : t('notInstalledShort'))}</small>`
+    // the installed version is in no channel any more (the main one moved on): "3.2" → "Elite 3.2"
+    : `<b>${esc(/^\d/.test(S.installed_version) ? 'Elite ' + S.installed_version : S.installed_version || '—')}</b>${S.installed_version ? `<small class="ok">✓ ${esc(t('installedTag'))}</small>` : ''}`;
+  $('verBtn').disabled = !chans.length;
+  if (!chans.length) verOpen(false);
+  const notMain = activeCh && mainCh && activeCh.id !== mainCh.id;
+  $('verWarn').classList.toggle('hidden', !notMain);
+  if (notMain) $('verWarn').textContent = t('youPlay', { name: L(activeCh.name) }) + ' ' + t('notMain', { name: L(mainCh.name) });
 
-  // add-ons (components)
-  const vshort = (c, v) => String(v || '').replace(new RegExp('^' + c.id + '-'), '');
-  const compVer = c => !c.installed ? (c.enabled && c.latest ? ' <span class="tag">→ v' + esc(vshort(c, c.latest)) + '</span>' : '')
-    : ' <span class="tag ok">v' + esc(vshort(c, c.installed)) + '</span>'
-      + (c.latest && c.latest !== c.installed ? ' <span class="tag">→ v' + esc(vshort(c, c.latest)) + '</span>' : '');
+  // add-ons: a switch each, the details behind "?"; an add-on's own options show up under it once it is on
   const comps = S.components || [];
   $('compBox').classList.toggle('hidden', !comps.length);
-  $('components').innerHTML = comps.map(c => `<label class="comp"><input type="checkbox" data-id="${esc(c.id)}" ${c.enabled ? 'checked' : ''} ${S.busy ? 'disabled' : ''}><div><b>${esc(L(c.name) || c.id)}${compVer(c)}</b><small>${esc(L(c.description))}</small>${c.enabled && (c.conflicts || []).length ? `<small class="warn">${esc(t('conflictActive'))}</small>` : ''}</div></label>`
-    + (c.options || []).map(o => `<label class="opt"><input type="checkbox" data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${o.on ? 'checked' : ''} ${!c.enabled || S.busy ? 'disabled' : ''}><span>${esc(L(o.name) || o.id)}</span></label>`).join('')).join('');
+  const lockC = S.busy || S.game_running;   // the game holds the add-on files while it runs
+  const nameHtml = c => { const n = L(c.name) || c.id, m = n.match(/^(.+?)\s*\(([^()]+)\)$/); return m ? `${esc(m[1])}<small>${esc(m[2])}</small>` : esc(n); };
+  $('components').innerHTML = (S.game_running ? `<div class="addon-note">${esc(t('gameRunningAddons'))}</div>` : '')
+    + comps.map(c => `<div class="addon ${c.enabled ? '' : 'off'}"><div class="addon-row"><span class="addon-name" title="${esc(L(c.name) || c.id)}">${nameHtml(c)}</span>`
+      + (c.enabled && (c.conflicts || []).length ? `<span class="addon-warn" title="${esc(t('conflictActive'))}">!</span>` : '')
+      + `<button class="qm ${$('pop').dataset.id === c.id ? 'on' : ''}" data-info="${esc(c.id)}" aria-label="${esc(t('addonInfo', { name: L(c.name) || c.id }))}">?</button>`
+      + `<label class="switch"><input type="checkbox" role="switch" data-id="${esc(c.id)}" aria-label="${esc(L(c.name) || c.id)}" ${c.enabled ? 'checked' : ''} ${lockC ? 'disabled' : ''}><i></i></label></div>`
+      + (c.enabled && (c.options || []).length ? '<div class="addon-opts">' + c.options.map(o => `<label class="addon-opt"><input type="checkbox" data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${o.on ? 'checked' : ''} ${lockC ? 'disabled' : ''}>${esc(L(o.name) || o.id)}</label>`).join('') + '</div>' : '')
+      + '</div>').join('');
+  $('components').querySelectorAll('.qm').forEach(b => b.onclick = e => { e.stopPropagation(); popAddon(b, comps.find(c => c.id === b.dataset.info)); });
   $('components').querySelectorAll('input[data-opt]').forEach(cb => cb.onchange = () =>
     invoke('set_comp_option', { comp: cb.dataset.comp, opt: cb.dataset.opt, on: cb.checked }).then(reload).catch(e => toast(e, true)));
   $('components').querySelectorAll('input[data-id]').forEach(cb => cb.onchange = async () => {
@@ -558,53 +862,52 @@ function render() {
     if (S.installed_version) { try { await invoke('start_update', { repair: false, componentsOnly: true }); S.busy = true; render(); } catch (e) { toast(e, true); } }
     else reload();
   });
-  // links
-  $('links').innerHTML = (cfg.links || []).map((l, i) => `<button data-i="${i}">${esc(L(l.title))}</button>`).join('');
-  $('links').querySelectorAll('button').forEach(b => b.onclick = () => open(cfg.links[+b.dataset.i].url));
 
-  // update banner (non-blocking)
-  const target = channelOf(S.installed_channel) || channelOf(S.channel);
-  const showUpd = target && S.installed_version && target.version !== S.installed_version && !S.busy;
-  $('updateBanner').classList.toggle('hidden', !showUpd);
-  if (showUpd) {
-    $('updateText').textContent = (L(cfg.update_text) || t('switchTo', { name: '{name}' })).replace('{name}', L(target.name)).replace('{version}', target.version);
-    $('updateBtn').textContent = t('updateNow');
-    $('updateBtn').onclick = () => switchTo(target.id);
-  }
-
-  // footer
+  // Play
   const play = $('play');
   play.classList.remove('install');
   $('cancel').classList.toggle('hidden', !S.busy);
   if (S.busy) { play.textContent = t('updating'); play.classList.add('install'); play.disabled = true; }
+  else if (S.game_running) { play.textContent = t('running'); play.disabled = true; }
   else if (!S.game_found) { play.textContent = t('play'); play.disabled = true; }
   else if (!S.installed_version) { play.textContent = t('install'); play.classList.add('install'); play.disabled = !S.config_loaded; }
   else { play.textContent = t('play'); play.disabled = false; }
   play.onclick = () => (S.installed_version ? doPlay() : switchTo(S.main_channel || S.channel));
-  $('playWhat').textContent = S.busy ? '' : activeCh ? L(activeCh.name) : (!S.installed_version && mainCh ? L(mainCh.name) : '');
-  const prev = channelOf(S.prev_channel || '');
-  $('quick').classList.toggle('hidden', !prev || S.busy || !S.installed_version);
-  if (prev) { $('quick').textContent = t('back', { name: L(prev.name) }); $('quick').onclick = () => switchTo(prev.id); }
 
-  if (!S.busy) {
+  // a newer version of the installed one: offered right above the version picker, never forced
+  const target = channelOf(S.installed_channel) || channelOf(S.channel);
+  const showUpd = !!(S.game_found && target && S.installed_version && target.version !== S.installed_version && !S.busy && !S.game_running && !S.last_error);
+  $('updBox').classList.toggle('hidden', !showUpd);
+  if (showUpd) {
+    const cost = (S.costs || {})[target.version];
+    $('updText').innerHTML = `<b>${esc((L(cfg.update_text) || t('switchTo', { name: '{name}' })).replace('{name}', L(target.name)).replace('{version}', target.version))}</b>`
+      + (cost ? `<small>${esc(t('upTo', { s: mb(cost) }))}</small>` : '');
+    $('updateBtn').textContent = t('updateNow');
+    $('updateBtn').onclick = () => switchTo(target.id);
+  }
+
+  // status line
+  if (!S.busy && !LU?.installing) {
     $('bar').classList.add('hidden');
+    $('statusText').classList.toggle('err', !!(S.last_error && S.config_loaded));
     $('statusText').innerHTML = S.last_error && !S.config_loaded ? esc(t('offline'))
-      : S.last_error ? esc(S.last_error)
+      : S.last_error ? esc(winPath(S.last_error))
       : S.installed_version ? esc(t('ready', { v: activeCh ? L(activeCh.name).replace(/^Elite\s+/i, '') : S.installed_version })) : (S.config_loaded ? '' : esc(t('connecting')));
     const hint = L(cfg.launch?.[S.os]?.hint);
-    $('statusMeta').textContent = [hint, S.game_dir || ''].filter(Boolean).join(' · ');
+    $('statusMeta').textContent = [hint, winPath(S.game_dir)].filter(Boolean).join(' · ');
   }
 
   // settings
-  $('gameDir').textContent = S.game_dir || '—';
+  $('gameDir').textContent = winPath(S.game_dir) || '—';
   $('lang').value = S.lang || '';
   $('cache').value = String(S.cache_mb);
   $('usage').checked = S.usage_stats !== false;
+  $('trayOnPlay').checked = S.tray_on_play !== false;
   $('mirror').value = S.extra_mirror || '';
   $('mirrorInfo').textContent = t('mirrors', { n: S.mirror_count });
-  $('repair').disabled = S.busy || !S.installed_version;
+  $('repair').disabled = S.busy || S.game_running || !S.installed_version;
   $('about').textContent = `Elite Launcher ${S.launcher_version} · ${S.os}`;
-  $('hdrVer').textContent = S.launcher_version ? `v${S.launcher_version}` : '';
+  $('hdrVer').textContent = S.launcher_version ? 'v' + S.launcher_version : '';
 }
 
 function renderProgress(p) {
@@ -620,6 +923,7 @@ function renderProgress(p) {
     } else { dlPrev = { b: p.downloaded, t: now }; }
     if (speedEMA > 0) spd = ` · ${mbps(speedEMA)}`;
   }
+  $('statusText').classList.remove('err');
   $('statusText').innerHTML = (p.phase === 'checking' ? esc(t('checking', { p: pct })) : esc(t('downloading', { file: p.file.split('/').pop() })) + ` <b>${pct}%</b>`) + spd;
   $('statusMeta').textContent = t('meta', { dl: mb(p.downloaded), re: mb(p.reused), fc: mb(p.from_cache), m: p.mirror });
 }
@@ -644,7 +948,7 @@ async function refresh() {
   try { S = await invoke('refresh'); render(); } catch (e) { toast(e, true); return; }
   // add-ons follow their checkboxes on their own: install missing ones, remove unticked ones
   const comps = S.components || [];
-  if (S.installed_version && !S.busy && comps.some(c => { const want = c.enabled && !(c.conflicts || []).length; return want !== !!c.installed || (want && c.latest && c.installed && c.installed !== c.latest); })) {
+  if (S.installed_version && !S.busy && !S.game_running && comps.some(c => { const want = c.enabled && !(c.conflicts || []).length; return want !== !!c.installed || (want && c.latest && c.installed && c.installed !== c.latest); })) {
     try { await invoke('start_update', { repair: false, componentsOnly: true }); S.busy = true; render(); } catch (e) { /* will retry next refresh */ }
   }
 }
@@ -673,6 +977,21 @@ listen('net', e => {
   else if (a[0] === 'try') { if (netActive) $('statusText').textContent = t('netTry', { host: a[1], k: a[2], n: a[3] }); }
   else if (a[0] === 'fail') { $('statusText').textContent = t('netFail', { host: a[1] }); }
 });
+listen('launcher_progress', e => {
+  if (!LU) return;
+  const { done, total } = e.payload;
+  const pct = total ? Math.min(100, Math.round(100 * done / total)) : 0;
+  LU.pct = total ? pct + '%' : mb(done);
+  renderLauncherBanner();
+  // the same bar at the bottom as for Elite and add-on updates
+  $('bar').classList.remove('hidden');
+  $('barFill').style.width = pct + '%';
+  $('statusText').classList.remove('err');
+  $('statusText').innerHTML = esc(t('launcherUpdating', { p: '' })) + ` <b>${esc(LU.pct)}</b>`;
+  $('statusMeta').textContent = total ? `${mb(done)} / ${mb(total)}` : mb(done);
+});
+listen('news', () => { if (S) reload(); });
+listen('game_running', e => { if (!S) return; S.game_running = e.payload; render(); if (!e.payload) refresh(); });
 listen('progress', e => { netActive = false; prog = e.payload; if (S) { S.busy = true; renderProgress(prog); } });
 listen('update_done', async e => {
   await reload();
@@ -696,6 +1015,7 @@ $('browse').onclick = pickDir;
 $('openDir').onclick = () => invoke('open_game_dir').catch(e => toast(e, true));
 $('lang').onchange = e => invoke('set_setting', { key: 'lang', value: e.target.value }).then(reload);
 $('usage').onchange = e => invoke('set_setting', { key: 'usage_stats', value: e.target.checked }).then(reload);
+$('trayOnPlay').onchange = e => invoke('set_setting', { key: 'tray_on_play', value: e.target.checked }).then(reload);
 $('cache').onchange = e => invoke('set_setting', { key: 'cache_mb', value: +e.target.value }).then(reload);
 $('saveMirror').onclick = () => invoke('set_setting', { key: 'extra_mirror', value: $('mirror').value.trim() }).then(refresh);
 $('repair').onclick = () => startUpdate(true);
@@ -709,10 +1029,20 @@ async function sendLogs(btn, label) {
   finally { btn.disabled = false; btn.textContent = t(label); }
 }
 $('sendLogs').onclick = () => sendLogs($('sendLogs'), 'sendLogs');
-$('sendLogsHome').onclick = () => sendLogs($('sendLogsHome'), 'sendLogsHome');
+$('sendLogsHome').onclick = () => sendLogs($('sendLogsHome'), 'sendLogs');
+
+$('verBtn').onclick = e => { e.stopPropagation(); verOpen($('verList').classList.contains('hidden')); };
+document.addEventListener('click', e => {
+  if (!$('verList').contains(e.target)) verOpen(false);
+  if (!$('pop').contains(e.target)) popClose();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { verOpen(false); popClose(); } });
+window.addEventListener('resize', popClose);
 
 reload().then(refresh);
-setInterval(() => { if (S && !S.busy) refresh(); }, 15 * 60 * 1000);   // pick up new versions and announcements
+launcherCheck();
+// every 15 minutes: new Elite versions, announcements and a newer launcher
+setInterval(() => { if (S && !S.busy) refresh(); launcherCheck(); }, 15 * 60 * 1000);
 
 
 // ---------- feedback chat with the developers ----------
@@ -770,3 +1100,102 @@ async function fbLoad() {
   if (atEnd || !FB.shown) box.scrollTop = box.scrollHeight; FB.shown = true;
 }
 fbInit();
+
+// ---------------- hotkeys ----------------
+const HK = { data: null, edits: {}, grid: false, wait: null };
+const AB = [1, 2, 3, 4, 5, 6, 7].map(i => 'grid:AB_key_' + i);
+const UC = r => [1, 2, 3, 4, 5, 6, 7].map(c => `grid:UC_Row${r}_Col${c}`);
+const MAIN = ['attack', 'retreat', 'retreat_queue', 'repair', 'reinforce', 'overwatch', 'attackground', 'attackmelee', 'halt', 'stance', 'rally', 'unload',
+  'retire', 'select_all', 'select_hq', 'select_hero', 'retreat_hero', 'retreat_all', 'retreat_beacon', 'next_primary_selection', 'event_cue_cycle', 'systemmenu'];
+const hkKey = b => b.scope + ':' + b.name;
+const HK_RU = { attack: 'Атака', retreat: 'Отступление', retreat_queue: 'Отступление в очередь', repair: 'Ремонт', reinforce: 'Подкрепление', overwatch: 'Наблюдение (overwatch)',
+  attackground: 'Атака по земле', attackmelee: 'Рукопашная атака', halt: 'Стоп', stance: 'Стойка', rally: 'Точка сбора', unload: 'Высадить', retire: 'Распустить',
+  select_all: 'Выбрать всех', select_hq: 'Выбрать штаб', select_hero: 'Выбрать героя', retreat_hero: 'Отступление героя', retreat_all: 'Отступление всех',
+  retreat_beacon: 'Маяк отступления', next_primary_selection: 'Следующий выбранный', event_cue_cycle: 'К последнему событию', systemmenu: 'Меню' };
+function hkVal(k) { const b = HK.data.map[k]; return k in HK.edits ? HK.edits[k] : b ? b.value : ''; }
+function hkPretty(name) { return name.replace(/_/g, ' ').replace(/^AB key /, '').replace(/^UC Row(\d) Col(\d)/, 'row $1 · $2'); }
+async function hkLoad() {
+  try { const d = await invoke('hotkeys_get'); HK.data = d; HK.data.map = {}; d.bindings.forEach(b => HK.data.map[hkKey(b)] = b); HK.grid = d.grid; HK.edits = {}; hkRender(); }
+  catch (e) { $('hkGridBox').innerHTML = `<div class="note">${esc(String(e))}</div>`; }
+}
+// with Grid Hotkeys on, the grid table re-assigns some commands (reinforce, melee, stance, repair) - those are the ones that work
+function hkMainKey(n) { return HK.grid && HK.data.map['grid:' + n] ? 'grid:' + n : ':' + n; }
+function hkDups() {
+  // keys used twice among commands that work at the same moment: a selected squad (main commands + abilities with the grid on);
+  // building keys work only with a building selected - checked among themselves
+  const groups = [MAIN.map(hkMainKey).concat(HK.grid ? AB : []), HK.grid ? UC(1).concat(UC(2), UC(3)) : []];
+  const dup = new Set();
+  groups.forEach(keys => { const seen = {};
+    keys.filter(k => HK.data.map[k]).forEach(k => { const v = hkVal(k).toLowerCase(); if (!v) return; (seen[v] = seen[v] || []).push(k); });
+    // only clashes the player made: the game's own defaults share some keys on purpose (context decides)
+    Object.values(seen).forEach(ks => { if (ks.length > 1 && ks.some(k => hkVal(k) !== HK.data.map[k].default)) ks.forEach(k => dup.add(k)); }); });
+  return dup;
+}
+function hkBtn(k) {
+  const b = HK.data.map[k]; if (!b) return '<span></span>';
+  const chg = hkVal(k) !== b.default;
+  return `<button class="kk${chg ? ' chg' : ''}" data-k="${esc(k)}" title="${esc(b.name)} — ${esc(t('hkNone'))}: ${esc(b.default)}">${esc(hkVal(k))}</button>`;
+}
+function hkRender() {
+  if (!HK.data) return;
+  $('hkGrid').checked = HK.grid;
+  const g = $('hkGridBox'); g.classList.toggle('off', !HK.grid);
+  g.innerHTML = [[t('hkAb'), AB], [t('hkUc1'), UC(1)], [t('hkUc2'), UC(2)], [t('hkUc3'), UC(3)]]
+    .map(([l, ks]) => `<span class="lbl">${esc(l)}</span>` + ks.map(hkBtn).join('')).join('');
+  $('hkMain').innerHTML = MAIN.filter(n => HK.data.map[':' + n]).map(n => `<div class="hk-row"><span title="${esc(n)}">${esc(lang === 'ru' && HK_RU[n] || hkPretty(n))}</span>${hkBtn(hkMainKey(n))}</div>`).join('');
+  const q = ($('hkSearch').value || '').toLowerCase(); let sec = '';
+  $('hkAllList').innerHTML = HK.data.bindings.filter(b => !q || b.name.toLowerCase().includes(q) || hkVal(hkKey(b)).toLowerCase() === q || b.section.toLowerCase().includes(q)).slice(0, 400)
+    .map(b => (b.section !== sec ? `<div class="hk-sec">${esc(sec = b.section)}</div>` : '') + `<div class="hk-row"><span>${esc(hkPretty(b.name))}</span>${hkBtn(hkKey(b))}</div>`).join('');
+  const dup = hkDups();
+  document.querySelectorAll('#hotkeys .kk').forEach(el => { el.classList.toggle('dup', dup.has(el.dataset.k)); el.onclick = () => hkWait(el); });
+  const n = Object.keys(HK.edits).filter(k => HK.edits[k] !== HK.data.map[k].value).length + HK.data.bindings.filter(b => b.value !== b.default && !(hkKey(b) in HK.edits)).length;
+  $('hkState').textContent = n ? t('hkCustom', { n }) : t('hkNone');
+}
+function hkWait(el) {
+  document.querySelectorAll('#hotkeys .kk.wait').forEach(x => { x.classList.remove('wait'); x.textContent = hkVal(x.dataset.k); });
+  HK.wait = el.dataset.k; el.classList.add('wait'); el.textContent = t('hkPress');
+}
+const KEYMAP = { Space: 'Space', Tab: 'Tab', Enter: 'Enter', Backspace: 'Backspace', Comma: 'Comma', Period: 'Period', Slash: 'Slash', Semicolon: 'Semicolon',
+  Quote: 'Apostrophe', BracketLeft: 'LBracket', BracketRight: 'RBracket', Backslash: 'Backslash', Minus: 'Minus', Equal: 'Equal', Backquote: 'Grave',
+  ArrowUp: 'Up', ArrowDown: 'Down', ArrowLeft: 'Left', ArrowRight: 'Right', Delete: 'Delete', Insert: 'Insert', Home: 'Home', End: 'End', PageUp: 'PageUp',
+  PageDown: 'PageDown', Pause: 'Pause', CapsLock: 'CapsLock', NumpadAdd: 'NumpadPlus', NumpadSubtract: 'NumpadMinus', NumpadMultiply: 'NumpadMultiply',
+  NumpadDivide: 'NumpadSlash', NumpadDecimal: 'NumpadPeriod' };
+function dowKey(e) {
+  let k = null; const c = e.code;
+  if (/^Key[A-Z]$/.test(c)) k = c.slice(3); else if (/^Digit\d$/.test(c)) k = c.slice(5); else if (/^F([1-9]|1[0-2])$/.test(c)) k = c;
+  else if (/^Numpad\d$/.test(c)) k = c; else k = KEYMAP[c] || null;
+  if (!k) return null;
+  return (e.ctrlKey ? 'Control+' : '') + (e.shiftKey ? 'Shift+' : '') + (e.altKey ? 'Alt+' : '') + k;
+}
+document.addEventListener('keydown', e => {
+  if (!HK.wait) return;
+  if (['ControlLeft', 'ControlRight', 'ShiftLeft', 'ShiftRight', 'AltLeft', 'AltRight', 'MetaLeft', 'MetaRight'].includes(e.code)) return;
+  e.preventDefault(); e.stopPropagation();
+  const k = HK.wait; HK.wait = null;
+  if (e.code !== 'Escape') { const v = dowKey(e); if (v) HK.edits[k] = v; }
+  hkRender();
+}, true);
+$('hkGrid').onchange = e => { HK.grid = e.target.checked; hkRender(); };
+$('hkSearch').oninput = () => hkRender();
+$('hkSave').onclick = async () => {
+  const dup = hkDups();
+  try { const d = await invoke('hotkeys_save', { changes: HK.edits, grid: HK.grid }); HK.data = d; HK.data.map = {}; d.bindings.forEach(b => HK.data.map[hkKey(b)] = b); HK.grid = d.grid; HK.edits = {}; hkRender();
+    toast(dup.size ? t('hkSaved') + '. ' + t('hkDup', { k: [...dup].map(k => hkVal(k)).filter((v, i, a) => a.indexOf(v) === i).join(', ') }) : t('hkSaved'), !!dup.size); }
+  catch (e) { toast(String(e), true); }
+};
+$('hkReset').onclick = async () => {
+  try { const d = await invoke('hotkeys_reset'); HK.data = d; HK.data.map = {}; d.bindings.forEach(b => HK.data.map[hkKey(b)] = b); HK.grid = d.grid; HK.edits = {}; hkRender(); toast(t('hkSaved')); }
+  catch (e) { toast(String(e), true); }
+};
+document.querySelector('.tab[data-view="hotkeys"]').addEventListener('click', () => { if (!HK.data) hkLoad(); });
+
+// ---------------- remove Elite completely ----------------
+let unArmed = 0;
+$('uninstall').onclick = async () => {
+  const b = $('uninstall');
+  if (Date.now() - unArmed > 6000) { unArmed = Date.now(); b.textContent = t('unSure'); setTimeout(() => { if (Date.now() - unArmed >= 6000) b.textContent = t('unBtn'); }, 6100); return; }
+  unArmed = 0; b.disabled = true;
+  try { const r = await invoke('uninstall_elite'); toast(t('unDone', { n: r.files })); refresh(); }
+  catch (e) { toast(String(e), true); }
+  b.disabled = false; b.textContent = t('unBtn');
+};

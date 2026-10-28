@@ -586,7 +586,17 @@ fn update_file(game: &Game, m: &Mirrors, f: &FileEntry, cur_sha: Option<[u8; 32]
     if dst.exists() {
         stash(game, &dst, cur_sha);
     }
-    fs::rename(&tmp, &dst).map_err(|e| Error::Io(format!("{}: {e} (is the game running?)", f.path)))?;
+    // the copy left by a previous update while the game held the file (see below)
+    let old = dst.with_file_name(format!("{}.old", dst.file_name().map(|n| n.to_string_lossy()).unwrap_or_default()));
+    let _ = fs::remove_file(&old);
+    if let Err(e) = fs::rename(&tmp, &dst) {
+        // a running game (or a crashed one still hanging) keeps its DLLs locked: Windows can not overwrite or delete
+        // them, but it can rename them - the new file takes the name, the old one goes when the game lets it go
+        if !(dst.exists() && fs::rename(&dst, &old).is_ok() && fs::rename(&tmp, &dst).is_ok()) {
+            let _ = fs::remove_file(&tmp);
+            return Err(Error::Io(format!("{}: {e} (is the game running?)", f.path)));
+        }
+    }
     tick(f.size);
     Ok(())
 }
