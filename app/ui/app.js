@@ -1076,7 +1076,7 @@ function onRender() {
   // in the launcher: the names the server lists (once it does), minus those already looking or playing
   const busy = new Set(look.map(p => p.steam).concat(matches.flatMap(m => (m.team1 || []).concat(m.team2 || []).map(p => p.steam))));
   const idle = Array.isArray(d?.in_launcher) ? d.in_launcher.filter(p => !busy.has(p.steam) && !p.status) : null;
-  const group = (cls, title, n, body) => `<div class="on-g ${cls}"><div class="on-gh"><i></i>${esc(title)}<span>${n}</span></div>${body}</div>`;
+  const group = (cls, title, n, body) => `<div class="on-g ${cls}"><div class="on-gh"><i></i>${esc(title)}<span>${esc(String(n))}</span></div>${body}</div>`;
   const st = { creating: 'onStateCreating', lobby: 'onStateLobby', playing: 'onStatePlaying' };
   let html = '';
   if (!d) html = `<div class="on-empty">${esc(ON.err ? t('onOffline') : t('connecting'))}</div>`;
@@ -1087,7 +1087,7 @@ function onRender() {
       matches.map(m => `<div class="on-m"><span class="tm">${(m.team1 || []).map(onWho).join(', ')}</span><span class="vs">vs</span>`
         + `<span class="tm r">${(m.team2 || []).map(onWho).join(', ')}</span><span class="tag ${esc(m.state)}" title="${esc(t(st[m.state] || 'onStateCreating'))}">${esc(m.mode)}</span></div>`).join(''));
     if (!look.length && !matches.length) html += `<div class="on-empty">${esc(t('onNobody'))}</div>`;
-    html += group('idle', t('onLauncher'), idle ? idle.length : d.online ?? 0, idle && idle.length ? `<div class="on-names">${idle.map(onWho).join('')}</div>` : '');
+    html += group('idle', t('onLauncher'), idle ? idle.length : Number(d.online) || 0, idle && idle.length ? `<div class="on-names">${idle.map(onWho).join('')}</div>` : '');
   }
   $('onGroups').innerHTML = html;
   $('onGroups').querySelectorAll('.nm[data-steam]').forEach(b => b.onclick = () => b.dataset.steam && open('https://steamcommunity.com/profiles/' + b.dataset.steam));
