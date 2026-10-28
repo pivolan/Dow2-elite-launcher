@@ -1082,13 +1082,12 @@ function onRender() {
       matches.map(m => `<div class="on-m"><span class="tag ${esc(m.state)}" title="${esc(t(st[m.state] || 'onStateCreating'))}">${esc(m.mode)}</span>`
         + `<div class="tms"><div>${(m.team1 || []).map(onWho).join(', ')}</div><div><span class="vs">vs</span> ${(m.team2 || []).map(onWho).join(', ')}</div></div></div>`).join(''));
     if (!look.length && !matches.length) html += `<div class="on-empty">${esc(t('onNobody'))}</div>`;
+    // in the lobby, the last group: online (whoever talked to the ladder server in the last minute, the number on the
+    // ladder page) minus those looking for a game or watching and those in a match; only a number, the server sends no names
+    const inMatches = matches.reduce((n, m) => n + (m.team1 || []).length + (m.team2 || []).length + (m.watchers || []).length, 0);
+    html += group('idle', t('onIdle'), Math.max(0, (Number(d.online) || 0) - (d.searching || []).length - inMatches), '');
   }
   $('onGroups').innerHTML = html;
-  // in the lobby, always in sight under the lists: online (whoever talked to the ladder server in the last minute, the
-  // number on the ladder page) minus those looking for a game or watching and those in a match; the server sends no names
-  const inMatches = matches.reduce((n, m) => n + (m.team1 || []).length + (m.team2 || []).length + (m.watchers || []).length, 0);
-  $('onIdle').classList.toggle('hidden', !d);
-  if (d) $('onIdle').innerHTML = `<div class="on-gh"><i></i>${esc(t('onIdle'))}<span>${esc(String(Math.max(0, (Number(d.online) || 0) - (d.searching || []).length - inMatches)))}</span></div>`;
   $('onGroups').querySelectorAll('.nm[data-steam]').forEach(b => b.onclick = () => b.dataset.steam && open('https://steamcommunity.com/profiles/' + b.dataset.steam));
   $('onGroups').querySelectorAll('[data-g]').forEach(b => b.onclick = () => {
     ON.shut.has(b.dataset.g) ? ON.shut.delete(b.dataset.g) : ON.shut.add(b.dataset.g);

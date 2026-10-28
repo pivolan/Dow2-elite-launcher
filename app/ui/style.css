@@ -214,8 +214,6 @@ input[type=checkbox]{flex:none;width:16px;height:16px;padding:0;accent-color:var
 .tag.lobby{border-color:#8a5d22;color:var(--amber)}
 .on-empty{padding:2px 0 6px;font-size:13px;line-height:1.4;color:var(--muted)}
 .on-box .more{flex:none}
-#onIdle{flex:none;padding:3px 0 6px;border-top:1px solid var(--sep)}
-#onIdle .on-gh{margin:0;cursor:default}
 /* loading: grey rows where the names will be */
 .on-skel{display:flex;flex-direction:column;gap:10px;padding:4px 0}
 .on-skel div{display:flex;align-items:center;gap:8px}
