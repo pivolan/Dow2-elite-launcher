@@ -260,7 +260,7 @@ fn uninstall_elite(app: State<'_, App>, handle: AppHandle) -> Result<Value, Stri
     if !dir.join("DOW2.exe").is_file() { return Err("this is not the game folder".into()); }
     let cfg = app.config.lock().unwrap().clone().unwrap_or_default();
     let mut files = 0usize;
-    for c in &cfg.components { files += update::Game::component(&dir, &c.id).uninstall().unwrap_or(0); }
+    for c in &cfg.components { files += update::Game::component(&dir, &c.id).uninstall().unwrap_or(0); restore_originals(&dir, &c.id); }
     files += update::Game::new(&dir).uninstall().map_err(|e| e.to_string())?;
     // what Elite and the add-ons leave next to the game: their folders, launch configs, the stand-alone patch loader
     let mut gone = Vec::new();
@@ -608,6 +608,41 @@ fn remove_conflicts(app: State<'_, App>, id: String) -> Result<Vec<String>, Stri
     Ok(removed)
 }
 
+fn backup_dir(dir: &std::path::Path, id: &str) -> PathBuf {
+    let id: String = id.chars().filter(|c| c.is_ascii_alphanumeric() || *c == '-' || *c == '_').collect();
+    dir.join(".elite_launcher").join("backup").join(id)
+}
+/// Copy the game files this add-on is about to overwrite (only files that exist and have no backup yet).
+fn backup_originals(dir: &std::path::Path, id: &str, man: &elite_core::manifest::Manifest) {
+    let b = backup_dir(dir, id);
+    for f in &man.files {
+        if f.path.contains("..") { continue; }
+        let src = update::Game::new(dir).file(&f.path);
+        let dst = b.join(f.path.replace('/', std::path::MAIN_SEPARATOR_STR));
+        if src.is_file() && !dst.exists() {
+            if let Some(p) = dst.parent() { let _ = std::fs::create_dir_all(p); }
+            let _ = std::fs::copy(&src, &dst);
+        }
+    }
+}
+/// Put back the originals saved by backup_originals and forget the backup.
+fn restore_originals(dir: &std::path::Path, id: &str) {
+    let b = backup_dir(dir, id);
+    fn walk(root: &std::path::Path, cur: &std::path::Path, dir: &std::path::Path) {
+        let Ok(rd) = std::fs::read_dir(cur) else { return };
+        for e in rd.flatten() {
+            let p = e.path();
+            if p.is_dir() { walk(root, &p, dir); continue; }
+            if let Ok(rel) = p.strip_prefix(root) {
+                let dst = dir.join(rel);
+                if let Some(d) = dst.parent() { let _ = std::fs::create_dir_all(d); }
+                let _ = std::fs::copy(&p, &dst);
+            }
+        }
+    }
+    if b.is_dir() { walk(&b, &b, dir); let _ = std::fs::remove_dir_all(&b); }
+}
+
 /// Install ticked components, remove unticked ones, keep Elite.launchconfig in sync.
 fn sync_components(dir: &std::path::Path, cfg: &LauncherConfig, s: &Settings, m: &Mirrors, progress: &mut dyn FnMut(&update::Progress)) -> Result<(), update::Error> {
     let main = update::Game::new(dir);
@@ -619,12 +654,15 @@ fn sync_components(dir: &std::path::Path, cfg: &LauncherConfig, s: &Settings, m:
         let g = update::Game::component(dir, &c.id);
         if on {
             let man = update::load_manifest(&g, m, &c.version)?;
+            // an add-on that replaces game files (e.g. a translation): keep the originals the first time, put them back when it is off
+            if g.load_state().version.is_empty() { backup_originals(dir, &c.id, &man); }
             update::apply(&g, m, &man, &update::Options { verify_all: false, cache_limit: s.cache_mb.unwrap_or(DEFAULT_CACHE_MB) << 20, channel: c.id.clone() }, progress)?;
             if c.id == "lobbystats" {
                 elite::clean_lobbystats_ini(dir).map_err(|e| update::Error::Io(e.to_string()))?;
             }
         } else if !g.load_state().version.is_empty() {
             g.uninstall()?;
+            restore_originals(dir, &c.id);
         }
         if !c.inject.is_empty() {
             for name in elite::set_injected_all(dir, &c.inject, on).map_err(|e| update::Error::Io(e.to_string()))? {
