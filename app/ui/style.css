@@ -123,7 +123,7 @@ nav{margin-left:auto;display:flex;gap:4px}
 .tag{font:700 9px Cinzel,serif;letter-spacing:1px;padding:1px 5px;border:1px solid var(--line2);color:var(--muted);vertical-align:2px;text-transform:uppercase}
 .tag.main{color:#1a1408;background:var(--gold);border-color:var(--gold)}
 .tag.beta{color:var(--amber);border-color:#8a5d22}
-.ver-warn{font-size:12px;color:var(--amber);margin-top:-4px}
+.ver-warn{flex:none;font-size:12px;line-height:1.35;color:var(--amber);margin-bottom:-6px}
 .play{flex:none;height:56px;border:1px solid #d0463d;background:linear-gradient(#b52b27,#7a1715);color:#f6e6c4;font:900 22px Cinzel,serif;letter-spacing:6px;box-shadow:0 0 30px rgba(200,56,47,.25);text-transform:uppercase}
 .play:hover:not(:disabled){filter:brightness(1.12)}
 .play.install{background:linear-gradient(#d4af55,#8a6d2b);color:#1a1408;border-color:#f0d68a;font-size:16px;letter-spacing:2px}
