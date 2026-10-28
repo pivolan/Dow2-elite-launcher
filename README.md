@@ -148,6 +148,23 @@ The public half of that key is in the repository, `keys/updater.pub` (the conten
 compiled into the launcher. Keep the private key out of the repository: installed launchers install any update signed
 with it. A new key pair means a new `keys/updater.pub`, and launchers built before it have to be updated by hand once.
 
+### Release builds outside CI (e.g. on the server)
+
+A launcher built anywhere else updates itself the same way, as long as the build is signed and an `updater.json`
+sits next to the installers:
+
+```bash
+export TAURI_SIGNING_PRIVATE_KEY=/path/to/elite-updater.key          # a path or the key itself
+export TAURI_SIGNING_PRIVATE_KEY_PASSWORD="$(cat /path/to/elite-updater.password)"
+DL=https://example.org/elite/dl                                         # public folder the installers go to
+cd app && cargo tauri build --config "{\"bundle\":{\"createUpdaterArtifacts\":true},\"plugins\":{\"updater\":{\"pubkey\":\"$(tr -d '[:space:]' < ../keys/updater.pub)\",\"endpoints\":[\"$DL/updater.json\"]}}}"
+# each installer now has <name>.sig next to it; put the installers and their .sig files into one folder, then
+python3 scripts/updater_manifest.py <version> "$DL" <folder> > <folder>/updater.json
+```
+
+Upload `updater.json` last, after the installers: launchers offer the new version as soon as they see it.
+An update reaches players only when the version in `updater.json` is higher than theirs.
+
 
 | Job | What |
 |---|---|
