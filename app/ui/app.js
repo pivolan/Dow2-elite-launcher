@@ -113,7 +113,50 @@ const T = {
     "launcherUpdateBtn": "Update the launcher",
     "launcherUpdating": "Updating the launcher… {p}",
     "launcherFail": "Could not update the launcher: {e}",
-    "noNews": "No news yet"
+    "noNews": "No news yet",
+    "online": "Online",
+    "onSteam": "In DoW2 now",
+    "onSteamNote": "everyone on Steam, with Elite or without",
+    "onLauncher": "In the launcher",
+    "onLauncherNote": "Elite Launcher open right now",
+    "onSearching": "Looking for a game",
+    "onMatches": "Matches",
+    "onMatchesNote": "playing: {p} · getting ready: {c}",
+    "onAll": "All",
+    "onWatch": "spectator",
+    "onWaits": "waiting {t}",
+    "onMaps": "maps: {n}",
+    "onAnyMap": "any map",
+    "onDiff": "±{n} rating",
+    "onNew": "newcomer",
+    "onNewT": "No rating yet",
+    "onRelicT": "Relic rating: no ladder games yet",
+    "onStateCreating": "Getting ready",
+    "onStateLobby": "In the lobby",
+    "onStatePlaying": "Playing",
+    "onMin": "{n} min",
+    "onHostMap": "map chosen by the host",
+    "onWatchers": "Watching: {list}",
+    "onNobody": "Nobody is looking for a game. Start the game and press “Find a Game”: you will show up here.",
+    "onNoMatches": "No matches right now.",
+    "onPeopleCount": "Players with the launcher open: {n}.",
+    "onInMatch": "in a match",
+    "onLooking": "looking, {m}",
+    "onUpdated": "Updated {n} s ago",
+    "onOffline": "No connection to the ladder server, trying again…",
+    "onLadder": "Ladder and match history ›",
+    "onHint": "Looking for a game: {n} ({modes}) — see who",
+    "showOnline": "Show me in the “In the launcher” list",
+    "showOnlineNote": "While the launcher is open, it tells the ladder server once a minute your Steam ID and Steam name. Off: you are in neither the list nor the count.",
+    "race_space_marines": "Space Marines",
+    "race_chaos_marines": "Chaos",
+    "race_eldar": "Eldar",
+    "race_orks": "Orks",
+    "race_tyranids": "Tyranids",
+    "race_imperial_guard": "Imperial Guard",
+    "race_t_tau": "Tau",
+    "race_z_unecron": "Necrons",
+    "race_ordo_malleus": "Ordo Malleus"
   },
   ru: {
     "fbTitle": "Написать разработчикам",
@@ -222,7 +265,50 @@ const T = {
     "launcherUpdateBtn": "Обновить лаунчер",
     "launcherUpdating": "Обновляю лаунчер… {p}",
     "launcherFail": "Не удалось обновить лаунчер: {e}",
-    "noNews": "Новостей пока нет"
+    "noNews": "Новостей пока нет",
+    "online": "Онлайн",
+    "onSteam": "В DoW2 сейчас",
+    "onSteamNote": "все в Steam, с Elite и без",
+    "onLauncher": "В лаунчере",
+    "onLauncherNote": "лаунчер открыт прямо сейчас",
+    "onSearching": "Ищут игру",
+    "onMatches": "Матчи",
+    "onMatchesNote": "идут: {p} · собираются: {c}",
+    "onAll": "Все",
+    "onWatch": "зритель",
+    "onWaits": "ждёт {t}",
+    "onMaps": "карт: {n}",
+    "onAnyMap": "любая карта",
+    "onDiff": "±{n} рейтинга",
+    "onNew": "новичок",
+    "onNewT": "Рейтинга ещё нет",
+    "onRelicT": "Рейтинг Relic: в ладдере ещё не играл",
+    "onStateCreating": "Собирается",
+    "onStateLobby": "В лобби",
+    "onStatePlaying": "Идёт",
+    "onMin": "{n} мин",
+    "onHostMap": "карту выберет хост",
+    "onWatchers": "Смотрят: {list}",
+    "onNobody": "Никто не ищет игру. Запусти игру и нажми «Find a Game» — тебя увидят здесь.",
+    "onNoMatches": "Матчей сейчас нет.",
+    "onPeopleCount": "Лаунчер сейчас открыт у игроков: {n}.",
+    "onInMatch": "в матче",
+    "onLooking": "ищет {m}",
+    "onUpdated": "Обновлено {n} сек назад",
+    "onOffline": "Нет связи с сервером ладдера, пробую снова…",
+    "onLadder": "Ладдер и история матчей ›",
+    "onHint": "Ищут игру: {n} ({modes}) — посмотреть",
+    "showOnline": "Показывать меня в списке «В лаунчере»",
+    "showOnlineNote": "Пока лаунчер открыт, он раз в минуту сообщает серверу ладдера ваш SteamID и ник в Steam. Выключено — вас нет ни в списке, ни в счётчике.",
+    "race_space_marines": "Космодесант",
+    "race_chaos_marines": "Хаос",
+    "race_eldar": "Эльдар",
+    "race_orks": "Орки",
+    "race_tyranids": "Тираниды",
+    "race_imperial_guard": "Имперская гвардия",
+    "race_t_tau": "Тау",
+    "race_z_unecron": "Некроны",
+    "race_ordo_malleus": "Ордо Маллеус"
   },
   es: {
     "fbTitle": "Escribir a los desarrolladores",
@@ -326,7 +412,50 @@ const T = {
     "launcherUpdateBtn": "Actualizar el launcher",
     "launcherUpdating": "Actualizando el launcher… {p}",
     "launcherFail": "No se pudo actualizar el launcher: {e}",
-    "noNews": "Aún no hay noticias"
+    "noNews": "Aún no hay noticias",
+    "online": "En línea",
+    "onSteam": "En DoW2 ahora",
+    "onSteamNote": "todos en Steam, con Elite o sin él",
+    "onLauncher": "En el launcher",
+    "onLauncherNote": "con el launcher abierto ahora",
+    "onSearching": "Buscan partida",
+    "onMatches": "Partidas",
+    "onMatchesNote": "en curso: {p} · preparándose: {c}",
+    "onAll": "Todos",
+    "onWatch": "espectador",
+    "onWaits": "espera {t}",
+    "onMaps": "mapas: {n}",
+    "onAnyMap": "cualquier mapa",
+    "onDiff": "±{n} de rating",
+    "onNew": "novato",
+    "onNewT": "Aún sin rating",
+    "onRelicT": "Rating de Relic: aún sin partidas en la ladder",
+    "onStateCreating": "Preparándose",
+    "onStateLobby": "En el lobby",
+    "onStatePlaying": "En curso",
+    "onMin": "{n} min",
+    "onHostMap": "el anfitrión elige el mapa",
+    "onWatchers": "Miran: {list}",
+    "onNobody": "Nadie busca partida. Inicia el juego y pulsa «Find a Game»: aparecerás aquí.",
+    "onNoMatches": "No hay partidas ahora.",
+    "onPeopleCount": "Jugadores con el launcher abierto: {n}.",
+    "onInMatch": "en partida",
+    "onLooking": "busca {m}",
+    "onUpdated": "Actualizado hace {n} s",
+    "onOffline": "Sin conexión con el servidor de la ladder, reintentando…",
+    "onLadder": "Ladder e historial de partidas ›",
+    "onHint": "Buscan partida: {n} ({modes}) — ver",
+    "showOnline": "Mostrarme en la lista «En el launcher»",
+    "showOnlineNote": "Mientras el launcher está abierto, comunica al servidor de la ladder una vez por minuto tu Steam ID y tu nombre de Steam. Desactivado: no apareces ni en la lista ni en el contador.",
+    "race_space_marines": "Marines Espaciales",
+    "race_chaos_marines": "Caos",
+    "race_eldar": "Eldar",
+    "race_orks": "Orkos",
+    "race_tyranids": "Tiránidos",
+    "race_imperial_guard": "Guardia Imperial",
+    "race_t_tau": "Tau",
+    "race_z_unecron": "Necrones",
+    "race_ordo_malleus": "Ordo Malleus"
   },
   fr: {
     "fbTitle": "Écrire aux développeurs",
@@ -430,7 +559,50 @@ const T = {
     "launcherUpdateBtn": "Mettre à jour le launcher",
     "launcherUpdating": "Mise à jour du launcher… {p}",
     "launcherFail": "Impossible de mettre à jour le launcher : {e}",
-    "noNews": "Pas encore d’actualités"
+    "noNews": "Pas encore d’actualités",
+    "online": "En ligne",
+    "onSteam": "Dans DoW2",
+    "onSteamNote": "tous sur Steam, avec ou sans Elite",
+    "onLauncher": "Dans le launcher",
+    "onLauncherNote": "launcher ouvert en ce moment",
+    "onSearching": "Cherchent une partie",
+    "onMatches": "Parties",
+    "onMatchesNote": "en cours : {p} · en préparation : {c}",
+    "onAll": "Tous",
+    "onWatch": "spectateur",
+    "onWaits": "attend {t}",
+    "onMaps": "cartes : {n}",
+    "onAnyMap": "n’importe quelle carte",
+    "onDiff": "±{n} de classement",
+    "onNew": "débutant",
+    "onNewT": "Pas encore de classement",
+    "onRelicT": "Classement Relic : pas encore de parties en ladder",
+    "onStateCreating": "En préparation",
+    "onStateLobby": "Dans le salon",
+    "onStatePlaying": "En cours",
+    "onMin": "{n} min",
+    "onHostMap": "carte choisie par l’hôte",
+    "onWatchers": "Regardent : {list}",
+    "onNobody": "Personne ne cherche de partie. Lancez le jeu et appuyez sur « Find a Game » : vous apparaîtrez ici.",
+    "onNoMatches": "Aucune partie en ce moment.",
+    "onPeopleCount": "Joueurs avec le launcher ouvert : {n}.",
+    "onInMatch": "en partie",
+    "onLooking": "cherche {m}",
+    "onUpdated": "Mis à jour il y a {n} s",
+    "onOffline": "Pas de connexion au serveur du ladder, nouvel essai…",
+    "onLadder": "Ladder et historique des parties ›",
+    "onHint": "Cherchent une partie : {n} ({modes}) — voir",
+    "showOnline": "M’afficher dans la liste « Dans le launcher »",
+    "showOnlineNote": "Tant que le launcher est ouvert, il envoie une fois par minute au serveur du ladder votre Steam ID et votre nom Steam. Désactivé : vous n’apparaissez ni dans la liste ni dans le compteur.",
+    "race_space_marines": "Space Marines",
+    "race_chaos_marines": "Chaos",
+    "race_eldar": "Eldar",
+    "race_orks": "Orks",
+    "race_tyranids": "Tyranides",
+    "race_imperial_guard": "Garde impériale",
+    "race_t_tau": "Tau",
+    "race_z_unecron": "Nécrons",
+    "race_ordo_malleus": "Ordo Malleus"
   },
   de: {
     "fbTitle": "An die Entwickler schreiben",
@@ -534,7 +706,50 @@ const T = {
     "launcherUpdateBtn": "Launcher aktualisieren",
     "launcherUpdating": "Launcher wird aktualisiert… {p}",
     "launcherFail": "Launcher konnte nicht aktualisiert werden: {e}",
-    "noNews": "Noch keine Neuigkeiten"
+    "noNews": "Noch keine Neuigkeiten",
+    "online": "Online",
+    "onSteam": "In DoW2 gerade",
+    "onSteamNote": "alle auf Steam, mit und ohne Elite",
+    "onLauncher": "Im Launcher",
+    "onLauncherNote": "Launcher gerade offen",
+    "onSearching": "Suchen ein Spiel",
+    "onMatches": "Spiele",
+    "onMatchesNote": "laufen: {p} · in Vorbereitung: {c}",
+    "onAll": "Alle",
+    "onWatch": "Zuschauer",
+    "onWaits": "wartet {t}",
+    "onMaps": "Karten: {n}",
+    "onAnyMap": "jede Karte",
+    "onDiff": "±{n} Wertung",
+    "onNew": "Neuling",
+    "onNewT": "Noch keine Wertung",
+    "onRelicT": "Relic-Wertung: noch keine Ladder-Spiele",
+    "onStateCreating": "Wird vorbereitet",
+    "onStateLobby": "In der Lobby",
+    "onStatePlaying": "Läuft",
+    "onMin": "{n} Min.",
+    "onHostMap": "Karte wählt der Host",
+    "onWatchers": "Schauen zu: {list}",
+    "onNobody": "Niemand sucht ein Spiel. Starte das Spiel und drücke „Find a Game“ – dann erscheinst du hier.",
+    "onNoMatches": "Gerade keine Spiele.",
+    "onPeopleCount": "Spieler mit offenem Launcher: {n}.",
+    "onInMatch": "im Spiel",
+    "onLooking": "sucht {m}",
+    "onUpdated": "Vor {n} s aktualisiert",
+    "onOffline": "Keine Verbindung zum Ladder-Server, neuer Versuch…",
+    "onLadder": "Ladder und Spielverlauf ›",
+    "onHint": "Suchen ein Spiel: {n} ({modes}) — ansehen",
+    "showOnline": "Mich in der Liste „Im Launcher“ zeigen",
+    "showOnlineNote": "Solange der Launcher offen ist, meldet er dem Ladder-Server einmal pro Minute deine Steam-ID und deinen Steam-Namen. Aus: Du erscheinst weder in der Liste noch in der Zählung.",
+    "race_space_marines": "Space Marines",
+    "race_chaos_marines": "Chaos",
+    "race_eldar": "Eldar",
+    "race_orks": "Orks",
+    "race_tyranids": "Tyraniden",
+    "race_imperial_guard": "Imperiale Armee",
+    "race_t_tau": "Tau",
+    "race_z_unecron": "Necrons",
+    "race_ordo_malleus": "Ordo Malleus"
   },
 };
 
@@ -784,11 +999,13 @@ function render() {
   $('cache').value = String(S.cache_mb);
   $('usage').checked = S.usage_stats !== false;
   $('trayOnPlay').checked = S.tray_on_play !== false;
+  $('showOnline').checked = S.show_online !== false;
   $('mirror').value = S.extra_mirror || '';
   $('mirrorInfo').textContent = t('mirrors', { n: S.mirror_count });
   $('repair').disabled = S.busy || S.game_running || !S.installed_version;
   $('about').textContent = `Elite Launcher ${S.launcher_version} · ${S.os}`;
   $('hdrVer').textContent = S.launcher_version ? 'v' + S.launcher_version : '';
+  onRender();
 }
 
 function renderProgress(p) {
@@ -890,6 +1107,7 @@ listen('update_done', async e => {
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
   document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('hidden', v.id !== b.dataset.view));
+  onPoll();   // the Online tab polls more often while it is open
 });
 $('cancel').onclick = () => invoke('cancel_update');
 $('browse').onclick = pickDir;
@@ -897,6 +1115,7 @@ $('openDir').onclick = () => invoke('open_game_dir').catch(e => toast(e, true));
 $('lang').onchange = e => invoke('set_setting', { key: 'lang', value: e.target.value }).then(reload);
 $('usage').onchange = e => invoke('set_setting', { key: 'usage_stats', value: e.target.checked }).then(reload);
 $('trayOnPlay').onchange = e => invoke('set_setting', { key: 'tray_on_play', value: e.target.checked }).then(reload);
+$('showOnline').onchange = e => invoke('set_setting', { key: 'show_online', value: e.target.checked }).then(reload);
 $('cache').onchange = e => invoke('set_setting', { key: 'cache_mb', value: +e.target.value }).then(reload);
 $('saveMirror').onclick = () => invoke('set_setting', { key: 'extra_mirror', value: $('mirror').value.trim() }).then(refresh);
 $('repair').onclick = () => startUpdate(true);
@@ -924,6 +1143,92 @@ reload().then(refresh);
 launcherCheck();
 // every 15 minutes: new Elite versions, announcements and a newer launcher
 setInterval(() => { if (S && !S.busy) refresh(); launcherCheck(); }, 15 * 60 * 1000);
+
+
+// ---------- Online: who is looking for a game, the matches, who has the launcher open ----------
+// The same list the ladder page shows: /ladder/api/mm/live of the ladder service (dow2-ladder) on the log hosts.
+// Every 10 seconds while the tab is open, every minute otherwise (for the badge on the tab and the hint above Play).
+const ON = { d: null, err: false, at: 0, mode: '', timer: null };
+const RACES = ['space_marines', 'chaos_marines', 'eldar', 'orks', 'tyranids', 'imperial_guard', 't_tau', 'z_unecron', 'ordo_malleus'];
+const onShown = () => !$('online').classList.contains('hidden');
+const raceImg = r => RACES.includes(r) ? `<img class="race" src="races/${r}.png" alt="${esc(t('race_' + r))}" title="${esc(t('race_' + r))}">` : '<span class="race"></span>';
+const mmss = s => { s = Math.max(0, s | 0); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+// "2p_doom_of_tularis" → "Doom of Tularis"
+const mapName = m => m ? m.replace(/^\(?\d+p\)?[ _]?/i, '').split('_').filter(Boolean)
+  .map((w, i) => i && /^(of|the|de)$/i.test(w) ? w : w[0].toUpperCase() + w.slice(1)).join(' ') : t('onHostMap');
+// the ladder rating; a Relic one marked R; a newcomer without a number (as on the ladder page)
+const onRating = p => p.rsrc === 'new' ? `<span class="rt new" title="${esc(t('onNewT'))}">${esc(t('onNew'))}</span>`
+  : p.rsrc === 'relic' ? `<span class="rt" title="${esc(t('onRelicT'))}">${p.rating}<sup>R</sup></span>` : `<span class="rt">${p.rating ?? ''}</span>`;
+const onWho = p => `<button class="nm" data-steam="${esc(p.steam || '')}" title="${esc(p.steam ? 'Steam ' + p.steam : '')}">${esc(p.name || 'Player')}</button>`;
+const onMode = m => m === 'watch' ? t('onWatch') : m;
+
+function onRender() {
+  if (!S) return;
+  const d = ON.d, look = d?.searching || [], players = look.filter(p => p.mode !== 'watch');   // spectators wait to watch, not to play
+  // the badge on the tab and the hint above Play: someone is looking for a game right now
+  $('onBadge').textContent = players.length || '';
+  $('onBadge').classList.toggle('hidden', !players.length);
+  $('onHint').classList.toggle('hidden', !players.length);
+  if (players.length) $('onHint').innerHTML = `<i class="dot"></i><span>${esc(t('onHint', { n: players.length, modes: [...new Set(players.map(p => p.mode))].join(', ') }))}</span>`;
+  if (!onShown()) return;
+
+  const q = d?.queue || {}, matches = d?.matches || [], playing = matches.filter(m => m.state === 'playing').length;
+  const tile = (id, n, label, note) => { $(id).innerHTML = `<b>${esc(n ?? '—')}</b><span>${esc(label)}</span><small>${esc(note)}</small>`; };
+  tile('onSteam', d?.in_game, t('onSteam'), t('onSteamNote'));
+  tile('onLauncher', d?.online, t('onLauncher'), t('onLauncherNote'));
+  tile('onQueue', d ? players.length : null, t('onSearching'), ['1v1', '2v2', '3v3'].map(m => `${m}: ${q[m] || 0}`).join(' · '));
+  tile('onMatches', d ? matches.length : null, t('onMatches'), t('onMatchesNote', { p: playing, c: matches.length - playing }));
+
+  // looking for a game, filtered by mode
+  const modes = ['1v1', '2v2', '3v3'].concat(look.some(p => p.mode === 'watch') ? ['watch'] : []);
+  if (ON.mode && !modes.includes(ON.mode)) ON.mode = '';
+  $('onModes').innerHTML = [''].concat(modes).map(m => `<button class="${ON.mode === m ? 'on' : ''}" data-m="${m}">${esc(m ? onMode(m) : t('onAll'))}`
+    + ` ${look.filter(p => !m || p.mode === m).length}</button>`).join('');
+  const shown = look.filter(p => !ON.mode || p.mode === ON.mode);
+  $('onSearch').innerHTML = shown.length ? shown.map(p => `<div class="on-row">${raceImg(p.race)}<div class="on-who"><div class="top">${onWho(p)}`
+      + `<span class="tag">${esc(onMode(p.mode))}</span></div><div class="on-meta">${esc([p.race && RACES.includes(p.race) ? t('race_' + p.race) : '',
+        p.maps ? t('onMaps', { n: p.maps }) : t('onAnyMap'), p.max_diff ? t('onDiff', { n: p.max_diff }) : '', t('onWaits', { t: mmss(p.waiting) })].filter(Boolean).join(' · '))}</div></div>`
+      + onRating(p) + '</div>').join('')
+    : `<div class="on-empty">${esc(d ? t('onNobody') : ON.err ? t('onOffline') : t('connecting'))}</div>`;
+
+  // matches being set up or played: the teams, the map, how long
+  const st = { creating: 'onStateCreating', lobby: 'onStateLobby', playing: 'onStatePlaying' };
+  const team = (ps, cls) => `<div class="team ${cls}">${ps.map(p => `<div class="p">${raceImg(p.race)}${onWho(p)}${onRating(p)}</div>`).join('')}</div>`;
+  $('onMatchList').innerHTML = matches.length ? matches.map(m => `<div class="on-match"><div class="top"><span class="tag ${esc(m.state)}">${esc(t(st[m.state] || 'onStateCreating'))}</span>`
+      + `<span class="tag">${esc(m.mode)}</span><span class="map">${esc(mapName(m.map))}</span><span>${esc(m.state === 'playing' ? t('onMin', { n: Math.max(1, Math.round(m.since / 60)) }) : mmss(m.since))}</span></div>`
+      + `<div class="teams">${team(m.team1 || [], 'l')}<span class="vs">vs</span>${team(m.team2 || [], 'r')}</div>`
+      + ((m.watchers || []).length ? `<div class="on-watch">${esc(t('onWatchers', { list: m.watchers.map(w => w.name || 'Player').join(', ') }))}</div>` : '') + '</div>').join('')
+    : `<div class="on-empty">${esc(d ? t('onNoMatches') : '')}</div>`;
+
+  // in the launcher: names once the server lists them, the count until then
+  const people = d?.in_launcher;
+  $('onPeople').innerHTML = Array.isArray(people) && people.length ? people.map(p => `<div class="on-person">${onWho(p)}`
+      + (p.status === 'searching' ? `<span class="st">${esc(t('onLooking', { m: onMode(p.mode) }))}</span>` : p.status === 'playing' ? `<span class="st in-match">${esc(t('onInMatch'))}</span>` : '') + '</div>').join('')
+    : `<div class="on-empty">${esc(d ? t('onPeopleCount', { n: d.online ?? 0 }) : '')}</div>`;
+
+  onFoot();
+  $('onModes').querySelectorAll('[data-m]').forEach(b => b.onclick = () => { ON.mode = b.dataset.m; onRender(); });
+  $('online').querySelectorAll('.nm[data-steam]').forEach(b => b.onclick = () => b.dataset.steam && open('https://steamcommunity.com/profiles/' + b.dataset.steam));
+  $('onLadder').onclick = () => open((ON.d?.host || '') + '/ladder/');
+  $('onLadder').classList.toggle('hidden', !ON.d?.host);
+}
+function onFoot() {
+  const ago = ON.at ? Math.round((Date.now() - ON.at) / 1000) : 0;
+  $('onUpdated').textContent = ON.err ? t('onOffline') : ON.at ? t('onUpdated', { n: ago }) : '';
+  $('onFoot').classList.toggle('err', ON.err);
+}
+async function onLoad() {
+  try { ON.d = await invoke('online_live'); ON.err = false; ON.at = Date.now(); }
+  catch (e) { ON.err = true; }
+  onRender();
+}
+function onPoll() {
+  clearTimeout(ON.timer);
+  onLoad().finally(() => { ON.timer = setTimeout(onPoll, onShown() ? 10000 : 60000); });
+}
+$('onHint').onclick = () => document.querySelector('.tab[data-view="online"]').click();
+setInterval(() => { if (onShown()) onFoot(); }, 1000);
+onPoll();
 
 
 // ---------- feedback chat with the developers ----------

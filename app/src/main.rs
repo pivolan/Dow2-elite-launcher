@@ -62,6 +62,8 @@ struct Settings {
     fb_name: String,
     /// Hide the window to the tray once the game starts. None = on.
     tray_on_play: Option<bool>,
+    /// Show this player in the "In the launcher" list of the Online tab (sent to the ladder server while the launcher is open).
+    show_online: Option<bool>,
 }
 
 struct App {
@@ -332,6 +334,7 @@ fn get_status(app: State<'_, App>) -> Value {
         })).collect::<Vec<_>>(),
         "usage_stats": s.usage_stats.unwrap_or(true),
         "tray_on_play": s.tray_on_play.unwrap_or(true),
+        "show_online": s.show_online.unwrap_or(true),
         "release_news": app.release_news.lock().unwrap().clone(),
         "costs": app.costs.lock().unwrap().clone(),
         "prev_channel": s.prev_channel.filter(|p| p != &channel && cfgd.channels.iter().any(|c| &c.id == p)),
@@ -405,6 +408,7 @@ fn set_setting(app: State<'_, App>, key: String, value: Value) {
         "cache_mb" => s.cache_mb = value.as_u64(),
         "usage_stats" => s.usage_stats = value.as_bool(),
         "tray_on_play" => s.tray_on_play = value.as_bool(),
+        "show_online" => s.show_online = value.as_bool(),
         "dismiss" => {
             if let Some(id) = value.as_str() {
                 s.dismissed.push(id.to_string());
@@ -923,6 +927,27 @@ async fn fb_thread(app: AppHandle) -> Result<Value, String> {
     }).await.map_err(|e| e.to_string())?
 }
 
+// ---------- Online: who is looking for a game, the matches, how many launchers are open ----------
+/// The same list the ladder page shows (/ladder/api/mm/live of the ladder service on the log hosts), plus the host
+/// that answered, for links to its ladder page.
+#[tauri::command]
+async fn online_live() -> Result<Value, String> {
+    tauri::async_runtime::spawn_blocking(|| {
+        let mut last = "the ladder server is not configured in this build".to_string();
+        for host in fb_hosts() {
+            match ureq::get(&format!("{host}/ladder/api/mm/live")).timeout(Duration::from_secs(10)).call() {
+                Ok(r) => {
+                    let mut v: Value = serde_json::from_str(&r.into_string().unwrap_or_default()).map_err(|e| e.to_string())?;
+                    v["host"] = json!(host);
+                    return Ok(v);
+                }
+                Err(e) => last = e.to_string(),
+            }
+        }
+        Err(last)
+    }).await.map_err(|e| e.to_string())?
+}
+
 /// Repositories whose GitHub Releases become news: CI makes every release from the changelog,
 /// so a new launcher or patch set shows up in the news without anyone writing it by hand.
 const NEWS_REPOS: [&str; 2] = ["pivolan/Dow2-elite-launcher", "pivolan/Dow2-patches"];
@@ -1116,7 +1141,7 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             get_status, refresh, set_channel, switch_to, send_logs, set_comp_option, set_setting, set_component, remove_conflicts, pick_game_dir, open_url, open_game_dir, start_update, cancel_update, play,
-            fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels, launcher_check, launcher_install
+            fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels, launcher_check, launcher_install, online_live
         ])
         .run(tauri::generate_context!())
         .expect("error while running Elite Launcher");

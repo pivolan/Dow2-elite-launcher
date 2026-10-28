@@ -11,7 +11,7 @@
   <header>
     <div class="brand"><span class="logo">ELITE Launcher</span><span class="hdr-ver" id="hdrVer"></span><span class="sub" id="subtitle">Dawn of War II · Retribution</span></div>
     <div class="launcher-banner hidden" id="launcherBanner"><span id="launcherText"></span><button class="btn gold small hidden" id="launcherBtn"></button></div>
-    <nav><button class="tab on" data-view="home" data-t="home"></button><button class="tab" data-view="settings" data-t="settings"></button></nav>
+    <nav><button class="tab on" data-view="home" data-t="home"></button><button class="tab" data-view="online"><span data-t="online"></span><b class="tab-badge hidden" id="onBadge"></b></button><button class="tab" data-view="settings" data-t="settings"></button></nav>
   </header>
 
   <main id="home" class="view home">
@@ -49,6 +49,7 @@
         <div id="components" class="addon-list"></div>
       </section>
       <div class="spacer"></div>
+      <button class="on-hint hidden" id="onHint"></button>
       <div class="upd-box hidden" id="updBox"><div class="upd-text" id="updText"></div><button class="btn gold small" id="updateBtn"></button></div>
       <div class="ver-warn hidden" id="verWarn"></div>
       <div class="ver-pick">
@@ -57,6 +58,31 @@
       </div>
       <button class="play" id="play"></button>
     </aside>
+  </main>
+
+  <main id="online" class="view online hidden">
+    <div class="on-tiles">
+      <div class="tile" id="onSteam"></div>
+      <div class="tile" id="onLauncher"></div>
+      <div class="tile q" id="onQueue"></div>
+      <div class="tile" id="onMatches"></div>
+    </div>
+    <div class="on-grid">
+      <section class="panel on-col">
+        <div class="h" data-t="onSearching"></div>
+        <div class="chips" id="onModes"></div>
+        <div class="on-list" id="onSearch"></div>
+      </section>
+      <section class="panel on-col">
+        <div class="h" data-t="onMatches"></div>
+        <div class="on-list" id="onMatchList"></div>
+      </section>
+      <section class="panel on-col">
+        <div class="h" data-t="onLauncher"></div>
+        <div class="on-list" id="onPeople"></div>
+      </section>
+    </div>
+    <div class="on-foot" id="onFoot"><span id="onUpdated"></span><button id="onLadder" data-t="onLadder"></button></div>
   </main>
 
   <main id="settings" class="view hidden">
@@ -76,6 +102,9 @@
       <div class="note" data-t="usageNote"></div>
       <label data-t="trayTitle"></label>
       <div class="row"><label class="chk"><input type="checkbox" id="trayOnPlay"><span data-t="trayOnPlay"></span></label></div>
+      <label data-t="online"></label>
+      <div class="row"><label class="chk"><input type="checkbox" id="showOnline"><span data-t="showOnline"></span></label></div>
+      <div class="note" data-t="showOnlineNote"></div>
       <label data-t="repairTitle"></label>
       <div class="row"><button class="btn" id="repair" data-t="repair"></button><span class="note" data-t="repairNote"></span></div>
       <label data-t="diagTitle"></label>

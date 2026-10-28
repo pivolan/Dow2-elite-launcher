@@ -181,6 +181,64 @@ input[type=checkbox]{flex:none;width:16px;height:16px;padding:0;accent-color:var
 .about{margin-top:22px;color:var(--dim);font-size:13px}
 .warn{color:var(--amber)}
 
+/* online: who is looking for a game, the matches, who has the launcher open */
+.tab-badge{display:inline-block;min-width:18px;height:18px;margin-left:6px;padding:0 5px;border-radius:9px;background:var(--green);color:#0d1408;font:700 11px/18px Spectral,serif;letter-spacing:0;vertical-align:1px}
+.online{display:flex;flex-direction:column;gap:12px}
+.on-tiles{flex:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tile{min-width:0;padding:10px 14px;border:1px solid var(--line);background:linear-gradient(#1a1611,#13100c)}
+.tile b{display:block;font:700 26px/1.1 Cinzel,serif;color:var(--gold2)}
+.tile span{display:block;margin-top:2px;font:700 11px Cinzel,serif;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+.tile small{display:block;margin-top:2px;font-size:12px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile.q b{color:var(--green)}
+.on-grid{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1.3fr) minmax(0,.75fr);gap:12px}
+.on-col{display:flex;flex-direction:column;min-height:0;padding-bottom:4px}
+.on-list{flex:1;min-height:0;overflow:auto;margin:0 -14px;padding:0 14px}
+.chips{flex:none;display:flex;flex-wrap:wrap;gap:4px;margin:-2px 0 6px}
+.chips button{height:22px;padding:0 7px;border:1px solid var(--line);background:none;color:var(--muted);font:600 12px Spectral,serif;letter-spacing:0;text-transform:none;white-space:nowrap}
+.chips button:hover{color:var(--bone)}
+.chips button.on{border-color:var(--gold);background:#2a2010;color:var(--gold2)}
+.on-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--sep)}
+.on-row:first-child{border-top:0}
+.race{flex:none;display:inline-block;width:28px;height:28px}
+.on-who{flex:1;min-width:0}
+.on-who .top{display:flex;align-items:center;gap:6px;min-width:0}
+.nm{min-width:0;padding:0;border:0;background:none;color:var(--bone);font:600 14px Spectral,serif;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nm:hover{color:var(--gold2);text-decoration:underline}
+.on-meta{font-size:12px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rt{flex:none;font:700 15px Cinzel,serif;color:var(--gold2)}
+.rt sup{margin-left:1px;font:600 10px Spectral,serif;color:var(--muted)}
+.rt.new{font:600 12px Spectral,serif;color:var(--muted)}
+.tag.playing{border-color:#3d5a2a;color:var(--green)}
+.tag.lobby{border-color:#8a5d22;color:var(--amber)}
+.on-match{padding:9px 0 11px;border-top:1px solid var(--sep)}
+.on-match:first-child{border-top:0}
+.on-match .top{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--dim)}
+.on-match .map{flex:1;min-width:0;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.teams{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center;margin-top:7px}
+.team{display:flex;flex-direction:column;gap:5px;min-width:0}
+.team .p{display:flex;align-items:center;gap:6px;min-width:0}
+.team .p .race{width:22px;height:22px}
+.team .p .rt{margin-left:auto;font-size:12px}
+.team.r .p{flex-direction:row-reverse}
+.team.r .p .rt{margin-left:0;margin-right:auto}
+.vs{font:700 12px Cinzel,serif;color:var(--red)}
+.on-watch{margin-top:5px;font-size:12px;color:var(--dim)}
+.on-empty{padding:10px 0;font-size:13px;line-height:1.4;color:var(--muted)}
+.on-person{display:flex;align-items:center;gap:8px;min-height:30px;border-top:1px solid var(--sep)}
+.on-person:first-child{border-top:0}
+.on-person .st{flex:none;margin-left:auto;font-size:11px;color:var(--green);white-space:nowrap}
+.on-person .st.in-match{color:var(--amber)}
+.on-foot{flex:none;display:flex;align-items:center;gap:12px;min-height:18px;font-size:12px;color:var(--dim)}
+.on-foot.err{color:#f0c8bf}
+.on-foot button{margin-left:auto;padding:0;border:0;background:none;color:#e2c06a;font-size:13px}
+.on-foot button:hover{color:var(--gold2)}
+/* home: someone is looking for a game right now (above the version picker) */
+.on-hint{flex:none;display:flex;align-items:center;gap:8px;margin-bottom:-4px;padding:6px 10px;border:1px solid #3d5a2a;background:#141c11;color:#cfe3bd;font-size:13px;text-align:left}
+.on-hint:hover{border-color:var(--green)}
+.on-hint .dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--green);animation:onpulse 1.6s infinite}
+@keyframes onpulse{0%{box-shadow:0 0 0 0 rgba(143,191,104,.6)}70%{box-shadow:0 0 0 7px rgba(143,191,104,0)}100%{box-shadow:0 0 0 0 rgba(143,191,104,0)}}
+@media (prefers-reduced-motion:reduce){.on-hint .dot{animation:none}}
+
 /* toast, modal */
 .toast{position:fixed;left:50%;bottom:64px;transform:translateX(-50%);background:#1c1813;border:1px solid var(--gold);padding:10px 16px;font-size:14px;box-shadow:0 10px 30px #000;max-width:80%;z-index:60}
 .toast.err{border-color:var(--blood2)}
@@ -214,5 +272,7 @@ input[type=checkbox]{flex:none;width:16px;height:16px;padding:0;accent-color:var
 /* narrow window (min 900 px) */
 @media (max-width:1040px){
   .home{grid-template-columns:210px minmax(0,1fr) 270px;gap:10px}
+  .on-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) minmax(0,.75fr);gap:10px}
+  .tile b{font-size:22px}
   .sub{display:none}
 }
