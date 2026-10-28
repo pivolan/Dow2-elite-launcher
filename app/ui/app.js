@@ -91,7 +91,6 @@ const T = {
     "upTo": "up to {s}",
     "needDl": "needs a download",
     "archive": "Archive versions ({n})",
-    "back": "⇄ Back to {name}",
     "youPlay": "You play {name}",
     "notMain": "— the lobbies play {name}",
     "switching": "Switching to {name}…",
@@ -201,7 +200,6 @@ const T = {
     "upTo": "до {s}",
     "needDl": "нужно скачать",
     "archive": "Архивные версии ({n})",
-    "back": "⇄ Обратно на {name}",
     "youPlay": "У вас {name}",
     "notMain": "— в лобби играют на {name}",
     "switching": "Переключаю на {name}…",
@@ -306,7 +304,6 @@ const T = {
     "upTo": "hasta {s}",
     "needDl": "requiere descarga",
     "archive": "Versiones archivadas ({n})",
-    "back": "⇄ Volver a {name}",
     "youPlay": "Juegas {name}",
     "notMain": "— en los lobbies se juega {name}",
     "switching": "Cambiando a {name}…",
@@ -411,7 +408,6 @@ const T = {
     "upTo": "jusqu'à {s}",
     "needDl": "téléchargement nécessaire",
     "archive": "Versions archivées ({n})",
-    "back": "⇄ Revenir à {name}",
     "youPlay": "Vous jouez {name}",
     "notMain": "— les lobbies jouent {name}",
     "switching": "Passage à {name}…",
@@ -516,7 +512,6 @@ const T = {
     "upTo": "bis {s}",
     "needDl": "Download nötig",
     "archive": "Archivversionen ({n})",
-    "back": "⇄ Zurück zu {name}",
     "youPlay": "Du spielst {name}",
     "notMain": "— die Lobbys spielen {name}",
     "switching": "Wechsle zu {name}…",
@@ -760,9 +755,6 @@ function render() {
   else if (!S.installed_version) { play.textContent = t('install'); play.classList.add('install'); play.disabled = !S.config_loaded; }
   else { play.textContent = t('play'); play.disabled = false; }
   play.onclick = () => (S.installed_version ? doPlay() : switchTo(S.main_channel || S.channel));
-  const prev = channelOf(S.prev_channel || '');
-  $('quick').classList.toggle('hidden', !prev || S.busy || !S.installed_version);
-  if (prev) { $('quick').textContent = t('back', { name: L(prev.name) }); $('quick').onclick = () => switchTo(prev.id); }
 
   // a newer version of the installed one: offered right above the version picker, never forced
   const target = channelOf(S.installed_channel) || channelOf(S.channel);
