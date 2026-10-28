@@ -922,8 +922,8 @@ window.addEventListener('resize', popClose);
 
 reload().then(refresh);
 launcherCheck();
-setInterval(launcherCheck, 6 * 3600 * 1000);
-setInterval(() => { if (S && !S.busy) refresh(); }, 15 * 60 * 1000);   // pick up new versions and announcements
+// every 15 minutes: new Elite versions, announcements and a newer launcher
+setInterval(() => { if (S && !S.busy) refresh(); launcherCheck(); }, 15 * 60 * 1000);
 
 
 // ---------- feedback chat with the developers ----------

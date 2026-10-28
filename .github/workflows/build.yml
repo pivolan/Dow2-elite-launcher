@@ -140,7 +140,9 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: |
-          printf '{"bundle":{"createUpdaterArtifacts":true},"plugins":{"updater":{"pubkey":"%s"}}}' "$TAURI_SIGNING_PUBLIC_KEY" > "$RUNNER_TEMP/updater.conf.json"
+          # updates come from the releases of the repository that builds it, so a fork can test the whole cycle
+          printf '{"bundle":{"createUpdaterArtifacts":true},"plugins":{"updater":{"pubkey":"%s","endpoints":["https://github.com/%s/releases/latest/download/updater.json"]}}}' \
+            "$TAURI_SIGNING_PUBLIC_KEY" "$GITHUB_REPOSITORY" > "$RUNNER_TEMP/updater.conf.json"
           cargo tauri build ${{ matrix.args }} --config "$RUNNER_TEMP/updater.conf.json"
       - uses: actions/upload-artifact@v4
         with:

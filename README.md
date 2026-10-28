@@ -23,8 +23,9 @@ always be started, update or not.
 - **News, announcements, links** shown on the home screen, all coming from the server. The news also carry the
   release notes of the launcher and of Dow2-patches, read from their GitHub Releases (made by CI from `changelog/`),
   so nobody has to write those by hand; the last copy is kept for offline starts.
-- **Updates itself.** A newer launcher on the latest GitHub Release (`updater.json`) is offered with a banner;
-  "Update the launcher" downloads it, checks its signature, installs it and restarts. The portable zip and builds
+- **Updates itself.** At start and every 15 minutes the launcher looks for a newer one on the latest GitHub Release
+  of the repository that built it (`updater.json`) and offers it with a banner; "Update the launcher" downloads it,
+  checks its signature, installs it and restarts. The portable zip and builds
   without the updater key only get a link to the download page (`launcher_update` in launcher.json).
 - **Add-ons** (`components` in launcher.json) the player ticks on/off, e.g. *LobbyStats* (Relic rating
   in the lobby + host auto-kick filter). An add-on is published like any version; the launcher installs
