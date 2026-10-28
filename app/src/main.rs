@@ -335,6 +335,7 @@ async fn launcher_check(app: AppHandle) -> Option<Value> {
 /// closes this window itself; elsewhere we restart into the new copy.
 #[tauri::command]
 async fn launcher_install(app: AppHandle) -> Result<(), String> {
+    ensure_game_closed(&app.state::<App>())?;   // the installer closes the launcher; never in the middle of a game
     let upd = app.state::<App>().launcher_update.lock().unwrap().clone().ok_or("no launcher update found")?;
     let h = app.clone();
     let mut done = 0u64;

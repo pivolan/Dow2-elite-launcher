@@ -723,7 +723,7 @@ function renderLauncherBanner() {
   if (LU) {
     $('launcherText').textContent = LU.installing ? t('launcherUpdating', { p: LU.pct || '' }) : t('launcherNew', { v });
     $('launcherBtn').textContent = t('launcherUpdateBtn');
-    $('launcherBtn').disabled = !!S.busy;
+    $('launcherBtn').disabled = !!S.busy || !!S.game_running;
     $('launcherBtn').onclick = launcherInstall;
     b.onclick = null;
   } else {
