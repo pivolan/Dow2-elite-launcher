@@ -1,6 +1,13 @@
 name: build
-# push/pull_request triggers are off for now: builds and deploys only by a manual run
+# Every push and pull request builds and tests everything (a check, nothing leaves CI).
+# Only main ships: installers to the download folder, the vX.Y.Z tag, and a GitHub Release (with updater.json for
+# the launcher self-update) for a new X.Y.0 - or for any version by "Run workflow" with the release box ticked.
 on:
+  push:
+    branches: ["**"]
+    paths-ignore: ["**.md", "design/**"]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
     inputs:
       release:
@@ -39,7 +46,10 @@ jobs:
           for k in ELITE_MIRRORS ELITE_LOG_HOSTS TAURI_SIGNING_PRIVATE_KEY; do
             [ -n "$(printenv "$k" | tr -d '[:space:]')" ] || missing="$missing $k"
           done
-          if [ -n "$missing" ]; then
+          if [ -n "$missing" ] && [ "$GITHUB_REF" != refs/heads/main ]; then
+            # a pull request from a fork gets no secrets: still a useful build check, it never ships anything
+            echo "::warning::No secrets here:$missing - this build can't reach the mirrors, only a check"
+          elif [ -n "$missing" ]; then
             echo "::error::Missing repository secrets:$missing. Add them in Settings > Secrets and variables > Actions > Repository secrets (not in an environment: the build jobs don't use one)."
             exit 1
           fi
