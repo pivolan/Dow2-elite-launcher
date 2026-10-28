@@ -135,7 +135,6 @@ const T = {
     "race_z_unecron": "Necrons",
     "race_ordo_malleus": "Ordo Malleus",
     "allAddons": "All ›",
-    "onInDow2": "in DoW2: {n}",
     "onInMatchH": "In a match"
   },
   ru: {
@@ -267,7 +266,6 @@ const T = {
     "race_z_unecron": "Некроны",
     "race_ordo_malleus": "Ордо Маллеус",
     "allAddons": "Все ›",
-    "onInDow2": "в DoW2: {n}",
     "onInMatchH": "В матче"
   },
   es: {
@@ -394,7 +392,6 @@ const T = {
     "race_z_unecron": "Necrones",
     "race_ordo_malleus": "Ordo Malleus",
     "allAddons": "Todos ›",
-    "onInDow2": "en DoW2: {n}",
     "onInMatchH": "En partida"
   },
   fr: {
@@ -521,7 +518,6 @@ const T = {
     "race_z_unecron": "Nécrons",
     "race_ordo_malleus": "Ordo Malleus",
     "allAddons": "Tous ›",
-    "onInDow2": "dans DoW2 : {n}",
     "onInMatchH": "En partie"
   },
   de: {
@@ -648,7 +644,6 @@ const T = {
     "race_z_unecron": "Necrons",
     "race_ordo_malleus": "Ordo Malleus",
     "allAddons": "Alle ›",
-    "onInDow2": "in DoW2: {n}",
     "onInMatchH": "Im Spiel"
   },
 };
@@ -1064,7 +1059,9 @@ setInterval(() => { if (S && !S.busy) refresh(); launcherCheck(); }, 15 * 60 * 1
 // ---------- Online (home, above the add-ons): who is looking for a game, who is in a match, who just has the launcher open ----------
 // The same list the ladder page shows: /ladder/api/mm/live of the ladder service on the log hosts, every 15 seconds
 // (every minute while the window is hidden). Only names here; the details are on the ladder page linked below the block.
-const ON = { d: null, err: false, timer: null };
+const ON = { d: null, err: false, timer: null, shut: new Set() };
+// the groups the player folded stay folded (only a convenience: without storage everything opens)
+try { ON.shut = new Set(JSON.parse(localStorage.getItem('onShut') || '[]')); } catch (e) {}
 const RACES = ['space_marines', 'chaos_marines', 'eldar', 'orks', 'tyranids', 'imperial_guard', 't_tau', 'z_unecron', 'ordo_malleus'];
 const raceImg = r => RACES.includes(r) ? `<img class="race" src="races/${r}.png" alt="${esc(t('race_' + r))}" title="${esc(t('race_' + r))}">` : '<span class="race"></span>';
 const onWho = p => `<button class="nm" data-steam="${esc(p.steam || '')}" title="${esc(p.steam ? 'Steam ' + p.steam : '')}">${esc(p.name || 'Player')}</button>`;
@@ -1072,11 +1069,15 @@ const onWho = p => `<button class="nm" data-steam="${esc(p.steam || '')}" title=
 function onRender() {
   if (!S) return;
   const d = ON.d, look = (d?.searching || []).filter(p => p.mode !== 'watch'), matches = d?.matches || [];   // spectators wait to watch, not to play
-  $('onSteam').textContent = d?.in_game != null ? t('onInDow2', { n: d.in_game }) : '';
   // in the launcher: the names the server lists (once it does), minus those already looking or playing
   const busy = new Set(look.map(p => p.steam).concat(matches.flatMap(m => (m.team1 || []).concat(m.team2 || []).map(p => p.steam))));
   const idle = Array.isArray(d?.in_launcher) ? d.in_launcher.filter(p => !busy.has(p.steam) && !p.status) : null;
-  const group = (cls, title, n, body) => `<div class="on-g ${cls}"><div class="on-gh"><i></i>${esc(title)}<span>${esc(String(n))}</span></div>${body}</div>`;
+  // a group folds on a click on its heading
+  const group = (key, title, n, body) => {
+    const open = !ON.shut.has(key);
+    return `<div class="on-g ${key} ${open ? '' : 'shut'}"><button class="on-gh" data-g="${key}" aria-expanded="${open}" ${body ? '' : 'disabled'}>`
+      + `<i></i>${esc(title)}<span>${esc(String(n))}</span>${body ? '<b class="chev"></b>' : ''}</button>${open ? body : ''}</div>`;
+  };
   const st = { creating: 'onStateCreating', lobby: 'onStateLobby', playing: 'onStatePlaying' };
   let html = '';
   if (!d) html = `<div class="on-empty">${esc(ON.err ? t('onOffline') : t('connecting'))}</div>`;
@@ -1084,13 +1085,19 @@ function onRender() {
     if (look.length) html += group('look', t('onSearching'), look.length,
       look.map(p => `<div class="on-p">${raceImg(p.race)}${onWho(p)}<span class="tag">${esc(p.mode)}</span></div>`).join(''));
     if (matches.length) html += group('match', t('onInMatchH'), matches.reduce((n, m) => n + (m.team1 || []).length + (m.team2 || []).length, 0),
-      matches.map(m => `<div class="on-m"><span class="tm">${(m.team1 || []).map(onWho).join(', ')}</span><span class="vs">vs</span>`
-        + `<span class="tm r">${(m.team2 || []).map(onWho).join(', ')}</span><span class="tag ${esc(m.state)}" title="${esc(t(st[m.state] || 'onStateCreating'))}">${esc(m.mode)}</span></div>`).join(''));
+      // a match is two lines, one per team, so 2v2 and 3v3 fit too; the mode's colour says whether it is on already
+      matches.map(m => `<div class="on-m"><span class="tag ${esc(m.state)}" title="${esc(t(st[m.state] || 'onStateCreating'))}">${esc(m.mode)}</span>`
+        + `<div class="tms"><div>${(m.team1 || []).map(onWho).join(', ')}</div><div><span class="vs">vs</span> ${(m.team2 || []).map(onWho).join(', ')}</div></div></div>`).join(''));
     if (!look.length && !matches.length) html += `<div class="on-empty">${esc(t('onNobody'))}</div>`;
     html += group('idle', t('onLauncher'), idle ? idle.length : Number(d.online) || 0, idle && idle.length ? `<div class="on-names">${idle.map(onWho).join('')}</div>` : '');
   }
   $('onGroups').innerHTML = html;
   $('onGroups').querySelectorAll('.nm[data-steam]').forEach(b => b.onclick = () => b.dataset.steam && open('https://steamcommunity.com/profiles/' + b.dataset.steam));
+  $('onGroups').querySelectorAll('[data-g]').forEach(b => b.onclick = () => {
+    ON.shut.has(b.dataset.g) ? ON.shut.delete(b.dataset.g) : ON.shut.add(b.dataset.g);
+    try { localStorage.setItem('onShut', JSON.stringify([...ON.shut])); } catch (e) {}
+    onRender();
+  });
   $('onLadder').classList.toggle('hidden', !d?.host);
   $('onLadder').onclick = () => open((ON.d?.host || '') + '/ladder/');
 }

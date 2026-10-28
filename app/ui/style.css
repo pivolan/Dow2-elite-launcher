@@ -183,12 +183,15 @@ input[type=checkbox]{flex:none;width:16px;height:16px;padding:0;accent-color:var
 /* home, right column: online on top (only names; the details are on the ladder page), the pinned add-ons below */
 .on-box{flex:1 1 0;min-height:90px;display:flex;flex-direction:column;padding-bottom:0}
 .on-box .h{margin-bottom:6px}
-.h-note{order:2;margin-left:auto;font:600 12px Spectral,serif;letter-spacing:0;color:var(--dim);text-transform:none}
 .h-link{padding:0;border:0;background:none;color:#e2c06a;font:600 12px Spectral,serif;letter-spacing:0;text-transform:none}
 .h-link:hover{color:var(--gold2)}
 .on-groups{flex:1;min-height:0;overflow:auto;margin:0 -14px;padding:0 14px 8px}
 .on-g+.on-g{margin-top:8px}
-.on-gh{display:flex;align-items:center;gap:6px;margin-bottom:2px;font:700 10px Cinzel,serif;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+.on-gh{width:100%;display:flex;align-items:center;gap:6px;margin-bottom:2px;padding:3px 0;border:0;background:none;color:var(--muted);font:700 10px Cinzel,serif;letter-spacing:1.5px;text-align:left;text-transform:uppercase}
+.on-gh:hover:not(:disabled){color:var(--bone)}
+.on-gh:disabled{cursor:default}
+.on-gh .chev{flex:none;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid var(--gold);transition:transform .15s}
+.on-g.shut .chev{transform:rotate(-90deg)}
 .on-gh i{flex:none;width:7px;height:7px;border-radius:50%;background:var(--line2)}
 .on-gh span{margin-left:auto;font:600 12px Spectral,serif;letter-spacing:0;color:var(--soft)}
 .on-g.look .on-gh i{background:var(--green);animation:onpulse 1.6s infinite}
@@ -201,10 +204,11 @@ input[type=checkbox]{flex:none;width:16px;height:16px;padding:0;accent-color:var
 .nm:hover{color:var(--gold2);text-decoration:underline}
 .on-p{display:flex;align-items:center;gap:6px;min-height:23px}
 .on-p .nm{flex:1}
-.on-m{display:flex;align-items:center;gap:5px;min-height:23px;min-width:0}
-.on-m .tm{flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;color:var(--dim)}
-.on-m .tm.r{text-align:right}
-.on-m .nm{display:inline;font-weight:400;color:var(--soft)}
+.on-m{display:flex;align-items:flex-start;gap:8px;padding:4px 0}
+.on-m+.on-m{border-top:1px solid var(--sep)}
+.on-m .tag{flex:none;min-width:30px;margin-top:3px;text-align:center}
+.tms{flex:1;min-width:0;font-size:13px;line-height:1.45;color:var(--dim)}
+.tms .nm{display:inline;font-weight:400;color:var(--soft);white-space:normal}
 .vs{flex:none;font:700 10px Cinzel,serif;color:var(--red)}
 .tag.playing{border-color:#3d5a2a;color:var(--green)}
 .tag.lobby{border-color:#8a5d22;color:var(--amber)}
