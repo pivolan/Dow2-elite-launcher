@@ -713,7 +713,8 @@ function render() {
   const shown = activeCh || (!S.installed_version && mainCh);
   $('verBtn').innerHTML = shown
     ? `<b>${esc(L(shown.name) || shown.id)}</b><small class="${activeCh ? 'ok' : ''}">${esc(activeCh ? '✓ ' + t('installedTag') : t('notInstalledShort'))}</small>`
-    : `<b>${esc(S.installed_version || '—')}</b>${S.installed_version ? `<small class="ok">✓ ${esc(t('installedTag'))}</small>` : ''}`;
+    // the installed version is in no channel any more (the main one moved on): "3.2" → "Elite 3.2"
+    : `<b>${esc(/^\d/.test(S.installed_version) ? 'Elite ' + S.installed_version : S.installed_version || '—')}</b>${S.installed_version ? `<small class="ok">✓ ${esc(t('installedTag'))}</small>` : ''}`;
   $('verBtn').disabled = !chans.length;
   if (!chans.length) verOpen(false);
   const notMain = activeCh && mainCh && activeCh.id !== mainCh.id;
@@ -763,18 +764,24 @@ function render() {
   $('quick').classList.toggle('hidden', !prev || S.busy || !S.installed_version);
   if (prev) { $('quick').textContent = t('back', { name: L(prev.name) }); $('quick').onclick = () => switchTo(prev.id); }
 
-  // status line; a newer version of the installed one is offered here (never forced)
+  // a newer version of the installed one: offered right above the version picker, never forced
   const target = channelOf(S.installed_channel) || channelOf(S.channel);
   const showUpd = !!(S.game_found && target && S.installed_version && target.version !== S.installed_version && !S.busy && !S.game_running && !S.last_error);
-  $('updateBtn').classList.toggle('hidden', !showUpd);
-  if (showUpd) { $('updateBtn').textContent = t('updateNow'); $('updateBtn').onclick = () => switchTo(target.id); }
+  $('updBox').classList.toggle('hidden', !showUpd);
+  if (showUpd) {
+    const cost = (S.costs || {})[target.version];
+    $('updText').innerHTML = `<b>${esc((L(cfg.update_text) || t('switchTo', { name: '{name}' })).replace('{name}', L(target.name)).replace('{version}', target.version))}</b>`
+      + (cost ? `<small>${esc(t('upTo', { s: mb(cost) }))}</small>` : '');
+    $('updateBtn').textContent = t('updateNow');
+    $('updateBtn').onclick = () => switchTo(target.id);
+  }
+
+  // status line
   if (!S.busy && !LU?.installing) {
     $('bar').classList.add('hidden');
     $('statusText').classList.toggle('err', !!(S.last_error && S.config_loaded));
-    const cost = showUpd ? (S.costs || {})[target.version] : 0;
     $('statusText').innerHTML = S.last_error && !S.config_loaded ? esc(t('offline'))
       : S.last_error ? esc(winPath(S.last_error))
-      : showUpd ? `<b>${esc((L(cfg.update_text) || t('switchTo', { name: '{name}' })).replace('{name}', L(target.name)).replace('{version}', target.version))}</b>` + (cost ? ' · ' + esc(t('upTo', { s: mb(cost) })) : '')
       : S.installed_version ? esc(t('ready', { v: activeCh ? L(activeCh.name).replace(/^Elite\s+/i, '') : S.installed_version })) : (S.config_loaded ? '' : esc(t('connecting')));
     const hint = L(cfg.launch?.[S.os]?.hint);
     $('statusMeta').textContent = [hint, winPath(S.game_dir)].filter(Boolean).join(' · ');
