@@ -589,6 +589,7 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
     let dir = game_dir(&st);
     let installed = dir.as_ref().map(|d| update::Game::new(d).load_state()).unwrap_or_default();
     let uid = fb_uid(&st);
+    let running = st.game_running.load(Ordering::Relaxed);
     let fb_name = st.settings.lock().unwrap().fb_name.clone();
     let elite_v = installed.version.clone();
     let comps: Vec<String> = {
@@ -645,7 +646,8 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
         let mut wer_roots: Vec<PathBuf> = Vec::new();
         if let Some(la) = dirs::data_local_dir() {
             let mut v = Vec::new(); walk(&la.join("CrashDumps"), 0, &mut v);
-            v.retain(|(_, p)| is_game(p) && recent(p, 7)); v.sort_by(|a, b| b.0.cmp(&a.0));
+            let starter = |p: &std::path::Path| p.file_name().map(|x| x.to_string_lossy().to_ascii_lowercase()).map_or(false, |n| n.starts_with("elite.exe") || n.starts_with("elite_test.exe"));
+            v.retain(|(_, p)| is_game(p) && !starter(p) && recent(p, 7)); v.sort_by(|a, b| b.0.cmp(&a.0));
             files.extend(v.into_iter().take(2).map(|x| x.1));
             wer_roots.push(la.join("Microsoft").join("Windows").join("WER"));
         }
@@ -665,12 +667,19 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
             .unwrap_or_default();
         let mut newmarks: serde_json::Map<String, Value> = serde_json::Map::new();
         let mut n = 0; let mut total = 0usize;
+        let mut sent_dumps: Vec<PathBuf> = Vec::new(); let mut sent_addon_logs: Vec<PathBuf> = Vec::new();
         for f in files {
             let Ok(b) = std::fs::read(&f) else { continue };
             if total > 30 << 20 { out += &format!("=== {} ({} bytes) — skipped, upload is full ===\n", f.display(), b.len()); continue; }
             let ext = ext_of(&f);
             if ext == "dmp" || ext == "mdmp" {
                 use base64::Engine;
+                let fname = f.file_name().map(|x| x.to_string_lossy().to_ascii_lowercase()).unwrap_or_default();
+                if fname.starts_with("elite.exe") || fname.starts_with("elite_test.exe") { continue; }
+                let key = f.display().to_string();
+                if marks.get(&key).and_then(|v| v.as_array()).and_then(|a| a.first()).and_then(|x| x.as_u64()) == Some(b.len() as u64) { continue; }
+                newmarks.insert(key, serde_json::json!([b.len() as u64, "dump"]));
+                sent_dumps.push(f.clone());
                 if b.len() > 12 << 20 { out += &format!("=== {} ({} bytes) — dump too big, skipped ===\n", f.display(), b.len()); continue; }
                 out += &format!("=== {} ({} bytes, base64) ===\n", f.display(), b.len());
                 out += &base64::engine::general_purpose::STANDARD.encode(&b);
@@ -694,7 +703,9 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
                     let u: Vec<u16> = b[2..].chunks_exact(2).map(|c| u16::from_le_bytes([c[0], c[1]])).collect();
                     String::from_utf16_lossy(&u)
                 } else { String::from_utf8_lossy(&b[start..]).into_owned() };
-                let tail = if text.len() > 4 << 20 { let mut k = text.len() - (4 << 20); while !text.is_char_boundary(k) { k += 1; } &text[k..] } else { &text[..] };
+                let cap = 256usize << 10;
+                let tail = if text.len() > cap { let mut k = text.len() - cap; while !text.is_char_boundary(k) { k += 1; } &text[k..] } else { &text[..] };
+                if ext == "log" && f.parent().and_then(|p| p.file_name()).map_or(false, |n| n.eq_ignore_ascii_case("Elite_DLLs")) { sent_addon_logs.push(f.clone()); }
                 if incr && start > 0 && tail.is_empty() { continue; }   // с прошлой отправки ничего нового — файл не шлём
                 let tag = if start > 0 { format!(", +{} new", b.len() - start) } else { String::new() };
                 out += &format!("=== {} ({} bytes{}) ===\n", f.display(), b.len(), tag);
@@ -734,6 +745,10 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
                         .set("Content-Type", "application/json").send_string(&note);
                     // запомним, докуда дошли по каждому растущему логу — в следующий раз только новый хвост
                     let _ = std::fs::write(data_dir().join("log_sent.json"), serde_json::to_vec(&Value::Object(newmarks.clone())).unwrap_or_default());
+                    if !running {
+                        for f in &sent_addon_logs { let _ = std::fs::OpenOptions::new().write(true).truncate(true).open(f); }
+                        for f in &sent_dumps { let _ = std::fs::remove_file(f); }
+                    }
                     return Ok(format!("{} ({} files)", v["id"].as_str().unwrap_or("ok"), n));
                 }
                 Err(e) => last = e.to_string(),
