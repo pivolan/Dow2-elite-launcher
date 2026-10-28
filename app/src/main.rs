@@ -181,6 +181,12 @@ fn current_channel(app: &App, cfg: &LauncherConfig, installed: &update::State) -
 }
 
 /// Everything the window needs to draw itself.
+/// The launcher itself sits in the game folder (or below it): its files there break the game (crash while a match loads).
+fn launcher_in_game_dir() -> bool {
+    let Ok(exe) = std::env::current_exe() else { return false };
+    exe.ancestors().skip(1).take(3).any(|d| d.join("DOW2.exe").is_file())
+}
+
 #[tauri::command]
 fn get_status(app: State<'_, App>) -> Value {
     let cfg = app.config.lock().unwrap().clone();
@@ -195,6 +201,7 @@ fn get_status(app: State<'_, App>) -> Value {
     });
     json!({
         "launcher_version": LAUNCHER_VERSION,
+        "in_game_dir": launcher_in_game_dir(),
         "os": os_name(),
         "lang": s.lang,
         "config": cfg,
