@@ -136,6 +136,10 @@ nav{margin-left:auto;display:flex;gap:4px}
 .btn.gold{background:linear-gradient(#d4af55,#8a6d2b);color:#1a1408;border-color:#f0d68a}
 .btn.red{background:linear-gradient(#b52b27,#7a1715);border-color:#d0463d;color:#f6e6c4}
 .btn.small{padding:0 12px;height:28px;font-size:11px;white-space:nowrap}
+/* "Send logs" on the home screen: a filled button with an icon, so players notice it */
+.logs-btn{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px;white-space:nowrap;box-shadow:0 0 18px rgba(212,175,85,.25)}
+.logs-btn::before{content:"";flex:none;width:14px;height:14px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 3v5h5M12 18v-6M9 15l3-3 3 3'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 3v5h5M12 18v-6M9 15l3-3 3 3'/%3E%3C/svg%3E") center/contain no-repeat}
+.logs-btn:hover:not(:disabled){filter:brightness(1.1)}
 .btn-line{background:none;border:1px solid var(--line);color:#c9b98f;height:28px;padding:0 10px;font:600 13px Spectral,serif;letter-spacing:0;text-transform:none;white-space:nowrap}
 .btn-line:hover:not(:disabled){border-color:var(--gold);color:var(--gold2)}
 .link-btn{background:#1c1813;border:1px solid var(--line);color:#c9b98f;padding:7px 12px;font:600 13px Spectral,serif}
