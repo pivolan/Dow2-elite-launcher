@@ -62,8 +62,6 @@ struct Settings {
     fb_name: String,
     /// Hide the window to the tray once the game starts. None = on.
     tray_on_play: Option<bool>,
-    /// Show this player in the "In the launcher" list of the Online tab (sent to the ladder server while the launcher is open).
-    show_online: Option<bool>,
 }
 
 struct App {
@@ -334,7 +332,6 @@ fn get_status(app: State<'_, App>) -> Value {
         })).collect::<Vec<_>>(),
         "usage_stats": s.usage_stats.unwrap_or(true),
         "tray_on_play": s.tray_on_play.unwrap_or(true),
-        "show_online": s.show_online.unwrap_or(true),
         "release_news": app.release_news.lock().unwrap().clone(),
         "costs": app.costs.lock().unwrap().clone(),
         "prev_channel": s.prev_channel.filter(|p| p != &channel && cfgd.channels.iter().any(|c| &c.id == p)),
@@ -408,7 +405,6 @@ fn set_setting(app: State<'_, App>, key: String, value: Value) {
         "cache_mb" => s.cache_mb = value.as_u64(),
         "usage_stats" => s.usage_stats = value.as_bool(),
         "tray_on_play" => s.tray_on_play = value.as_bool(),
-        "show_online" => s.show_online = value.as_bool(),
         "dismiss" => {
             if let Some(id) = value.as_str() {
                 s.dismissed.push(id.to_string());
@@ -927,7 +923,7 @@ async fn fb_thread(app: AppHandle) -> Result<Value, String> {
     }).await.map_err(|e| e.to_string())?
 }
 
-// ---------- Online: who is looking for a game, the matches, how many launchers are open ----------
+// ---------- Online: who is looking for a game, the matches being set up or played ----------
 /// The same list the ladder page shows (/ladder/api/mm/live of the ladder service on the log hosts), plus the host
 /// that answered, for links to its ladder page.
 #[tauri::command]

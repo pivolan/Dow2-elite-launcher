@@ -115,7 +115,6 @@ const T = {
     "launcherFail": "Could not update the launcher: {e}",
     "noNews": "No news yet",
     "online": "Online",
-    "onLauncher": "In the launcher",
     "onSearching": "Looking for a game",
     "onStateCreating": "Getting ready",
     "onStateLobby": "In the lobby",
@@ -124,8 +123,6 @@ const T = {
     "onOffline": "No connection to the ladder server, trying again…",
     "onLoading": "Loading who is online…",
     "onLadder": "Ladder and match history ›",
-    "showOnline": "Show me in the “In the launcher” list",
-    "showOnlineNote": "While the launcher is open, it tells the ladder server once a minute your Steam ID and Steam name. Off: you are in neither the list nor the count.",
     "race_space_marines": "Space Marines",
     "race_chaos_marines": "Chaos",
     "race_eldar": "Eldar",
@@ -247,7 +244,6 @@ const T = {
     "launcherFail": "Не удалось обновить лаунчер: {e}",
     "noNews": "Новостей пока нет",
     "online": "Онлайн",
-    "onLauncher": "В лаунчере",
     "onSearching": "Ищут игру",
     "onStateCreating": "Собирается",
     "onStateLobby": "В лобби",
@@ -256,8 +252,6 @@ const T = {
     "onOffline": "Нет связи с сервером ладдера, пробую снова…",
     "onLoading": "Загружаю, кто онлайн…",
     "onLadder": "Ладдер и история матчей ›",
-    "showOnline": "Показывать меня в списке «В лаунчере»",
-    "showOnlineNote": "Пока лаунчер открыт, он раз в минуту сообщает серверу ладдера ваш SteamID и ник в Steam. Выключено — вас нет ни в списке, ни в счётчике.",
     "race_space_marines": "Космодесант",
     "race_chaos_marines": "Хаос",
     "race_eldar": "Эльдар",
@@ -374,7 +368,6 @@ const T = {
     "launcherFail": "No se pudo actualizar el launcher: {e}",
     "noNews": "Aún no hay noticias",
     "online": "En línea",
-    "onLauncher": "En el launcher",
     "onSearching": "Buscan partida",
     "onStateCreating": "Preparándose",
     "onStateLobby": "En el lobby",
@@ -383,8 +376,6 @@ const T = {
     "onOffline": "Sin conexión con el servidor de la ladder, reintentando…",
     "onLoading": "Cargando quién está en línea…",
     "onLadder": "Ladder e historial de partidas ›",
-    "showOnline": "Mostrarme en la lista «En el launcher»",
-    "showOnlineNote": "Mientras el launcher está abierto, comunica al servidor de la ladder una vez por minuto tu Steam ID y tu nombre de Steam. Desactivado: no apareces ni en la lista ni en el contador.",
     "race_space_marines": "Marines Espaciales",
     "race_chaos_marines": "Caos",
     "race_eldar": "Eldar",
@@ -501,7 +492,6 @@ const T = {
     "launcherFail": "Impossible de mettre à jour le launcher : {e}",
     "noNews": "Pas encore d’actualités",
     "online": "En ligne",
-    "onLauncher": "Dans le launcher",
     "onSearching": "Cherchent une partie",
     "onStateCreating": "En préparation",
     "onStateLobby": "Dans le salon",
@@ -510,8 +500,6 @@ const T = {
     "onOffline": "Pas de connexion au serveur du ladder, nouvel essai…",
     "onLoading": "Chargement des joueurs en ligne…",
     "onLadder": "Ladder et historique des parties ›",
-    "showOnline": "M’afficher dans la liste « Dans le launcher »",
-    "showOnlineNote": "Tant que le launcher est ouvert, il envoie une fois par minute au serveur du ladder votre Steam ID et votre nom Steam. Désactivé : vous n’apparaissez ni dans la liste ni dans le compteur.",
     "race_space_marines": "Space Marines",
     "race_chaos_marines": "Chaos",
     "race_eldar": "Eldar",
@@ -628,7 +616,6 @@ const T = {
     "launcherFail": "Launcher konnte nicht aktualisiert werden: {e}",
     "noNews": "Noch keine Neuigkeiten",
     "online": "Online",
-    "onLauncher": "Im Launcher",
     "onSearching": "Suchen ein Spiel",
     "onStateCreating": "Wird vorbereitet",
     "onStateLobby": "In der Lobby",
@@ -637,8 +624,6 @@ const T = {
     "onOffline": "Keine Verbindung zum Ladder-Server, neuer Versuch…",
     "onLoading": "Lade, wer online ist…",
     "onLadder": "Ladder und Spielverlauf ›",
-    "showOnline": "Mich in der Liste „Im Launcher“ zeigen",
-    "showOnlineNote": "Solange der Launcher offen ist, meldet er dem Ladder-Server einmal pro Minute deine Steam-ID und deinen Steam-Namen. Aus: Du erscheinst weder in der Liste noch in der Zählung.",
     "race_space_marines": "Space Marines",
     "race_chaos_marines": "Chaos",
     "race_eldar": "Eldar",
@@ -915,7 +900,6 @@ function render() {
   $('cache').value = String(S.cache_mb);
   $('usage').checked = S.usage_stats !== false;
   $('trayOnPlay').checked = S.tray_on_play !== false;
-  $('showOnline').checked = S.show_online !== false;
   $('mirror').value = S.extra_mirror || '';
   $('mirrorInfo').textContent = t('mirrors', { n: S.mirror_count });
   $('repair').disabled = S.busy || S.game_running || !S.installed_version;
@@ -1031,7 +1015,6 @@ $('openDir').onclick = () => invoke('open_game_dir').catch(e => toast(e, true));
 $('lang').onchange = e => invoke('set_setting', { key: 'lang', value: e.target.value }).then(reload);
 $('usage').onchange = e => invoke('set_setting', { key: 'usage_stats', value: e.target.checked }).then(reload);
 $('trayOnPlay').onchange = e => invoke('set_setting', { key: 'tray_on_play', value: e.target.checked }).then(reload);
-$('showOnline').onchange = e => invoke('set_setting', { key: 'show_online', value: e.target.checked }).then(reload);
 $('cache').onchange = e => invoke('set_setting', { key: 'cache_mb', value: +e.target.value }).then(reload);
 $('saveMirror').onclick = () => invoke('set_setting', { key: 'extra_mirror', value: $('mirror').value.trim() }).then(refresh);
 $('repair').onclick = () => startUpdate(true);
@@ -1061,7 +1044,7 @@ launcherCheck();
 setInterval(() => { if (S && !S.busy) refresh(); launcherCheck(); }, 15 * 60 * 1000);
 
 
-// ---------- Online (home, above the add-ons): who is looking for a game, who is in a match, who just has the launcher open ----------
+// ---------- Online (home, above the add-ons): who is looking for a game, who is in a match ----------
 // The same list the ladder page shows: /ladder/api/mm/live of the ladder service on the log hosts, every 15 seconds
 // (every minute while the window is hidden). Only names here; the details are on the ladder page linked below the block.
 const ON = { d: null, err: false, timer: null, shut: new Set() };
@@ -1074,9 +1057,6 @@ const onWho = p => `<button class="nm" data-steam="${esc(p.steam || '')}" title=
 function onRender() {
   if (!S) return;
   const d = ON.d, look = (d?.searching || []).filter(p => p.mode !== 'watch'), matches = d?.matches || [];   // spectators wait to watch, not to play
-  // in the launcher: the names the server lists (once it does), minus those already looking or playing
-  const busy = new Set(look.map(p => p.steam).concat(matches.flatMap(m => (m.team1 || []).concat(m.team2 || []).map(p => p.steam))));
-  const idle = Array.isArray(d?.in_launcher) ? d.in_launcher.filter(p => !busy.has(p.steam) && !p.status) : null;
   // a group folds on a click on its heading
   const group = (key, title, n, body) => {
     const open = !ON.shut.has(key);
@@ -1097,7 +1077,6 @@ function onRender() {
       matches.map(m => `<div class="on-m"><span class="tag ${esc(m.state)}" title="${esc(t(st[m.state] || 'onStateCreating'))}">${esc(m.mode)}</span>`
         + `<div class="tms"><div>${(m.team1 || []).map(onWho).join(', ')}</div><div><span class="vs">vs</span> ${(m.team2 || []).map(onWho).join(', ')}</div></div></div>`).join(''));
     if (!look.length && !matches.length) html += `<div class="on-empty">${esc(t('onNobody'))}</div>`;
-    html += group('idle', t('onLauncher'), idle ? idle.length : Number(d.online) || 0, idle && idle.length ? `<div class="on-names">${idle.map(onWho).join('')}</div>` : '');
   }
   $('onGroups').innerHTML = html;
   $('onGroups').querySelectorAll('.nm[data-steam]').forEach(b => b.onclick = () => b.dataset.steam && open('https://steamcommunity.com/profiles/' + b.dataset.steam));
