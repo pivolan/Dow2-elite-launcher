@@ -115,37 +115,14 @@ const T = {
     "launcherFail": "Could not update the launcher: {e}",
     "noNews": "No news yet",
     "online": "Online",
-    "onSteam": "In DoW2 now",
-    "onSteamNote": "everyone on Steam, with Elite or without",
     "onLauncher": "In the launcher",
-    "onLauncherNote": "Elite Launcher open right now",
     "onSearching": "Looking for a game",
-    "onMatches": "Matches",
-    "onMatchesNote": "playing: {p} · getting ready: {c}",
-    "onAll": "All",
-    "onWatch": "spectator",
-    "onWaits": "waiting {t}",
-    "onMaps": "maps: {n}",
-    "onAnyMap": "any map",
-    "onDiff": "±{n} rating",
-    "onNew": "newcomer",
-    "onNewT": "No rating yet",
-    "onRelicT": "Relic rating: no ladder games yet",
     "onStateCreating": "Getting ready",
     "onStateLobby": "In the lobby",
     "onStatePlaying": "Playing",
-    "onMin": "{n} min",
-    "onHostMap": "map chosen by the host",
-    "onWatchers": "Watching: {list}",
-    "onNobody": "Nobody is looking for a game. Start the game and press “Find a Game”: you will show up here.",
-    "onNoMatches": "No matches right now.",
-    "onPeopleCount": "Players with the launcher open: {n}.",
-    "onInMatch": "in a match",
-    "onLooking": "looking, {m}",
-    "onUpdated": "Updated {n} s ago",
+    "onNobody": "Nobody is looking for a game. Start the game and press “Find a Game”.",
     "onOffline": "No connection to the ladder server, trying again…",
     "onLadder": "Ladder and match history ›",
-    "onHint": "Looking for a game: {n} ({modes}) — see who",
     "showOnline": "Show me in the “In the launcher” list",
     "showOnlineNote": "While the launcher is open, it tells the ladder server once a minute your Steam ID and Steam name. Off: you are in neither the list nor the count.",
     "race_space_marines": "Space Marines",
@@ -156,7 +133,10 @@ const T = {
     "race_imperial_guard": "Imperial Guard",
     "race_t_tau": "Tau",
     "race_z_unecron": "Necrons",
-    "race_ordo_malleus": "Ordo Malleus"
+    "race_ordo_malleus": "Ordo Malleus",
+    "allAddons": "All ›",
+    "onInDow2": "in DoW2: {n}",
+    "onInMatchH": "In a match"
   },
   ru: {
     "fbTitle": "Написать разработчикам",
@@ -267,37 +247,14 @@ const T = {
     "launcherFail": "Не удалось обновить лаунчер: {e}",
     "noNews": "Новостей пока нет",
     "online": "Онлайн",
-    "onSteam": "В DoW2 сейчас",
-    "onSteamNote": "все в Steam, с Elite и без",
     "onLauncher": "В лаунчере",
-    "onLauncherNote": "лаунчер открыт прямо сейчас",
     "onSearching": "Ищут игру",
-    "onMatches": "Матчи",
-    "onMatchesNote": "идут: {p} · собираются: {c}",
-    "onAll": "Все",
-    "onWatch": "зритель",
-    "onWaits": "ждёт {t}",
-    "onMaps": "карт: {n}",
-    "onAnyMap": "любая карта",
-    "onDiff": "±{n} рейтинга",
-    "onNew": "новичок",
-    "onNewT": "Рейтинга ещё нет",
-    "onRelicT": "Рейтинг Relic: в ладдере ещё не играл",
     "onStateCreating": "Собирается",
     "onStateLobby": "В лобби",
     "onStatePlaying": "Идёт",
-    "onMin": "{n} мин",
-    "onHostMap": "карту выберет хост",
-    "onWatchers": "Смотрят: {list}",
-    "onNobody": "Никто не ищет игру. Запусти игру и нажми «Find a Game» — тебя увидят здесь.",
-    "onNoMatches": "Матчей сейчас нет.",
-    "onPeopleCount": "Лаунчер сейчас открыт у игроков: {n}.",
-    "onInMatch": "в матче",
-    "onLooking": "ищет {m}",
-    "onUpdated": "Обновлено {n} сек назад",
+    "onNobody": "Никто не ищет игру. Запусти игру и нажми «Find a Game».",
     "onOffline": "Нет связи с сервером ладдера, пробую снова…",
     "onLadder": "Ладдер и история матчей ›",
-    "onHint": "Ищут игру: {n} ({modes}) — посмотреть",
     "showOnline": "Показывать меня в списке «В лаунчере»",
     "showOnlineNote": "Пока лаунчер открыт, он раз в минуту сообщает серверу ладдера ваш SteamID и ник в Steam. Выключено — вас нет ни в списке, ни в счётчике.",
     "race_space_marines": "Космодесант",
@@ -308,7 +265,10 @@ const T = {
     "race_imperial_guard": "Имперская гвардия",
     "race_t_tau": "Тау",
     "race_z_unecron": "Некроны",
-    "race_ordo_malleus": "Ордо Маллеус"
+    "race_ordo_malleus": "Ордо Маллеус",
+    "allAddons": "Все ›",
+    "onInDow2": "в DoW2: {n}",
+    "onInMatchH": "В матче"
   },
   es: {
     "fbTitle": "Escribir a los desarrolladores",
@@ -414,37 +374,14 @@ const T = {
     "launcherFail": "No se pudo actualizar el launcher: {e}",
     "noNews": "Aún no hay noticias",
     "online": "En línea",
-    "onSteam": "En DoW2 ahora",
-    "onSteamNote": "todos en Steam, con Elite o sin él",
     "onLauncher": "En el launcher",
-    "onLauncherNote": "con el launcher abierto ahora",
     "onSearching": "Buscan partida",
-    "onMatches": "Partidas",
-    "onMatchesNote": "en curso: {p} · preparándose: {c}",
-    "onAll": "Todos",
-    "onWatch": "espectador",
-    "onWaits": "espera {t}",
-    "onMaps": "mapas: {n}",
-    "onAnyMap": "cualquier mapa",
-    "onDiff": "±{n} de rating",
-    "onNew": "novato",
-    "onNewT": "Aún sin rating",
-    "onRelicT": "Rating de Relic: aún sin partidas en la ladder",
     "onStateCreating": "Preparándose",
     "onStateLobby": "En el lobby",
     "onStatePlaying": "En curso",
-    "onMin": "{n} min",
-    "onHostMap": "el anfitrión elige el mapa",
-    "onWatchers": "Miran: {list}",
-    "onNobody": "Nadie busca partida. Inicia el juego y pulsa «Find a Game»: aparecerás aquí.",
-    "onNoMatches": "No hay partidas ahora.",
-    "onPeopleCount": "Jugadores con el launcher abierto: {n}.",
-    "onInMatch": "en partida",
-    "onLooking": "busca {m}",
-    "onUpdated": "Actualizado hace {n} s",
+    "onNobody": "Nadie busca partida. Inicia el juego y pulsa «Find a Game».",
     "onOffline": "Sin conexión con el servidor de la ladder, reintentando…",
     "onLadder": "Ladder e historial de partidas ›",
-    "onHint": "Buscan partida: {n} ({modes}) — ver",
     "showOnline": "Mostrarme en la lista «En el launcher»",
     "showOnlineNote": "Mientras el launcher está abierto, comunica al servidor de la ladder una vez por minuto tu Steam ID y tu nombre de Steam. Desactivado: no apareces ni en la lista ni en el contador.",
     "race_space_marines": "Marines Espaciales",
@@ -455,7 +392,10 @@ const T = {
     "race_imperial_guard": "Guardia Imperial",
     "race_t_tau": "Tau",
     "race_z_unecron": "Necrones",
-    "race_ordo_malleus": "Ordo Malleus"
+    "race_ordo_malleus": "Ordo Malleus",
+    "allAddons": "Todos ›",
+    "onInDow2": "en DoW2: {n}",
+    "onInMatchH": "En partida"
   },
   fr: {
     "fbTitle": "Écrire aux développeurs",
@@ -561,37 +501,14 @@ const T = {
     "launcherFail": "Impossible de mettre à jour le launcher : {e}",
     "noNews": "Pas encore d’actualités",
     "online": "En ligne",
-    "onSteam": "Dans DoW2",
-    "onSteamNote": "tous sur Steam, avec ou sans Elite",
     "onLauncher": "Dans le launcher",
-    "onLauncherNote": "launcher ouvert en ce moment",
     "onSearching": "Cherchent une partie",
-    "onMatches": "Parties",
-    "onMatchesNote": "en cours : {p} · en préparation : {c}",
-    "onAll": "Tous",
-    "onWatch": "spectateur",
-    "onWaits": "attend {t}",
-    "onMaps": "cartes : {n}",
-    "onAnyMap": "n’importe quelle carte",
-    "onDiff": "±{n} de classement",
-    "onNew": "débutant",
-    "onNewT": "Pas encore de classement",
-    "onRelicT": "Classement Relic : pas encore de parties en ladder",
     "onStateCreating": "En préparation",
     "onStateLobby": "Dans le salon",
     "onStatePlaying": "En cours",
-    "onMin": "{n} min",
-    "onHostMap": "carte choisie par l’hôte",
-    "onWatchers": "Regardent : {list}",
-    "onNobody": "Personne ne cherche de partie. Lancez le jeu et appuyez sur « Find a Game » : vous apparaîtrez ici.",
-    "onNoMatches": "Aucune partie en ce moment.",
-    "onPeopleCount": "Joueurs avec le launcher ouvert : {n}.",
-    "onInMatch": "en partie",
-    "onLooking": "cherche {m}",
-    "onUpdated": "Mis à jour il y a {n} s",
+    "onNobody": "Personne ne cherche de partie. Lancez le jeu et appuyez sur « Find a Game ».",
     "onOffline": "Pas de connexion au serveur du ladder, nouvel essai…",
     "onLadder": "Ladder et historique des parties ›",
-    "onHint": "Cherchent une partie : {n} ({modes}) — voir",
     "showOnline": "M’afficher dans la liste « Dans le launcher »",
     "showOnlineNote": "Tant que le launcher est ouvert, il envoie une fois par minute au serveur du ladder votre Steam ID et votre nom Steam. Désactivé : vous n’apparaissez ni dans la liste ni dans le compteur.",
     "race_space_marines": "Space Marines",
@@ -602,7 +519,10 @@ const T = {
     "race_imperial_guard": "Garde impériale",
     "race_t_tau": "Tau",
     "race_z_unecron": "Nécrons",
-    "race_ordo_malleus": "Ordo Malleus"
+    "race_ordo_malleus": "Ordo Malleus",
+    "allAddons": "Tous ›",
+    "onInDow2": "dans DoW2 : {n}",
+    "onInMatchH": "En partie"
   },
   de: {
     "fbTitle": "An die Entwickler schreiben",
@@ -708,37 +628,14 @@ const T = {
     "launcherFail": "Launcher konnte nicht aktualisiert werden: {e}",
     "noNews": "Noch keine Neuigkeiten",
     "online": "Online",
-    "onSteam": "In DoW2 gerade",
-    "onSteamNote": "alle auf Steam, mit und ohne Elite",
     "onLauncher": "Im Launcher",
-    "onLauncherNote": "Launcher gerade offen",
     "onSearching": "Suchen ein Spiel",
-    "onMatches": "Spiele",
-    "onMatchesNote": "laufen: {p} · in Vorbereitung: {c}",
-    "onAll": "Alle",
-    "onWatch": "Zuschauer",
-    "onWaits": "wartet {t}",
-    "onMaps": "Karten: {n}",
-    "onAnyMap": "jede Karte",
-    "onDiff": "±{n} Wertung",
-    "onNew": "Neuling",
-    "onNewT": "Noch keine Wertung",
-    "onRelicT": "Relic-Wertung: noch keine Ladder-Spiele",
     "onStateCreating": "Wird vorbereitet",
     "onStateLobby": "In der Lobby",
     "onStatePlaying": "Läuft",
-    "onMin": "{n} Min.",
-    "onHostMap": "Karte wählt der Host",
-    "onWatchers": "Schauen zu: {list}",
-    "onNobody": "Niemand sucht ein Spiel. Starte das Spiel und drücke „Find a Game“ – dann erscheinst du hier.",
-    "onNoMatches": "Gerade keine Spiele.",
-    "onPeopleCount": "Spieler mit offenem Launcher: {n}.",
-    "onInMatch": "im Spiel",
-    "onLooking": "sucht {m}",
-    "onUpdated": "Vor {n} s aktualisiert",
+    "onNobody": "Niemand sucht ein Spiel. Starte das Spiel und drücke „Find a Game“.",
     "onOffline": "Keine Verbindung zum Ladder-Server, neuer Versuch…",
     "onLadder": "Ladder und Spielverlauf ›",
-    "onHint": "Suchen ein Spiel: {n} ({modes}) — ansehen",
     "showOnline": "Mich in der Liste „Im Launcher“ zeigen",
     "showOnlineNote": "Solange der Launcher offen ist, meldet er dem Ladder-Server einmal pro Minute deine Steam-ID und deinen Steam-Namen. Aus: Du erscheinst weder in der Liste noch in der Zählung.",
     "race_space_marines": "Space Marines",
@@ -749,7 +646,10 @@ const T = {
     "race_imperial_guard": "Imperiale Armee",
     "race_t_tau": "Tau",
     "race_z_unecron": "Necrons",
-    "race_ordo_malleus": "Ordo Malleus"
+    "race_ordo_malleus": "Ordo Malleus",
+    "allAddons": "Alle ›",
+    "onInDow2": "in DoW2: {n}",
+    "onInMatchH": "Im Spiel"
   },
 };
 
@@ -782,15 +682,52 @@ function verOpen(on) {
   $('verBtn').classList.toggle('on', on);
 }
 
+// "Version 0.7.0", plus the one the next update brings
+function compVer(c) {
+  const v = x => 'v' + String(x || '').replace(new RegExp('^' + c.id + '-'), '');
+  return c.installed ? t('addonVer', { v: v(c.installed) }) + (c.latest && c.latest !== c.installed ? ', ' + t('addonNext', { v: v(c.latest) }) : '')
+    : c.latest ? t('addonVer', { v: v(c.latest) }) : '';
+}
+
+// add-on rows: a switch each and its own options under it once it is on; the details behind "?" on the home screen,
+// written out on the Add-ons tab (full)
+function compList(box, list, full) {
+  const lock = S.busy || S.game_running;   // the game holds the add-on files while it runs
+  const nameHtml = c => { const n = L(c.name) || c.id, m = n.match(/^(.+?)\s*\(([^()]+)\)$/); return m ? `${esc(m[1])}<small>${esc(m[2])}</small>` : esc(n); };
+  box.innerHTML = (S.game_running ? `<div class="addon-note">${esc(t('gameRunningAddons'))}</div>` : '')
+    + list.map(c => `<div class="addon ${c.enabled ? '' : 'off'}"><div class="addon-row"><span class="addon-name" title="${esc(L(c.name) || c.id)}">${nameHtml(c)}</span>`
+      + (c.enabled && (c.conflicts || []).length ? `<span class="addon-warn" title="${esc(t('conflictActive'))}">!</span>` : '')
+      + (full ? '' : `<button class="qm ${$('pop').dataset.id === c.id ? 'on' : ''}" data-info="${esc(c.id)}" aria-label="${esc(t('addonInfo', { name: L(c.name) || c.id }))}">?</button>`)
+      + `<label class="switch"><input type="checkbox" role="switch" data-id="${esc(c.id)}" aria-label="${esc(L(c.name) || c.id)}" ${c.enabled ? 'checked' : ''} ${lock ? 'disabled' : ''}><i></i></label></div>`
+      + (full ? (L(c.description) ? `<p class="addon-desc">${esc(L(c.description))}</p>` : '')
+          + `<div class="addon-ver">${esc([compVer(c), t('addonLater')].filter(Boolean).join(' · '))}</div>`
+          + (c.enabled && (c.conflicts || []).length ? `<div class="addon-note">${esc(t('conflictActive'))}</div>` : '') : '')
+      + (c.enabled && (c.options || []).length ? '<div class="addon-opts">' + c.options.map(o => `<label class="addon-opt"><input type="checkbox" data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${o.on ? 'checked' : ''} ${lock ? 'disabled' : ''}>${esc(L(o.name) || o.id)}</label>`).join('') + '</div>' : '')
+      + '</div>').join('');
+  box.querySelectorAll('.qm').forEach(b => b.onclick = e => { e.stopPropagation(); popAddon(b, list.find(c => c.id === b.dataset.info)); });
+  box.querySelectorAll('input[data-opt]').forEach(cb => cb.onchange = () =>
+    invoke('set_comp_option', { comp: cb.dataset.comp, opt: cb.dataset.opt, on: cb.checked }).then(reload).catch(e => toast(e, true)));
+  box.querySelectorAll('input[data-id]').forEach(cb => cb.onchange = async () => {
+    const comp = list.find(c => c.id === cb.dataset.id);
+    if (cb.checked && comp && (comp.conflicts || []).length) {
+      const del = await askConflict(comp.conflicts);
+      if (del) {
+        try { toast(t('conflictRemoved', { files: (await invoke('remove_conflicts', { id: comp.id })).join(', ') })); }
+        catch (e) { toast(e, true); }
+      }
+    }
+    await invoke('set_component', { id: cb.dataset.id, on: cb.checked });
+    if (S.installed_version) { try { await invoke('start_update', { repair: false, componentsOnly: true }); S.busy = true; render(); } catch (e) { toast(e, true); } }
+    else reload();
+  });
+}
+
 // details of an add-on next to its "?": description, version, a hand-installed copy in the game folder
 function popAddon(btn, c) {
   const pop = $('pop');
   if (!c || (pop.dataset.id === c.id && !pop.classList.contains('hidden'))) return popClose();
-  const v = x => 'v' + String(x || '').replace(new RegExp('^' + c.id + '-'), '');
-  const ver = c.installed ? t('addonVer', { v: v(c.installed) }) + (c.latest && c.latest !== c.installed ? ', ' + t('addonNext', { v: v(c.latest) }) : '')
-    : c.latest ? t('addonVer', { v: v(c.latest) }) : '';
   pop.innerHTML = `<b>${esc(L(c.name) || c.id)}</b>` + (L(c.description) ? `<p>${esc(L(c.description))}</p>` : '')
-    + `<div class="v">${esc([ver, t('addonLater')].filter(Boolean).join(' · '))}</div>`
+    + `<div class="v">${esc([compVer(c), t('addonLater')].filter(Boolean).join(' · '))}</div>`
     + (c.enabled && (c.conflicts || []).length ? `<div class="w">${esc(t('conflictActive'))}</div>` : '');
   pop.dataset.id = c.id;
   pop.classList.remove('hidden');
@@ -930,34 +867,13 @@ function render() {
   $('verWarn').classList.toggle('hidden', !notMain);
   if (notMain) $('verWarn').textContent = t('youPlay', { name: L(activeCh.name) }) + ' ' + t('notMain', { name: L(mainCh.name) });
 
-  // add-ons: a switch each, the details behind "?"; an add-on's own options show up under it once it is on
+  // add-ons: the ones players switch most on the home screen (launcher.json "home"), all of them on the Add-ons tab
   const comps = S.components || [];
-  $('compBox').classList.toggle('hidden', !comps.length);
-  const lockC = S.busy || S.game_running;   // the game holds the add-on files while it runs
-  const nameHtml = c => { const n = L(c.name) || c.id, m = n.match(/^(.+?)\s*\(([^()]+)\)$/); return m ? `${esc(m[1])}<small>${esc(m[2])}</small>` : esc(n); };
-  $('components').innerHTML = (S.game_running ? `<div class="addon-note">${esc(t('gameRunningAddons'))}</div>` : '')
-    + comps.map(c => `<div class="addon ${c.enabled ? '' : 'off'}"><div class="addon-row"><span class="addon-name" title="${esc(L(c.name) || c.id)}">${nameHtml(c)}</span>`
-      + (c.enabled && (c.conflicts || []).length ? `<span class="addon-warn" title="${esc(t('conflictActive'))}">!</span>` : '')
-      + `<button class="qm ${$('pop').dataset.id === c.id ? 'on' : ''}" data-info="${esc(c.id)}" aria-label="${esc(t('addonInfo', { name: L(c.name) || c.id }))}">?</button>`
-      + `<label class="switch"><input type="checkbox" role="switch" data-id="${esc(c.id)}" aria-label="${esc(L(c.name) || c.id)}" ${c.enabled ? 'checked' : ''} ${lockC ? 'disabled' : ''}><i></i></label></div>`
-      + (c.enabled && (c.options || []).length ? '<div class="addon-opts">' + c.options.map(o => `<label class="addon-opt"><input type="checkbox" data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${o.on ? 'checked' : ''} ${lockC ? 'disabled' : ''}>${esc(L(o.name) || o.id)}</label>`).join('') + '</div>' : '')
-      + '</div>').join('');
-  $('components').querySelectorAll('.qm').forEach(b => b.onclick = e => { e.stopPropagation(); popAddon(b, comps.find(c => c.id === b.dataset.info)); });
-  $('components').querySelectorAll('input[data-opt]').forEach(cb => cb.onchange = () =>
-    invoke('set_comp_option', { comp: cb.dataset.comp, opt: cb.dataset.opt, on: cb.checked }).then(reload).catch(e => toast(e, true)));
-  $('components').querySelectorAll('input[data-id]').forEach(cb => cb.onchange = async () => {
-    const comp = comps.find(c => c.id === cb.dataset.id);
-    if (cb.checked && comp && (comp.conflicts || []).length) {
-      const del = await askConflict(comp.conflicts);
-      if (del) {
-        try { toast(t('conflictRemoved', { files: (await invoke('remove_conflicts', { id: comp.id })).join(', ') })); }
-        catch (e) { toast(e, true); }
-      }
-    }
-    await invoke('set_component', { id: cb.dataset.id, on: cb.checked });
-    if (S.installed_version) { try { await invoke('start_update', { repair: false, componentsOnly: true }); S.busy = true; render(); } catch (e) { toast(e, true); } }
-    else reload();
-  });
+  const pinned = comps.some(c => c.home) ? comps.filter(c => c.home)
+    : comps.filter(c => /automatch|relay/i.test(c.id));   // until launcher.json marks them
+  $('compBox').classList.toggle('hidden', !pinned.length);
+  compList($('components'), pinned, false);
+  compList($('allCompList'), comps, true);
 
   // Play
   const play = $('play');
@@ -1107,8 +1023,8 @@ listen('update_done', async e => {
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
   document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('hidden', v.id !== b.dataset.view));
-  onPoll();   // the Online tab polls more often while it is open
 });
+$('allComps').onclick = () => document.querySelector('.tab[data-view="addons"]').click();
 $('cancel').onclick = () => invoke('cancel_update');
 $('browse').onclick = pickDir;
 $('openDir').onclick = () => invoke('open_game_dir').catch(e => toast(e, true));
@@ -1145,89 +1061,49 @@ launcherCheck();
 setInterval(() => { if (S && !S.busy) refresh(); launcherCheck(); }, 15 * 60 * 1000);
 
 
-// ---------- Online: who is looking for a game, the matches, who has the launcher open ----------
-// The same list the ladder page shows: /ladder/api/mm/live of the ladder service (dow2-ladder) on the log hosts.
-// Every 10 seconds while the tab is open, every minute otherwise (for the badge on the tab and the hint above Play).
-const ON = { d: null, err: false, at: 0, mode: '', timer: null };
+// ---------- Online (home, above the add-ons): who is looking for a game, who is in a match, who just has the launcher open ----------
+// The same list the ladder page shows: /ladder/api/mm/live of the ladder service on the log hosts, every 15 seconds
+// (every minute while the window is hidden). Only names here; the details are on the ladder page linked below the block.
+const ON = { d: null, err: false, timer: null };
 const RACES = ['space_marines', 'chaos_marines', 'eldar', 'orks', 'tyranids', 'imperial_guard', 't_tau', 'z_unecron', 'ordo_malleus'];
-const onShown = () => !$('online').classList.contains('hidden');
 const raceImg = r => RACES.includes(r) ? `<img class="race" src="races/${r}.png" alt="${esc(t('race_' + r))}" title="${esc(t('race_' + r))}">` : '<span class="race"></span>';
-const mmss = s => { s = Math.max(0, s | 0); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
-// "2p_doom_of_tularis" → "Doom of Tularis"
-const mapName = m => m ? m.replace(/^\(?\d+p\)?[ _]?/i, '').split('_').filter(Boolean)
-  .map((w, i) => i && /^(of|the|de)$/i.test(w) ? w : w[0].toUpperCase() + w.slice(1)).join(' ') : t('onHostMap');
-// the ladder rating; a Relic one marked R; a newcomer without a number (as on the ladder page)
-const onRating = p => p.rsrc === 'new' ? `<span class="rt new" title="${esc(t('onNewT'))}">${esc(t('onNew'))}</span>`
-  : p.rsrc === 'relic' ? `<span class="rt" title="${esc(t('onRelicT'))}">${p.rating}<sup>R</sup></span>` : `<span class="rt">${p.rating ?? ''}</span>`;
 const onWho = p => `<button class="nm" data-steam="${esc(p.steam || '')}" title="${esc(p.steam ? 'Steam ' + p.steam : '')}">${esc(p.name || 'Player')}</button>`;
-const onMode = m => m === 'watch' ? t('onWatch') : m;
 
 function onRender() {
   if (!S) return;
-  const d = ON.d, look = d?.searching || [], players = look.filter(p => p.mode !== 'watch');   // spectators wait to watch, not to play
-  // the badge on the tab and the hint above Play: someone is looking for a game right now
-  $('onBadge').textContent = players.length || '';
-  $('onBadge').classList.toggle('hidden', !players.length);
-  $('onHint').classList.toggle('hidden', !players.length);
-  if (players.length) $('onHint').innerHTML = `<i class="dot"></i><span>${esc(t('onHint', { n: players.length, modes: [...new Set(players.map(p => p.mode))].join(', ') }))}</span>`;
-  if (!onShown()) return;
-
-  const q = d?.queue || {}, matches = d?.matches || [], playing = matches.filter(m => m.state === 'playing').length;
-  const tile = (id, n, label, note) => { $(id).innerHTML = `<b>${esc(n ?? '—')}</b><span>${esc(label)}</span><small>${esc(note)}</small>`; };
-  tile('onSteam', d?.in_game, t('onSteam'), t('onSteamNote'));
-  tile('onLauncher', d?.online, t('onLauncher'), t('onLauncherNote'));
-  tile('onQueue', d ? players.length : null, t('onSearching'), ['1v1', '2v2', '3v3'].map(m => `${m}: ${q[m] || 0}`).join(' · '));
-  tile('onMatches', d ? matches.length : null, t('onMatches'), t('onMatchesNote', { p: playing, c: matches.length - playing }));
-
-  // looking for a game, filtered by mode
-  const modes = ['1v1', '2v2', '3v3'].concat(look.some(p => p.mode === 'watch') ? ['watch'] : []);
-  if (ON.mode && !modes.includes(ON.mode)) ON.mode = '';
-  $('onModes').innerHTML = [''].concat(modes).map(m => `<button class="${ON.mode === m ? 'on' : ''}" data-m="${m}">${esc(m ? onMode(m) : t('onAll'))}`
-    + ` ${look.filter(p => !m || p.mode === m).length}</button>`).join('');
-  const shown = look.filter(p => !ON.mode || p.mode === ON.mode);
-  $('onSearch').innerHTML = shown.length ? shown.map(p => `<div class="on-row">${raceImg(p.race)}<div class="on-who"><div class="top">${onWho(p)}`
-      + `<span class="tag">${esc(onMode(p.mode))}</span></div><div class="on-meta">${esc([p.race && RACES.includes(p.race) ? t('race_' + p.race) : '',
-        p.maps ? t('onMaps', { n: p.maps }) : t('onAnyMap'), p.max_diff ? t('onDiff', { n: p.max_diff }) : '', t('onWaits', { t: mmss(p.waiting) })].filter(Boolean).join(' · '))}</div></div>`
-      + onRating(p) + '</div>').join('')
-    : `<div class="on-empty">${esc(d ? t('onNobody') : ON.err ? t('onOffline') : t('connecting'))}</div>`;
-
-  // matches being set up or played: the teams, the map, how long
+  const d = ON.d, look = (d?.searching || []).filter(p => p.mode !== 'watch'), matches = d?.matches || [];   // spectators wait to watch, not to play
+  $('onSteam').textContent = d?.in_game != null ? t('onInDow2', { n: d.in_game }) : '';
+  // in the launcher: the names the server lists (once it does), minus those already looking or playing
+  const busy = new Set(look.map(p => p.steam).concat(matches.flatMap(m => (m.team1 || []).concat(m.team2 || []).map(p => p.steam))));
+  const idle = Array.isArray(d?.in_launcher) ? d.in_launcher.filter(p => !busy.has(p.steam) && !p.status) : null;
+  const group = (cls, title, n, body) => `<div class="on-g ${cls}"><div class="on-gh"><i></i>${esc(title)}<span>${n}</span></div>${body}</div>`;
   const st = { creating: 'onStateCreating', lobby: 'onStateLobby', playing: 'onStatePlaying' };
-  const team = (ps, cls) => `<div class="team ${cls}">${ps.map(p => `<div class="p">${raceImg(p.race)}${onWho(p)}${onRating(p)}</div>`).join('')}</div>`;
-  $('onMatchList').innerHTML = matches.length ? matches.map(m => `<div class="on-match"><div class="top"><span class="tag ${esc(m.state)}">${esc(t(st[m.state] || 'onStateCreating'))}</span>`
-      + `<span class="tag">${esc(m.mode)}</span><span class="map">${esc(mapName(m.map))}</span><span>${esc(m.state === 'playing' ? t('onMin', { n: Math.max(1, Math.round(m.since / 60)) }) : mmss(m.since))}</span></div>`
-      + `<div class="teams">${team(m.team1 || [], 'l')}<span class="vs">vs</span>${team(m.team2 || [], 'r')}</div>`
-      + ((m.watchers || []).length ? `<div class="on-watch">${esc(t('onWatchers', { list: m.watchers.map(w => w.name || 'Player').join(', ') }))}</div>` : '') + '</div>').join('')
-    : `<div class="on-empty">${esc(d ? t('onNoMatches') : '')}</div>`;
-
-  // in the launcher: names once the server lists them, the count until then
-  const people = d?.in_launcher;
-  $('onPeople').innerHTML = Array.isArray(people) && people.length ? people.map(p => `<div class="on-person">${onWho(p)}`
-      + (p.status === 'searching' ? `<span class="st">${esc(t('onLooking', { m: onMode(p.mode) }))}</span>` : p.status === 'playing' ? `<span class="st in-match">${esc(t('onInMatch'))}</span>` : '') + '</div>').join('')
-    : `<div class="on-empty">${esc(d ? t('onPeopleCount', { n: d.online ?? 0 }) : '')}</div>`;
-
-  onFoot();
-  $('onModes').querySelectorAll('[data-m]').forEach(b => b.onclick = () => { ON.mode = b.dataset.m; onRender(); });
-  $('online').querySelectorAll('.nm[data-steam]').forEach(b => b.onclick = () => b.dataset.steam && open('https://steamcommunity.com/profiles/' + b.dataset.steam));
+  let html = '';
+  if (!d) html = `<div class="on-empty">${esc(ON.err ? t('onOffline') : t('connecting'))}</div>`;
+  else {
+    if (look.length) html += group('look', t('onSearching'), look.length,
+      look.map(p => `<div class="on-p">${raceImg(p.race)}${onWho(p)}<span class="tag">${esc(p.mode)}</span></div>`).join(''));
+    if (matches.length) html += group('match', t('onInMatchH'), matches.reduce((n, m) => n + (m.team1 || []).length + (m.team2 || []).length, 0),
+      matches.map(m => `<div class="on-m"><span class="tm">${(m.team1 || []).map(onWho).join(', ')}</span><span class="vs">vs</span>`
+        + `<span class="tm r">${(m.team2 || []).map(onWho).join(', ')}</span><span class="tag ${esc(m.state)}" title="${esc(t(st[m.state] || 'onStateCreating'))}">${esc(m.mode)}</span></div>`).join(''));
+    if (!look.length && !matches.length) html += `<div class="on-empty">${esc(t('onNobody'))}</div>`;
+    html += group('idle', t('onLauncher'), idle ? idle.length : d.online ?? 0, idle && idle.length ? `<div class="on-names">${idle.map(onWho).join('')}</div>` : '');
+  }
+  $('onGroups').innerHTML = html;
+  $('onGroups').querySelectorAll('.nm[data-steam]').forEach(b => b.onclick = () => b.dataset.steam && open('https://steamcommunity.com/profiles/' + b.dataset.steam));
+  $('onLadder').classList.toggle('hidden', !d?.host);
   $('onLadder').onclick = () => open((ON.d?.host || '') + '/ladder/');
-  $('onLadder').classList.toggle('hidden', !ON.d?.host);
-}
-function onFoot() {
-  const ago = ON.at ? Math.round((Date.now() - ON.at) / 1000) : 0;
-  $('onUpdated').textContent = ON.err ? t('onOffline') : ON.at ? t('onUpdated', { n: ago }) : '';
-  $('onFoot').classList.toggle('err', ON.err);
 }
 async function onLoad() {
-  try { ON.d = await invoke('online_live'); ON.err = false; ON.at = Date.now(); }
+  try { ON.d = await invoke('online_live'); ON.err = false; }
   catch (e) { ON.err = true; }
   onRender();
 }
 function onPoll() {
   clearTimeout(ON.timer);
-  onLoad().finally(() => { ON.timer = setTimeout(onPoll, onShown() ? 10000 : 60000); });
+  onLoad().finally(() => { ON.timer = setTimeout(onPoll, document.hidden ? 60000 : 15000); });
 }
-$('onHint').onclick = () => document.querySelector('.tab[data-view="online"]').click();
-setInterval(() => { if (onShown()) onFoot(); }, 1000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) onPoll(); });
 onPoll();
 
 
