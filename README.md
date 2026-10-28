@@ -80,7 +80,6 @@ fields are ignored, so old launchers keep working with newer configs. Texts are 
 ```jsonc
 {
   "schema": 1,
-  "title": "Elite Mod",
   "subtitle": "Dawn of War II · Retribution",
   "channels": [
     {"id": "stable", "name": "Elite 3.1", "version": "3.1", "default": true,
@@ -106,6 +105,8 @@ fields are ignored, so old launchers keep working with newer configs. Texts are 
 }
 ```
 
+- `subtitle` — the line next to "ELITE Launcher" in the header. `title` is not shown since 1.3.0 (launchers up to
+  1.2.x still put it in the header).
 - `update_text` — banner when the player's channel points to a newer version. `{name}`/`{version}` are replaced.
 - `announcements` — dismissable bars on top; `until` hides them after a date.
 - `launcher_update` — offers (never forces) a newer launcher as a link to its download page. Installed launchers
