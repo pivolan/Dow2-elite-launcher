@@ -4,3 +4,10 @@
 - The launcher updates itself: "Update the launcher" downloads the new version, checks its signature, installs it and restarts (not for the portable zip).
 - Tray icon: minimising the launcher hides it to the tray, and so does starting the game (that one can be turned off in the settings); the icon opens it again, its menu also quits.
 - Game paths are shown without the `\\?\` prefix.
+- The launcher self-update never starts on its own: only on the player click, and not while the game is running.
+- Hotkeys tab: Grid Hotkeys on/off, the ability and building grid, the main commands and every other key with search. Your changes survive game and Elite patches.
+- Settings: remove Elite completely, so Steam can restore a clean game.
+- Add-ons that replace game files (translations) keep the originals and put them back when turned off or when Elite is removed.
+- Russian is the default language.
+- The installer refuses the game folder; a launcher started from the game folder shows a warning.
+- "Send logs" sends less (no old dumps and huge logs), cleans the sent files up and tells the developers who sent them, so they can answer in the chat.
