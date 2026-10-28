@@ -183,7 +183,6 @@ input[type=checkbox]{flex:none;width:16px;height:16px;padding:0;accent-color:var
 /* home, right column: online on top (who is looking for a game, who is in a match; the details are on the ladder page), the pinned add-ons below */
 .on-box{flex:1 1 0;min-height:90px;display:flex;flex-direction:column;padding-bottom:0}
 .on-box .h{margin-bottom:6px}
-.h-note{order:2;margin-left:auto;font:700 14px Cinzel,serif;letter-spacing:0;color:var(--gold2);cursor:default}
 .h-link{padding:0;border:0;background:none;color:#e2c06a;font:600 12px Spectral,serif;letter-spacing:0;text-transform:none}
 .h-link:hover{color:var(--gold2)}
 .on-groups{flex:1;min-height:0;overflow:auto;margin:0 -14px;padding:0 14px 8px}
@@ -197,6 +196,7 @@ input[type=checkbox]{flex:none;width:16px;height:16px;padding:0;accent-color:var
 .on-gh span{margin-left:auto;font:600 12px Spectral,serif;letter-spacing:0;color:var(--soft)}
 .on-g.look .on-gh i{background:var(--green);animation:onpulse 1.6s infinite}
 .on-g.match .on-gh i{background:var(--amber)}
+.on-g.idle .on-gh i{background:var(--gold)}
 @keyframes onpulse{0%{box-shadow:0 0 0 0 rgba(143,191,104,.6)}70%{box-shadow:0 0 0 6px rgba(143,191,104,0)}100%{box-shadow:0 0 0 0 rgba(143,191,104,0)}}
 @media (prefers-reduced-motion:reduce){.on-g.look .on-gh i{animation:none}}
 .race{flex:none;display:inline-block;width:18px;height:18px}
@@ -214,6 +214,8 @@ input[type=checkbox]{flex:none;width:16px;height:16px;padding:0;accent-color:var
 .tag.lobby{border-color:#8a5d22;color:var(--amber)}
 .on-empty{padding:2px 0 6px;font-size:13px;line-height:1.4;color:var(--muted)}
 .on-box .more{flex:none}
+#onIdle{flex:none;padding:3px 0 6px;border-top:1px solid var(--sep)}
+#onIdle .on-gh{margin:0;cursor:default}
 /* loading: grey rows where the names will be */
 .on-skel{display:flex;flex-direction:column;gap:10px;padding:4px 0}
 .on-skel div{display:flex;align-items:center;gap:8px}

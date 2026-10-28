@@ -121,7 +121,7 @@ const T = {
     "onStatePlaying": "Playing",
     "onNobody": "Nobody is looking for a game. Start the game and press “Find a Game”.",
     "onOffline": "No connection to the ladder server, trying again…",
-    "onCountT": "Players connected to the ladder server right now: the same number as on the ladder page",
+    "onIdle": "In the lobby",
     "onLoading": "Loading who is online…",
     "onLadder": "Ladder and match history ›",
     "race_space_marines": "Space Marines",
@@ -251,7 +251,7 @@ const T = {
     "onStatePlaying": "Идёт",
     "onNobody": "Никто не ищет игру. Запусти игру и нажми «Find a Game».",
     "onOffline": "Нет связи с сервером ладдера, пробую снова…",
-    "onCountT": "Сколько игроков сейчас на связи с сервером ладдера — то же число, что на сайте",
+    "onIdle": "В лобби",
     "onLoading": "Загружаю, кто онлайн…",
     "onLadder": "Ладдер и история матчей ›",
     "race_space_marines": "Космодесант",
@@ -376,7 +376,7 @@ const T = {
     "onStatePlaying": "En curso",
     "onNobody": "Nadie busca partida. Inicia el juego y pulsa «Find a Game».",
     "onOffline": "Sin conexión con el servidor de la ladder, reintentando…",
-    "onCountT": "Jugadores conectados ahora al servidor de la ladder: el mismo número que en la web",
+    "onIdle": "En el lobby",
     "onLoading": "Cargando quién está en línea…",
     "onLadder": "Ladder e historial de partidas ›",
     "race_space_marines": "Marines Espaciales",
@@ -501,7 +501,7 @@ const T = {
     "onStatePlaying": "En cours",
     "onNobody": "Personne ne cherche de partie. Lancez le jeu et appuyez sur « Find a Game ».",
     "onOffline": "Pas de connexion au serveur du ladder, nouvel essai…",
-    "onCountT": "Joueurs connectés au serveur du ladder en ce moment : le même nombre que sur le site",
+    "onIdle": "Dans le salon",
     "onLoading": "Chargement des joueurs en ligne…",
     "onLadder": "Ladder et historique des parties ›",
     "race_space_marines": "Space Marines",
@@ -626,7 +626,7 @@ const T = {
     "onStatePlaying": "Läuft",
     "onNobody": "Niemand sucht ein Spiel. Starte das Spiel und drücke „Find a Game“.",
     "onOffline": "Keine Verbindung zum Ladder-Server, neuer Versuch…",
-    "onCountT": "Spieler, die gerade mit dem Ladder-Server verbunden sind: dieselbe Zahl wie auf der Website",
+    "onIdle": "In der Lobby",
     "onLoading": "Lade, wer online ist…",
     "onLadder": "Ladder und Spielverlauf ›",
     "race_space_marines": "Space Marines",
@@ -1062,9 +1062,6 @@ const onWho = p => `<button class="nm" data-steam="${esc(p.steam || '')}" title=
 function onRender() {
   if (!S) return;
   const d = ON.d, look = (d?.searching || []).filter(p => p.mode !== 'watch'), matches = d?.matches || [];   // spectators wait to watch, not to play
-  // how many players are online, the same number as on the ladder page: whoever talked to the ladder server in the last minute
-  $('onCount').textContent = d ? String(Number(d.online) || 0) : '';
-  $('onCount').title = t('onCountT');
   // a group folds on a click on its heading
   const group = (key, title, n, body) => {
     const open = !ON.shut.has(key);
@@ -1087,6 +1084,11 @@ function onRender() {
     if (!look.length && !matches.length) html += `<div class="on-empty">${esc(t('onNobody'))}</div>`;
   }
   $('onGroups').innerHTML = html;
+  // in the lobby, always in sight under the lists: online (whoever talked to the ladder server in the last minute, the
+  // number on the ladder page) minus those looking for a game or watching and those in a match; the server sends no names
+  const inMatches = matches.reduce((n, m) => n + (m.team1 || []).length + (m.team2 || []).length + (m.watchers || []).length, 0);
+  $('onIdle').classList.toggle('hidden', !d);
+  if (d) $('onIdle').innerHTML = `<div class="on-gh"><i></i>${esc(t('onIdle'))}<span>${esc(String(Math.max(0, (Number(d.online) || 0) - (d.searching || []).length - inMatches)))}</span></div>`;
   $('onGroups').querySelectorAll('.nm[data-steam]').forEach(b => b.onclick = () => b.dataset.steam && open('https://steamcommunity.com/profiles/' + b.dataset.steam));
   $('onGroups').querySelectorAll('[data-g]').forEach(b => b.onclick = () => {
     ON.shut.has(b.dataset.g) ? ON.shut.delete(b.dataset.g) : ON.shut.add(b.dataset.g);
