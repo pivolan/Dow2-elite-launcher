@@ -122,6 +122,7 @@ const T = {
     "onStatePlaying": "Playing",
     "onNobody": "Nobody is looking for a game. Start the game and press “Find a Game”.",
     "onOffline": "No connection to the ladder server, trying again…",
+    "onLoading": "Loading who is online…",
     "onLadder": "Ladder and match history ›",
     "showOnline": "Show me in the “In the launcher” list",
     "showOnlineNote": "While the launcher is open, it tells the ladder server once a minute your Steam ID and Steam name. Off: you are in neither the list nor the count.",
@@ -253,6 +254,7 @@ const T = {
     "onStatePlaying": "Идёт",
     "onNobody": "Никто не ищет игру. Запусти игру и нажми «Find a Game».",
     "onOffline": "Нет связи с сервером ладдера, пробую снова…",
+    "onLoading": "Загружаю, кто онлайн…",
     "onLadder": "Ладдер и история матчей ›",
     "showOnline": "Показывать меня в списке «В лаунчере»",
     "showOnlineNote": "Пока лаунчер открыт, он раз в минуту сообщает серверу ладдера ваш SteamID и ник в Steam. Выключено — вас нет ни в списке, ни в счётчике.",
@@ -379,6 +381,7 @@ const T = {
     "onStatePlaying": "En curso",
     "onNobody": "Nadie busca partida. Inicia el juego y pulsa «Find a Game».",
     "onOffline": "Sin conexión con el servidor de la ladder, reintentando…",
+    "onLoading": "Cargando quién está en línea…",
     "onLadder": "Ladder e historial de partidas ›",
     "showOnline": "Mostrarme en la lista «En el launcher»",
     "showOnlineNote": "Mientras el launcher está abierto, comunica al servidor de la ladder una vez por minuto tu Steam ID y tu nombre de Steam. Desactivado: no apareces ni en la lista ni en el contador.",
@@ -505,6 +508,7 @@ const T = {
     "onStatePlaying": "En cours",
     "onNobody": "Personne ne cherche de partie. Lancez le jeu et appuyez sur « Find a Game ».",
     "onOffline": "Pas de connexion au serveur du ladder, nouvel essai…",
+    "onLoading": "Chargement des joueurs en ligne…",
     "onLadder": "Ladder et historique des parties ›",
     "showOnline": "M’afficher dans la liste « Dans le launcher »",
     "showOnlineNote": "Tant que le launcher est ouvert, il envoie une fois par minute au serveur du ladder votre Steam ID et votre nom Steam. Désactivé : vous n’apparaissez ni dans la liste ni dans le compteur.",
@@ -631,6 +635,7 @@ const T = {
     "onStatePlaying": "Läuft",
     "onNobody": "Niemand sucht ein Spiel. Starte das Spiel und drücke „Find a Game“.",
     "onOffline": "Keine Verbindung zum Ladder-Server, neuer Versuch…",
+    "onLoading": "Lade, wer online ist…",
     "onLadder": "Ladder und Spielverlauf ›",
     "showOnline": "Mich in der Liste „Im Launcher“ zeigen",
     "showOnlineNote": "Solange der Launcher offen ist, meldet er dem Ladder-Server einmal pro Minute deine Steam-ID und deinen Steam-Namen. Aus: Du erscheinst weder in der Liste noch in der Zählung.",
@@ -1080,8 +1085,11 @@ function onRender() {
   };
   const st = { creating: 'onStateCreating', lobby: 'onStateLobby', playing: 'onStatePlaying' };
   let html = '';
-  if (!d) html = `<div class="on-empty">${esc(ON.err ? t('onOffline') : t('connecting'))}</div>`;
+  // first load: grey rows in place of the names; no answer: say so
+  if (!d) html = ON.err ? `<div class="on-empty">${esc(t('onOffline'))}</div>`
+    : `<div class="on-skel" role="status" aria-label="${esc(t('onLoading'))}">${'<div><i></i><b></b></div>'.repeat(5)}</div>`;
   else {
+    if (ON.err) html += `<div class="on-stale">${esc(t('onOffline'))}</div>`;   // the last list stays, marked as old
     if (look.length) html += group('look', t('onSearching'), look.length,
       look.map(p => `<div class="on-p">${raceImg(p.race)}${onWho(p)}<span class="tag">${esc(p.mode)}</span></div>`).join(''));
     if (matches.length) html += group('match', t('onInMatchH'), matches.reduce((n, m) => n + (m.team1 || []).length + (m.team2 || []).length, 0),

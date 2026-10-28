@@ -216,6 +216,16 @@ input[type=checkbox]{flex:none;width:16px;height:16px;padding:0;accent-color:var
 .on-names .nm{font-weight:400;color:var(--soft)}
 .on-empty{padding:2px 0 6px;font-size:13px;line-height:1.4;color:var(--muted)}
 .on-box .more{flex:none}
+/* loading: grey rows where the names will be */
+.on-skel{display:flex;flex-direction:column;gap:10px;padding:4px 0}
+.on-skel div{display:flex;align-items:center;gap:8px}
+.on-skel i{flex:none;width:18px;height:18px;border-radius:50%;background:var(--sep)}
+.on-skel b{height:10px;width:62%;background:linear-gradient(90deg,var(--sep) 0%,var(--line) 50%,var(--sep) 100%);background-size:200% 100%;animation:onshine 1.4s linear infinite}
+.on-skel div:nth-child(2n) b{width:46%}
+.on-skel div:nth-child(3n) b{width:74%}
+@keyframes onshine{from{background-position:100% 0}to{background-position:-100% 0}}
+@media (prefers-reduced-motion:reduce){.on-skel b{animation:none}}
+.on-stale{margin-bottom:6px;font-size:12px;color:var(--amber)}
 
 /* the Add-ons tab: every add-on, written out */
 #addons{display:flex;justify-content:center}
