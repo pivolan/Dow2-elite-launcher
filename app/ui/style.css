@@ -138,16 +138,17 @@ nav{margin-left:auto;display:flex;gap:4px}
 .link-btn:hover{border-color:var(--gold)}
 .btn-gold{background:linear-gradient(#3a2a12,#22190c);border:1px solid var(--line2);color:var(--gold2);padding:7px 14px;font:700 12px Cinzel,serif;letter-spacing:1px}
 
-/* banners */
-.banner{display:flex;align-items:center;gap:14px;padding:8px 18px;font-size:14px;flex:none}
-.launcher-banner{background:#13202a;border-bottom:1px solid #2c4a5c}
-.launcher-banner.link{cursor:pointer}
-.launcher-banner span{flex:1}
+/* a newer launcher: inside the header, so nothing below moves when it shows up */
+.launcher-banner{margin-left:auto;display:flex;align-items:center;gap:10px;min-width:0;height:34px;padding:0 4px 0 12px;border:1px solid #2c4a5c;background:#13202a;font-size:13px}
+.launcher-banner span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.launcher-banner.link{cursor:pointer;padding-right:12px}
+.launcher-banner:not(.hidden)+nav{margin-left:0}
 
-/* status line at the bottom */
-footer{display:flex;gap:12px;align-items:center;min-height:46px;flex:none;padding:6px 18px;border-top:1px solid var(--line);background:#0d0b09}
+/* status line at the bottom: one fixed height for every state (idle, error, update offer, download bar),
+   so the panels above never move when it changes */
+footer{display:flex;gap:12px;align-items:center;height:68px;flex:none;padding:0 18px;border-top:1px solid var(--line);background:#0d0b09;overflow:hidden}
 .status{flex:1;min-width:0}
-.status-line{display:flex;align-items:center;gap:12px;min-width:0}
+.status-line{display:flex;align-items:center;gap:12px;min-width:0;min-height:28px}
 #statusText{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 #statusText b{color:var(--gold2);font-weight:600}
 #statusText.err{color:#f0c8bf}
@@ -206,4 +207,5 @@ input[type=checkbox]{flex:none;width:16px;height:16px;padding:0;accent-color:var
 @media (max-width:1040px){
   .home{grid-template-columns:210px minmax(0,1fr) 270px;gap:10px}
   .sub{display:none}
+  header:has(.launcher-banner:not(.hidden)) .hdr-ver{display:none}
 }
