@@ -151,7 +151,12 @@ jobs:
           # of the repository that builds it, so a fork can test the whole cycle
           printf '{"bundle":{"createUpdaterArtifacts":true},"plugins":{"updater":{"pubkey":"%s","endpoints":["https://github.com/%s/releases/latest/download/updater.json"]}}}' \
             "$(tr -d '[:space:]' < keys/updater.pub)" "$GITHUB_REPOSITORY" > "$RUNNER_TEMP/updater.conf.json"
-          cargo tauri build ${{ matrix.args }} --config "$RUNNER_TEMP/updater.conf.json"
+          # on failure the last lines go into the run's annotations: readable without access to the logs
+          set -o pipefail
+          cargo tauri build ${{ matrix.args }} --config "$RUNNER_TEMP/updater.conf.json" 2>&1 | tee "$RUNNER_TEMP/build.log" || {
+            grep -E -i 'error|panicked|failed|incorrect|invalid' "$RUNNER_TEMP/build.log" | grep -v '^warning' | tail -n 8 | while IFS= read -r l; do echo "::error::${l:0:400}"; done
+            exit 1
+          }
       - uses: actions/upload-artifact@v4
         with:
           name: elite-launcher-${{ matrix.os }}
