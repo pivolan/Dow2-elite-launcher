@@ -765,7 +765,7 @@ function render() {
 
   // status line; a newer version of the installed one is offered here (never forced)
   const target = channelOf(S.installed_channel) || channelOf(S.channel);
-  const showUpd = !!(target && S.installed_version && target.version !== S.installed_version && !S.busy && !S.game_running && !S.last_error);
+  const showUpd = !!(S.game_found && target && S.installed_version && target.version !== S.installed_version && !S.busy && !S.game_running && !S.last_error);
   $('updateBtn').classList.toggle('hidden', !showUpd);
   if (showUpd) { $('updateBtn').textContent = t('updateNow'); $('updateBtn').onclick = () => switchTo(target.id); }
   if (!S.busy && !LU?.installing) {
