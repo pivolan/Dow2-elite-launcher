@@ -23,8 +23,9 @@ always be started, update or not.
 - **News, announcements, links** shown on the home screen, all coming from the server. The news also carry the
   release notes of the launcher and of Dow2-patches, read from their GitHub Releases (made by CI from `changelog/`),
   so nobody has to write those by hand; the last copy is kept for offline starts.
-- **Updates itself.** A newer launcher on the latest GitHub Release (`updater.json`) is offered with a banner;
-  "Update the launcher" downloads it, checks its signature, installs it and restarts. The portable zip and builds
+- **Updates itself.** At start and every 15 minutes the launcher looks for a newer one on the latest GitHub Release
+  of the repository that built it (`updater.json`) and offers it with a banner; "Update the launcher" downloads it,
+  checks its signature, installs it and restarts. The portable zip and builds
   without the updater key only get a link to the download page (`launcher_update` in launcher.json).
 - **Add-ons** (`components` in launcher.json) the player ticks on/off, e.g. *LobbyStats* (Relic rating
   in the lobby + host auto-kick filter). An add-on is published like any version; the launcher installs
@@ -80,7 +81,6 @@ fields are ignored, so old launchers keep working with newer configs. Texts are 
 ```jsonc
 {
   "schema": 1,
-  "title": "Elite Mod",
   "subtitle": "Dawn of War II · Retribution",
   "channels": [
     {"id": "stable", "name": "Elite 3.1", "version": "3.1", "default": true,
@@ -106,6 +106,8 @@ fields are ignored, so old launchers keep working with newer configs. Texts are 
 }
 ```
 
+- `subtitle` — the line next to "ELITE Launcher" in the header. `title` is not shown since 1.3.0 (launchers up to
+  1.2.x still put it in the header).
 - `update_text` — banner when the player's channel points to a newer version. `{name}`/`{version}` are replaced.
 - `announcements` — dismissable bars on top; `until` hides them after a date.
 - `launcher_update` — offers (never forces) a newer launcher as a link to its download page. Installed launchers
@@ -140,10 +142,28 @@ Other languages can sit next to `en.md` later (`ru.md`, …); only `en.md` is re
 | `ELITE_MIRRORS` | built-in mirrors, `https://a/;https://b/` |
 | `ELITE_LOG_HOSTS` | where "Send logs", the usage count and the chat go, `https://a;https://b` |
 | `TAURI_SIGNING_PRIVATE_KEY` | self-update key made with `cargo tauri signer generate -w elite-updater.key`: the content of `elite-updater.key` |
-| `TAURI_SIGNING_PUBLIC_KEY` | its public half: the content of `elite-updater.key.pub` |
 | `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` | the key's password (optional: leave it out for a key without one) |
 
-Keep the self-update key pair safe outside the repository: installed launchers only accept updates signed with it.
+The public half of that key is in the repository, `keys/updater.pub` (the content of `elite-updater.key.pub`), and is
+compiled into the launcher. Keep the private key out of the repository: installed launchers install any update signed
+with it. A new key pair means a new `keys/updater.pub`, and launchers built before it have to be updated by hand once.
+
+### Release builds outside CI (e.g. on the server)
+
+A launcher built anywhere else updates itself the same way, as long as the build is signed and an `updater.json`
+sits next to the installers:
+
+```bash
+export TAURI_SIGNING_PRIVATE_KEY=/path/to/elite-updater.key          # a path or the key itself
+export TAURI_SIGNING_PRIVATE_KEY_PASSWORD="$(cat /path/to/elite-updater.password)"
+DL=https://example.org/elite/dl                                         # public folder the installers go to
+cd app && cargo tauri build --config "{\"bundle\":{\"createUpdaterArtifacts\":true},\"plugins\":{\"updater\":{\"pubkey\":\"$(tr -d '[:space:]' < ../keys/updater.pub)\",\"endpoints\":[\"$DL/updater.json\"]}}}"
+# each installer now has <name>.sig next to it; put the installers and their .sig files into one folder, then
+python3 scripts/updater_manifest.py <version> "$DL" <folder> > <folder>/updater.json
+```
+
+Upload `updater.json` last, after the installers: launchers offer the new version as soon as they see it.
+An update reaches players only when the version in `updater.json` is higher than theirs.
 
 
 | Job | What |

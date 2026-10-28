@@ -756,7 +756,6 @@ function render() {
   document.querySelectorAll('[data-t]').forEach(e => e.textContent = t(e.dataset.t));
   document.querySelectorAll('[data-tp]').forEach(e => e.placeholder = t(e.dataset.tp));
   const cfg = S.config || {};
-  $('title').textContent = L(cfg.title) || 'Elite Mod';
   $('subtitle').textContent = L(cfg.subtitle) || 'Dawn of War II · Retribution';
 
   renderLauncherBanner();
@@ -908,7 +907,7 @@ function render() {
   $('mirrorInfo').textContent = t('mirrors', { n: S.mirror_count });
   $('repair').disabled = S.busy || S.game_running || !S.installed_version;
   $('about').textContent = `Elite Launcher ${S.launcher_version} · ${S.os}`;
-  $('hdrVer').textContent = S.launcher_version ? `Launcher ${S.launcher_version}` : '';
+  $('hdrVer').textContent = S.launcher_version ? 'v' + S.launcher_version : '';
 }
 
 function renderProgress(p) {
@@ -1042,8 +1041,8 @@ window.addEventListener('resize', popClose);
 
 reload().then(refresh);
 launcherCheck();
-setInterval(launcherCheck, 6 * 3600 * 1000);
-setInterval(() => { if (S && !S.busy) refresh(); }, 15 * 60 * 1000);   // pick up new versions and announcements
+// every 15 minutes: new Elite versions, announcements and a newer launcher
+setInterval(() => { if (S && !S.busy) refresh(); launcherCheck(); }, 15 * 60 * 1000);
 
 
 // ---------- feedback chat with the developers ----------

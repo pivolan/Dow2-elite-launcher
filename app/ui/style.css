@@ -10,9 +10,9 @@ button:disabled{cursor:default}
 /* header: title, game, launcher version on one line */
 header{display:flex;align-items:center;gap:16px;height:52px;flex:none;padding:0 18px;border-bottom:1px solid var(--line);background:linear-gradient(#17130e,#0d0b09)}
 .brand{display:flex;align-items:baseline;gap:14px;min-width:0;white-space:nowrap;overflow:hidden}
-.logo{font:900 22px Cinzel,serif;letter-spacing:3px;background:linear-gradient(#f0d68a,#d4af55 50%,#8a6d2b);-webkit-background-clip:text;background-clip:text;color:transparent;text-transform:uppercase}
+.logo{font:900 22px Cinzel,serif;letter-spacing:3px;background:linear-gradient(#f0d68a,#d4af55 50%,#8a6d2b);-webkit-background-clip:text;background-clip:text;color:transparent}
 .sub{font:700 10px Cinzel,serif;letter-spacing:3px;color:var(--red);text-transform:uppercase}
-.hdr-ver{font:700 10px Cinzel,serif;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.hdr-ver{margin-left:-6px;font:600 13px Spectral,serif;color:var(--muted)}
 nav{margin-left:auto;display:flex;gap:4px}
 .tab{background:none;border:1px solid transparent;color:var(--muted);font:700 12px Cinzel,serif;letter-spacing:2px;height:34px;padding:0 14px;text-transform:uppercase}
 .tab:hover{color:var(--bone)}
@@ -215,7 +215,6 @@ input[type=checkbox]{flex:none;width:16px;height:16px;padding:0;accent-color:var
 @media (max-width:1040px){
   .home{grid-template-columns:210px minmax(0,1fr) 270px;gap:10px}
   .sub{display:none}
-  header:has(.launcher-banner:not(.hidden)) .hdr-ver{display:none}
 }
 
 /* hotkeys */
