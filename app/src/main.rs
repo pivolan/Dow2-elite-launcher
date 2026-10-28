@@ -62,6 +62,8 @@ struct Settings {
     fb_name: String,
     /// Hide the window to the tray once the game starts. None = on.
     tray_on_play: Option<bool>,
+    /// Hotkeys the player changed: "scope:name" -> "Control+A" ("grid:AB_key_1" for Grid Hotkeys); see elite_core::hotkeys.
+    hotkeys: BTreeMap<String, String>,
 }
 
 struct App {
@@ -212,6 +214,76 @@ fn current_channel(app: &App, cfg: &LauncherConfig, installed: &update::State) -
         .or_else(|| cfg.channels.iter().find(|c| c.default).map(|c| c.id.clone()))
         .or_else(|| cfg.channels.first().map(|c| c.id.clone()))
         .unwrap_or_default()
+}
+
+/// Hotkeys: every binding of the game (defaults + the player's changes) and the Grid Hotkeys setting.
+#[tauri::command]
+fn hotkeys_get(app: State<'_, App>) -> Result<Value, String> {
+    let o = app.settings.lock().unwrap().hotkeys.clone();
+    elite_core::hotkeys::load(&o)
+}
+
+/// Save the player's hotkeys: only the bindings that differ from the game's defaults are kept.
+#[tauri::command]
+fn hotkeys_save(app: State<'_, App>, changes: BTreeMap<String, String>, grid: bool) -> Result<Value, String> {
+    ensure_game_closed(&app)?;     // the game rewrites configuration.lua when it closes
+    let mut s = app.settings.lock().unwrap();
+    let defaults: BTreeMap<String, String> = elite_core::hotkeys::load(&BTreeMap::new())?["bindings"].as_array().cloned().unwrap_or_default()
+        .iter().map(|b| (format!("{}:{}", b["scope"].as_str().unwrap_or(""), b["name"].as_str().unwrap_or("")), b["default"].as_str().unwrap_or("").to_string())).collect();
+    for (k, v) in changes {
+        if defaults.get(&k) == Some(&v) { s.hotkeys.remove(&k); } else if defaults.contains_key(&k) { s.hotkeys.insert(k, v); }
+    }
+    elite_core::hotkeys::apply(&s.hotkeys, Some(grid))?;
+    save_settings(&s);
+    let o = s.hotkeys.clone(); drop(s);
+    elite_core::hotkeys::load(&o)
+}
+
+/// Back to the game's own hotkeys: no keydefaults.lua, no changes kept (Grid Hotkeys stays as it is).
+#[tauri::command]
+fn hotkeys_reset(app: State<'_, App>) -> Result<Value, String> {
+    ensure_game_closed(&app)?;
+    let mut s = app.settings.lock().unwrap();
+    s.hotkeys.clear();
+    elite_core::hotkeys::apply(&s.hotkeys, None)?;
+    save_settings(&s); drop(s);
+    elite_core::hotkeys::load(&BTreeMap::new())
+}
+
+/// Remove Elite completely: the mod, every add-on, the launcher's files in the game folder, then Steam checks the game
+/// files and restores what Elite replaced - a clean vanilla game to start over from.
+#[tauri::command]
+fn uninstall_elite(app: State<'_, App>, handle: AppHandle) -> Result<Value, String> {
+    ensure_game_closed(&app)?;
+    if app.busy.load(Ordering::Relaxed) { return Err("files are being updated, wait a few seconds".into()); }
+    let dir = game_dir(&app).ok_or("game folder not found")?;
+    if !dir.join("DOW2.exe").is_file() { return Err("this is not the game folder".into()); }
+    let cfg = app.config.lock().unwrap().clone().unwrap_or_default();
+    let mut files = 0usize;
+    for c in &cfg.components { files += update::Game::component(&dir, &c.id).uninstall().unwrap_or(0); }
+    files += update::Game::new(&dir).uninstall().map_err(|e| e.to_string())?;
+    // what Elite and the add-ons leave next to the game: their folders, launch configs, the stand-alone patch loader
+    let mut gone = Vec::new();
+    for d in ["Elite", "Elite_bin", "Elite_bin_Test", "Elite_Test", "Elite_DLLs", "dow2-patches", ".elite_launcher"] {
+        let p = dir.join(d);
+        if p.is_dir() && std::fs::remove_dir_all(&p).is_ok() { gone.push(d.to_string()); }
+    }
+    if let Ok(rd) = std::fs::read_dir(&dir) {
+        for e in rd.flatten() {
+            let n = e.file_name().to_string_lossy().to_string(); let l = n.to_ascii_lowercase();
+            let elite_file = l.starts_with("elite") && (l.ends_with(".exe") || l.ends_with(".module") || l.contains(".launchconfig") || l.ends_with(".config")
+                || l.ends_with(".lua") || l.ends_with(".shells") || l.ends_with(".cullsphere") || l.ends_with(".bmp") || l.ends_with(".ico"));
+            let loader = l == "winmm.dll" && std::fs::read(e.path()).map(|b| b.windows(12).any(|w| w == b"dow2-patches")).unwrap_or(false);
+            if (elite_file || loader) && e.path().is_file() && std::fs::remove_file(e.path()).is_ok() { gone.push(n); }
+        }
+    }
+    {
+        let mut s = app.settings.lock().unwrap();
+        s.channel = None; s.prev_channel = None; save_settings(&s);
+    }
+    // Steam puts back the original files Elite had replaced (and the ones we just removed if they were the game's)
+    let _ = handle.opener().open_url("steam://validate/56400", None::<&str>);
+    Ok(json!({"files": files, "removed": gone}))
 }
 
 /// Is the game (DOW2.exe) running? Its DLLs are locked then: add-ons can not be switched or updated under it.
@@ -867,6 +939,7 @@ fn start_game(app: &App) -> Result<(), String> {
     let cfg = app.config.lock().unwrap().clone().unwrap_or_default();
     drop_conflicting(&dir, &cfg);
     sync_injected(&dir, &cfg, &app.settings.lock().unwrap().clone());
+    elite_core::hotkeys::refresh_if_stale(&app.settings.lock().unwrap().hotkeys);     // a patch brought new defaults
     let mut cmd = match os_name() {
         "windows" => cfg.launch.windows.clone(),
         "macos" => cfg.launch.macos.clone(),
@@ -1179,7 +1252,8 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             get_status, refresh, set_channel, switch_to, send_logs, set_comp_option, set_setting, set_component, remove_conflicts, pick_game_dir, open_url, open_game_dir, start_update, cancel_update, play,
-            fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels, launcher_check, launcher_install
+            fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels, launcher_check, launcher_install,
+            hotkeys_get, hotkeys_save, hotkeys_reset, uninstall_elite
         ])
         .run(tauri::generate_context!())
         .expect("error while running Elite Launcher");
