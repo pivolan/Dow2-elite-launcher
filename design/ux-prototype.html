@@ -1,0 +1,457 @@
+<!doctype html>
+<!-- Clickable UX prototype of the launcher with demo data. Not part of the app build: open this file in a browser. -->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elite Launcher — UX prototype</title>
+<link rel="stylesheet" href="../app/ui/fonts.css">
+<style>
+:root{--ink:#0b0a09;--panel:#15120e;--panel2:#1c1813;--line:#3a2f1d;--line2:#5c4a28;--sep:#2a2216;--gold:#d4af55;--gold2:#f0d68a;--brass:#8a6d2b;--bone:#e9dfc8;--soft:#c9bd9f;--muted:#a39577;--blood2:#c8382f;--green:#7fa65a;--well:#0e0c0a;--deep:#120f0b}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--ink)}
+body{color:var(--bone);font:14px/1.4 Spectral,Georgia,serif}
+button,input,textarea,select{font-family:inherit}
+a{color:var(--gold)}a:hover{color:var(--gold2)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.app{height:100vh;min-height:600px;display:flex;flex-direction:column;overflow:hidden;background:radial-gradient(ellipse at 20% -10%,rgba(158,36,33,.2),transparent 55%),var(--ink)}
+header{flex:none;display:flex;align-items:center;gap:12px;padding:8px 14px;border-bottom:1px solid var(--line);background:linear-gradient(#17130e,#0d0b09)}
+.brand{flex-grow:1;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;min-width:0}
+.logo{font:900 18px Cinzel,serif;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+.sub{font:700 9px Cinzel,serif;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
+.demo{display:flex;align-items:center;gap:4px;white-space:nowrap;padding:2px 6px;border:1px dashed var(--line2);font-size:11px;color:var(--muted)}
+.tab{height:30px;padding:0 12px;cursor:pointer;font:700 11px Cinzel,serif;letter-spacing:2px;text-transform:uppercase;border:1px solid transparent;background:none;color:var(--muted)}
+.tab.on{border-color:var(--line2);background:var(--panel2);color:var(--gold2)}
+.chip{height:24px;padding:0 8px;white-space:nowrap;cursor:pointer;font:700 10px Cinzel,serif;letter-spacing:1px;border:1px solid var(--line);background:none;color:var(--muted)}
+.chip.on{border-color:var(--gold);background:#2a2111;color:var(--gold2)}
+main{flex:1 1 0;min-height:0;display:flex;flex-wrap:wrap;gap:10px;padding:10px 14px;overflow-y:auto}
+.panel{border:1px solid var(--line2);background:linear-gradient(var(--panel2),var(--panel))}
+.col{min-height:0;max-height:100%;display:flex;flex-direction:column}
+.h{margin:0;font:700 11px Cinzel,serif;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+.phead{flex:none;display:flex;align-items:center;gap:8px;padding:8px 12px 6px;border-bottom:1px solid var(--sep)}
+.scroll{flex:1 1 0;min-height:0;overflow-y:auto}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.linkbtn{background:none;border:none;padding:0;color:var(--gold);cursor:pointer;font-size:12px;text-decoration:underline}
+.btn{height:32px;background:var(--panel2);border:1px solid var(--line2);color:var(--bone);padding:0 12px;cursor:pointer}
+.btn.gold{background:#2a2111;border-color:var(--brass);color:var(--gold2)}
+.field{background:var(--well);border:1px solid var(--line2);color:var(--bone);padding:0 10px}
+.toggle{position:relative;flex:none;width:40px;height:22px;border-radius:11px;padding:0;cursor:pointer;border:1px solid var(--line2);background:var(--well)}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:7px;background:var(--muted)}
+.toggle.on{border-color:var(--gold);background:#5a4720}
+.toggle.on::after{left:20px;background:var(--gold2)}
+.toggle:disabled{opacity:.45;cursor:not-allowed}
+/* home */
+.left{flex:999 1 560px;min-width:0;min-height:0;max-height:100%;display:flex;flex-direction:column;gap:6px}
+.left-row{flex:1 1 0;min-height:0;display:flex;gap:10px}
+.newscol{flex:0 1 250px;min-width:210px;min-height:0;display:flex;flex-direction:column;gap:10px}
+.profile{flex:none;padding:10px 12px;display:flex;gap:10px;align-items:center}
+.avatar{flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid var(--brass);background:#2a2111;color:var(--gold2);font:900 18px Cinzel,serif}
+.news article{padding:9px 0;border-bottom:1px solid var(--sep)}
+.news h3{margin:0;font:600 14px Spectral,Georgia,serif;color:var(--gold2)}
+.news ul{margin:4px 0 0;padding-left:16px;color:var(--soft);font-size:13px}
+.chat{flex:1 1 300px}
+.ctabs{flex:none;display:flex;align-items:flex-end;gap:4px;padding:6px 10px 0;border-bottom:1px solid var(--line);overflow-x:auto}
+.ctab{display:flex;align-items:center;height:30px;padding:0 10px;font-size:13px;border:1px solid transparent;border-bottom:none;color:var(--muted);white-space:nowrap}
+.ctab.on{border-color:var(--line2);background:var(--deep);color:var(--gold2)}
+.ctab button{background:none;border:none;padding:0;color:inherit;cursor:pointer;font:inherit}
+.ctab .x{padding-left:5px;color:var(--muted);font-size:12px}
+.msgs{display:flex;flex-direction:column;justify-content:flex-end;gap:4px;padding:8px 12px}
+.msg{display:flex;gap:8px;align-items:baseline}
+.msg .t{flex:none;width:36px;color:var(--muted);font-size:11px}
+.msg .w{flex:none;font-weight:600;color:var(--gold)}
+.msg .w.me{color:var(--gold2)}.msg .w.dev{color:var(--green)}.msg .w.sys{color:var(--muted)}
+.composer{flex:none;display:flex;gap:6px;padding:8px 12px 10px}
+.composer input{flex-grow:1;min-width:0;height:36px;font-size:14px}
+.strip{flex:none;height:38px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.track{height:6px;background:#221c13;border:1px solid var(--line)}
+.track.idle{visibility:hidden}
+.track i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brass),var(--gold2))}
+.status{display:flex;align-items:baseline;gap:12px;font-size:13px;white-space:nowrap;overflow:hidden}
+.status b{flex:none}
+.status span{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis}
+.right{flex:1 1 280px;max-width:320px;min-width:0;min-height:0;max-height:100%;display:flex;flex-direction:column;gap:10px}
+.online{flex:1 1 0;min-height:140px;display:flex;flex-direction:column}
+.online .phead{flex-direction:column;align-items:stretch;gap:4px}
+.online input{height:28px;border-color:var(--line);font-size:13px;padding:0 8px}
+.ghead{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:6px;width:100%;height:26px;padding:0 2px;background:#17130e;border:none;border-bottom:1px solid var(--sep);color:var(--muted);cursor:pointer;font:700 10px Cinzel,serif;letter-spacing:1px;text-transform:uppercase}
+.ghead span:first-child{flex-grow:1;text-align:left}
+.prow{position:relative}
+.person{display:flex;align-items:center;gap:6px;width:100%;padding:3px 2px;font-size:13px;color:var(--bone);cursor:pointer;border:none;background:none}
+.person.open{background:#2a2111}
+.person .n{flex-grow:1;min-width:0;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.person .star{color:var(--gold);font-size:11px}
+.person .where{flex:none;color:var(--muted);font-size:12px}
+.dot{width:7px;height:7px;border-radius:4px;flex:none}
+.menu{position:absolute;right:0;top:100%;z-index:3;min-width:190px;border:1px solid var(--line2);background:var(--deep);box-shadow:0 8px 24px rgba(0,0,0,.6);padding:4px;display:flex;flex-direction:column}
+.menu button{height:30px;padding:0 8px;text-align:left;background:none;border:none;color:var(--bone);cursor:pointer;font-size:13px}
+.menu button:disabled{color:var(--muted);cursor:default}
+.launch{flex:none;padding:8px 12px;display:flex;flex-direction:column;gap:6px}
+.addon-row{display:flex;align-items:center;gap:8px;font-size:13px}
+.addon-row span:first-child{flex-grow:1}
+.playbox{flex:none;position:relative;display:flex;flex-direction:column;gap:6px}
+.vers{position:absolute;left:0;right:0;bottom:100%;margin-bottom:4px;z-index:5;border:1px solid var(--line2);background:var(--deep);box-shadow:0 -8px 24px rgba(0,0,0,.6);padding:4px}
+.vrow{display:flex;align-items:center;gap:8px;width:100%;height:32px;padding:0 8px;cursor:pointer;color:var(--bone);font-size:13px;border:none;background:none;text-align:left}
+.vrow.sel{background:#2a2111}
+.vrow .nm{flex-grow:1}
+.vrow .tag{color:var(--muted);font-size:11px}
+.vrow .new{font-size:10px;padding:0 4px;border:1px solid var(--brass);color:var(--gold2)}
+.vrow .r{flex:none;font-size:12px;color:var(--muted)}
+.vrow .r.inst{color:var(--green)}.vrow .r.get{color:var(--gold2)}
+.vsep{font:700 9px Cinzel,serif;letter-spacing:2px;color:var(--muted);text-transform:uppercase;padding:6px 8px 2px;border-top:1px solid var(--sep);margin-top:2px}
+.vbtn{display:flex;align-items:center;gap:8px;height:36px;padding:0 10px;background:var(--well);border:1px solid var(--line2);color:var(--bone);cursor:pointer;font-size:13px}
+.vbtn .v{flex-grow:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.play{height:48px;cursor:pointer;font:900 20px Cinzel,serif;letter-spacing:5px;text-transform:uppercase;border:1px solid #d0463d;color:#f6e6c4;background:linear-gradient(#b52b27,#7a1715)}
+.play.long{font-size:15px;letter-spacing:2px}
+.play.busy{cursor:default}
+.play.ingame{background:#3a1210;opacity:.7;cursor:default}
+.under{height:18px;display:flex;justify-content:center}
+/* addons, settings */
+.center{flex:1 1 auto;width:100%;max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.card{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.card .top{display:flex;align-items:center;gap:10px}
+.card .top div{flex-grow:1}
+.card .desc{color:var(--soft);font-size:13px}
+.conflict{display:flex;flex-wrap:wrap;align-items:center;gap:8px;border:1px solid #8a5d22;background:#2a1e0c;padding:6px 10px;font-size:13px}
+.conflict span{flex-grow:1;min-width:200px}
+.settings{font-size:15px}
+.scol{flex:0 1 420px;min-width:300px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+.sblock{flex:none;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.sblock label{display:flex;flex-direction:column;gap:4px;color:var(--muted);font-size:13px}
+.sblock select,.sblock input{height:38px;font-size:14px}
+.sblock .btn{height:38px;font-size:14px}
+.report{flex:999 1 400px}
+.report .msgs{padding:10px 14px;gap:8px}
+.report .msg{font-size:15px}
+.report .msg .t{width:40px;font-size:12px}
+.report-compose{flex:none;display:flex;flex-direction:column;gap:8px;padding:10px 14px 12px;border-top:1px solid var(--sep)}
+.report-compose textarea{padding:10px;font-size:15px;resize:none}
+.report-compose .row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:14px}
+footer{flex:none;height:44px;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:0 14px;border-top:1px solid var(--line);background:linear-gradient(#0d0b09,#17130e)}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+const NAMES = ['Sol','Kestrel','Varrik','Morn','Ashka','Brenn','Corvin','Drask','Elric','Fenn','Gorrik','Hale','Ivra','Jarek','Kael','Lorne','Mira','Nox','Orin','Pell','Quill','Rook','Sable','Tamsin','Ulric','Vex','Wren','Xan','Yorin','Zeph','Arden','Bastion','Cael','Dorn','Esk','Falk','Grim','Holt','Isar','Jory','Kurr','Lysander','Marrow','Nyx','Oskar','Pyre','Rauth'];
+const FRIENDS = { Sol: 1, Varrik: 1, Mira: 1, Dorn: 1 };
+const MAPS = ['Angel Forge', 'Calderis Refinery', 'Argus Plateau', 'Shrine of Excellion'];
+const MODES = ['1v1', '2v2', '3v3'];
+const GROUPS = [
+  { id: 'match', title: 'В матче', color: '#c8382f', people: NAMES.slice(0, 10).map((n, i) => ({ name: n, where: MODES[i % 3] + ' · ' + MAPS[i % 4] })) },
+  { id: 'search', title: 'В поиске', color: '#d4af55', people: NAMES.slice(10, 15).map((n, i) => ({ name: n, where: MODES[i % 3] + ' · ' + (1500 + i * 85) })) },
+  { id: 'launcher', title: 'В лаунчере', color: '#7fa65a', people: NAMES.slice(15).map((n) => ({ name: n, where: '' })) }
+];
+const NEWS = [
+  { title: 'Elite Launcher 1.2.10', date: '27 октября', items: ['Версия лаунчера видна на главном экране', 'Во время обновления видно зеркало, скорость и итог загрузки', 'Размер загрузки при смене версии теперь точный'] },
+  { title: 'Патчи 0.1.0', date: '27 октября', items: ['Без лагов в обсервере: живые матчи не тормозят у наблюдателя', 'Рейтинг в лобби: только рейтинг и подсказка, автокик убран', 'Отряды в портале Эльдар не теряют автоподкрепление'] },
+  { title: 'Elite 3.3 PTR', date: '26 октября', items: ['Правки баланса Имперской гвардии', 'Новая карта 3v3 в ротации', 'Исправлены вылеты при загрузке'] },
+  { title: 'Elite Launcher 1.2.8', date: '26 октября', items: ['Elite, поставленный не лаунчером, не качается заново', 'Чат с разработчиками'] },
+  { title: 'Турнир 2v2 в субботу', date: '24 октября', items: ['Регистрация в Discord до пятницы', 'Олимпийская система, Bo3'] }
+];
+const ADDONS = [
+  { id: 'automatch', name: 'Автоматч', test: true, pinned: true, desc: 'Поиск матча одной кнопкой в меню игры. Нужен всем игрокам матча.', details: 'В игре: Мультиплеер → Find a Game → Start Searching. Режимы и карты — в Map Preferences. «Watch a match» — зайти наблюдателем. Очередь и матчи: rts.fintebtc.de/ladder.', version: 'vmmfind-0.17' },
+  { id: 'rating', name: 'Рейтинг в лобби', pinned: true, desc: 'Рейтинг Relic и статистика рядом с ником игрока в лобби.', details: 'Наведите на игрока: винрейт, число игр и часы в Steam.', version: '0.7.0' },
+  { id: 'obsfix', name: 'Без лагов в обсервере', test: true, conflictable: true, desc: 'Наблюдение за живыми матчами без просадки FPS.', details: 'Игра больше не пересобирает информацию о матче десятки раз за кадр. На синхронизацию не влияет.', version: 'v1' },
+  { id: 'reinforce', name: 'Автоподкрепление в портале', desc: 'Отряды в портале Эльдар не теряют автоподкрепление.', details: 'Отряд внутри портала больше не выпадает из списка автоподкрепления.', version: 'v1' }
+];
+const VERS = {
+  main: { id: '3.3', name: 'Elite 3.3', tag: 'основная', size: '12 МБ' },
+  ptr: { id: 'ptr', name: 'Elite 3.3 PTR', tag: 'тест', size: '42 МБ' },
+  arch: [
+    { id: '3.2', name: 'Elite 3.2', tag: 'основная', size: 'мгновенно' },
+    { id: '3.1', name: 'Elite 3.1', tag: 'основная', size: 'мгновенно' },
+    { id: '2.9.3', name: 'Elite 2.9.3', tag: 'старая', size: '180 МБ' }
+  ]
+};
+
+let S, timer;
+function initial(scenario) {
+  return {
+    scenario, tab: 'home', verOpen: false,
+    groupOpen: { match: true, search: true, launcher: false }, showAll: {}, whoQuery: '', menuFor: null,
+    installed: scenario === 'fresh' ? null : (scenario === 'actual' ? '3.3' : '3.2'),
+    selected: '3.3', phase: 'idle', progress: 0,
+    addons: { automatch: true, rating: true, obsfix: false, reinforce: true }, conflict: true, open: {},
+    chatTab: 'all', dmTabs: [],
+    general: [
+      { time: '13:58', who: 'Varrik', text: 'кто на 2v2? средний рейтинг' },
+      { time: '14:01', who: 'Sol', text: 'го, я за ИГ' },
+      { time: '14:02', who: 'Morn', text: 'на 3.3 PTR кто-нибудь тестит?' },
+      { time: '14:04', who: 'Varrik', text: 'жми автоматч, там сейчас пятеро' }
+    ],
+    dms: { Mira: [{ time: '13:40', who: 'Mira', text: 'привет, вечером 3v3 с Dorn?' }] },
+    chatDraft: '', reportDraft: '', logsSent: null, attachLogs: true, stats: true, diag: false, devOpen: false,
+    devThread: [
+      { time: '12:40', who: 'Вы', text: 'После обновления вылет при загрузке карты Calderis.' },
+      { time: '13:05', who: 'Разработчик', text: 'Спасибо, дамп пришёл, смотрим. Обновитесь на 3.3, там исправлено.' }
+    ]
+  };
+}
+const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const now = () => { const d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
+const set = (patch) => { Object.assign(S, patch); render(); };
+const newerAvailable = () => S.installed !== null && S.installed !== '3.3' && S.installed !== 'ptr';
+
+function versionLists() {
+  const prev = VERS.arch.find((v) => v.id === S.installed && v.id === '3.2');
+  const top = [VERS.main].concat(prev ? [prev] : []).concat([VERS.ptr]);
+  const archive = VERS.arch.filter((v) => !(prev && v.id === prev.id));
+  return { top, archive, all: top.concat(archive) };
+}
+function vrow(v, withTag) {
+  const installed = v.id === S.installed;
+  const isNew = v.id === '3.3' && newerAvailable();
+  const right = installed ? 'установлена' : (S.installed === null ? '1.4 ГБ' : (isNew ? 'скачать · ' + v.size : v.size));
+  return `<button class="vrow${v.id === S.selected ? ' sel' : ''}" role="option" aria-selected="${v.id === S.selected}" data-act="pickVer" data-id="${v.id}">
+    <span class="nm">${esc(v.name)}${isNew ? ' <span class="new">новая</span>' : ''}${withTag ? ' <span class="tag">' + esc(v.tag) + '</span>' : ''}</span>
+    <span class="r${installed ? ' inst' : (isNew ? ' get' : '')}">${esc(right)}</span></button>`;
+}
+function playState() {
+  const v = versionLists();
+  const sel = v.all.find((x) => x.id === S.selected) || v.all[0];
+  const installedName = (v.all.find((x) => x.id === S.installed) || {}).name;
+  let hint = sel.tag, label = 'Играть';
+  if (S.installed === null) hint = 'не установлена';
+  else if (S.selected === S.installed) hint = 'установлена';
+  else if (S.selected === '3.3' && newerAvailable()) hint = 'новая · скачать ' + sel.size;
+  else hint = 'переключиться · ' + sel.size;
+  if (S.phase === 'updating') label = 'Обновление ' + S.progress + '%';
+  else if (S.phase === 'ingame') label = 'В игре';
+  else if (S.installed === null) label = 'Установить';
+  else if (S.selected === S.installed) label = 'Играть';
+  else if (S.selected === '3.3' && newerAvailable()) label = 'Обновить и играть';
+  else label = 'Перейти и играть';
+  let status = 'Elite не установлен', meta = 'установка займёт около 1.4 ГБ', color = 'var(--bone)';
+  if (S.phase === 'updating') { status = 'Обновление до ' + sel.name + ' · ' + S.progress + '%'; meta = (Math.round(S.progress * 1.2) / 10) + ' из 12 МБ · 2.1 МБ/с · зеркало mirror-1 · осталось ~' + Math.max(1, Math.round((100 - S.progress) / 20)) + ' с'; color = 'var(--gold2)'; }
+  else if (S.phase === 'ingame') { status = 'Игра запущена · ' + (installedName || sel.name); meta = 'лаунчер свёрнут в трей'; color = 'var(--green)'; }
+  else if (S.installed !== null && newerAvailable()) { status = 'Вышла Elite 3.3'; meta = 'установлена ' + installedName + ' · «Обновить и играть» скачает 12 МБ и запустит игру'; color = 'var(--gold2)'; }
+  else if (S.installed !== null) { status = installedName + ' · актуальна ✓'; meta = ''; color = 'var(--green)'; }
+  return { v, sel, hint, label, status, meta, color };
+}
+function statusStrip(ps) {
+  return `<div class="track${S.phase === 'updating' ? '' : ' idle'}" role="progressbar" aria-label="Загрузка обновления" aria-valuenow="${S.progress}" aria-valuemin="0" aria-valuemax="100"><i style="width:${S.progress}%"></i></div>
+    <div class="status"><b style="color:${ps.color}">${esc(ps.status)}</b><span>${esc(ps.meta)}</span></div>`;
+}
+function toggle(act, on, label, disabled, id) {
+  return `<button class="toggle${on ? ' on' : ''}" aria-pressed="${on}" aria-label="${esc(label)}" data-act="${act}"${id ? ' data-id="' + id + '"' : ''}${disabled ? ' disabled' : ''}></button>`;
+}
+function addonOn(a) { return !(a.conflictable && S.conflict) && !!S.addons[a.id]; }
+function msgs(list) {
+  return list.map((m) => {
+    const cls = m.who === 'Вы' ? ' me' : (m.who === 'Разработчик' ? ' dev' : (m.who === 'Лаунчер' ? ' sys' : ''));
+    return `<div class="msg"><span class="t">${esc(m.time)}</span><span class="w${cls}">${esc(m.who)}</span><span>${esc(m.text)}</span></div>`;
+  }).join('');
+}
+
+function header() {
+  const tabs = [['home', 'Главная'], ['addons', 'Дополнения'], ['settings', 'Настройки']];
+  return `<header>
+    <div class="brand"><span class="logo">Elite Mod</span><span class="sub" style="color:var(--blood2)">Dawn of War II · Retribution</span><span class="sub muted">Launcher 1.2.10</span></div>
+    <div class="demo" role="group" aria-label="Демо">демо: сценарий
+      ${[['update', 'обновление'], ['actual', 'актуально'], ['fresh', 'нет Elite']].map(([id, l]) => `<button class="chip${S.scenario === id ? ' on' : ''}" data-act="scenario" data-id="${id}">${l}</button>`).join('')}
+    </div>
+    <nav style="display:flex;gap:4px">${tabs.map(([id, l]) => `<button class="tab${S.tab === id ? ' on' : ''}" aria-pressed="${S.tab === id}" data-act="tab" data-id="${id}">${l}</button>`).join('')}</nav>
+  </header>`;
+}
+
+function home(ps) {
+  const q = S.whoQuery.trim().toLowerCase();
+  const online = GROUPS.map((g) => {
+    const people = g.people.filter((p) => !q || p.name.toLowerCase().includes(q)).sort((a, b) => (FRIENDS[b.name] || 0) - (FRIENDS[a.name] || 0));
+    const open = q ? true : !!S.groupOpen[g.id];
+    const shown = (q || S.showAll[g.id]) ? people : people.slice(0, 8);
+    const rows = open ? shown.map((p) => {
+      const menu = S.menuFor === p.name ? `<div class="menu" role="menu">
+          <button role="menuitem" data-act="dm" data-id="${esc(p.name)}">Написать лично</button>
+          <button role="menuitem" data-act="closeMenu">Профиль в Steam ›</button></div>` : '';
+      return `<div class="prow"><button class="person${S.menuFor === p.name ? ' open' : ''}" aria-haspopup="menu" aria-expanded="${S.menuFor === p.name}" data-act="menu" data-id="${esc(p.name)}">
+          <span class="dot" style="background:${g.color}"></span><span class="n">${esc(p.name)} ${FRIENDS[p.name] ? '<span class="star">★</span>' : ''}</span><span class="where">${esc(p.where)}</span></button>${menu}</div>`;
+    }).join('') + (people.length > shown.length ? `<button class="linkbtn" style="text-decoration:none;padding:2px" data-act="showAll" data-id="${g.id}">Ещё ${people.length - shown.length} ›</button>` : '') : '';
+    return `<div><button class="ghead" aria-expanded="${open}" data-act="group" data-id="${g.id}"><span>${g.title} · ${people.length}</span><span aria-hidden="true">${open ? '▴' : '▾'}</span></button>${rows}</div>`;
+  }).join('');
+
+
+  const chatTabs = `<span class="ctab${S.chatTab === 'all' ? ' on' : ''}"><button data-act="chatTab" data-id="all">Общий чат</button></span>` +
+    S.dmTabs.map((n) => `<span class="ctab${S.chatTab === n ? ' on' : ''}"><button data-act="chatTab" data-id="${esc(n)}">${esc(n)}</button><button class="x" aria-label="Закрыть переписку с ${esc(n)}" data-act="closeDm" data-id="${esc(n)}">✕</button></span>`).join('');
+  const list = S.chatTab === 'all' ? S.general : (S.dms[S.chatTab] || []);
+
+  const longLabel = ps.label.length > 8;
+  return `<main>
+    <div class="left">
+      <div class="left-row">
+        <div class="newscol">
+          <div class="panel profile"><div class="avatar" aria-hidden="true">C</div>
+            <div style="min-width:0">
+              <div style="display:flex;align-items:center;gap:6px"><span class="dot" style="background:var(--green)"></span><b>Commander</b></div>
+              <div class="small" style="color:var(--soft)">1v1 <b style="color:var(--gold2)">1720</b> · 2v2 <b style="color:var(--gold2)">1650</b></div>
+              <div class="muted" style="font-size:11px">56% побед · 312 игр · <a href="#">Steam ›</a></div>
+            </div></div>
+          <section class="panel col news" aria-label="Новости" style="flex:1 1 0">
+            <h2 class="h phead">Новости</h2>
+            <div class="scroll" style="padding:0 12px 10px">
+              ${NEWS.map((n) => `<article><h3>${esc(n.title)}</h3><div class="muted" style="font-size:11px">${esc(n.date)}</div><ul>${n.items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></article>`).join('')}
+              <a href="#" class="small" style="display:inline-block;margin-top:8px">Все новости мода на ModDB ›</a>
+            </div>
+          </section>
+        </div>
+        <section class="panel col chat" aria-label="Чат">
+          <div class="ctabs">${chatTabs}<span style="flex-grow:1"></span><span class="muted" style="font-size:11px;padding-bottom:6px;white-space:nowrap">демо · после входа через Steam</span></div>
+          <div class="scroll msgs" style="min-height:120px">${msgs(list)}</div>
+          <div class="composer"><label for="chatin" class="sr">Сообщение</label>
+            <input id="chatin" class="field" value="${esc(S.chatDraft)}" placeholder="${S.chatTab === 'all' ? 'Написать в общий чат…' : 'Написать ' + esc(S.chatTab) + '…'}">
+            <button class="btn gold" style="width:44px;height:36px" aria-label="Отправить" data-act="send">➤</button></div>
+        </section>
+      </div>
+      <div class="strip">${statusStrip(ps)}</div>
+    </div>
+
+    <aside class="right">
+      <div class="panel online">
+        <div class="phead"><div style="display:flex;align-items:baseline;gap:8px"><h2 class="h" style="flex-grow:1">Онлайн</h2><span class="muted" style="font-size:11px">в игре 214 · с Elite 47</span></div>
+          <label for="who" class="sr">Найти игрока</label><input id="who" class="field" placeholder="Найти игрока…" value="${esc(S.whoQuery)}"></div>
+        <div class="scroll" style="padding:0 10px 6px">${online}</div>
+      </div>
+      <div class="panel launch">
+        <div style="display:flex;align-items:center"><h2 class="h" style="flex-grow:1">Настройки запуска</h2><a href="#" class="small" data-act="tab" data-id="addons">Все ›</a></div>
+        ${ADDONS.filter((a) => a.pinned).map((a) => `<div class="addon-row"><span>${esc(a.name)} ${a.test ? '<span class="muted" style="font-size:11px">тест</span>' : ''}</span>${toggle('addon', addonOn(a), a.name, false, a.id)}</div>`).join('')}
+      </div>
+      <div class="playbox">
+        ${S.verOpen && S.phase === 'idle' ? `<div class="vers" role="listbox" aria-label="Версия">${ps.v.top.map((v) => vrow(v, true)).join('')}<div class="vsep">Архив</div>${ps.v.archive.map((v) => vrow(v, false)).join('')}</div>` : ''}
+        <button class="vbtn" aria-expanded="${S.verOpen}" data-act="toggleVer"><span class="v">${esc(ps.sel.name)} <span class="muted small">· ${esc(ps.hint)}</span></span><span aria-hidden="true" style="color:var(--gold)">▾</span></button>
+        <button class="play${longLabel ? ' long' : ''}${S.phase === 'updating' ? ' busy' : ''}${S.phase === 'ingame' ? ' ingame' : ''}" data-act="play">${esc(ps.label)}</button>
+        <div class="under">${S.phase === 'updating' ? '<button class="linkbtn" data-act="cancel">Отменить загрузку</button>' : ''}${S.phase === 'ingame' ? '<button class="linkbtn" data-act="reset">игра закрыта (сбросить демо)</button>' : ''}</div>
+      </div>
+    </aside>
+  </main>`;
+}
+
+function addons() {
+  return `<main><div class="center">
+    <h2 class="h" style="font-size:12px">Дополнения</h2>
+    <p class="muted" style="margin:0 0 4px;font-size:13px">Небольшие патчи для игры. Действуют со следующего запуска. Отмеченные ★ — в «Настройках запуска» на главной.</p>
+    ${ADDONS.map((a) => {
+      const conflict = a.conflictable && S.conflict;
+      const open = !!S.open[a.id];
+      return `<div class="panel card"><div class="top"><div><div style="font-weight:600">${a.pinned ? '★ ' : ''}${esc(a.name)} ${a.test ? '<span class="muted" style="font-size:11px;font-weight:400">тест</span>' : ''}</div><div class="desc">${esc(a.desc)}</div></div>${toggle('addon', addonOn(a), a.name, conflict, a.id)}</div>
+        ${conflict ? '<div class="conflict"><span>Стоит ручная копия из dow2-patches — версия лаунчера отключена.</span><button class="btn" style="border-color:#8a5d22;color:var(--gold2);font-size:12px" data-act="fixConflict">Удалить ручную копию</button></div>' : ''}
+        <button class="linkbtn" style="align-self:flex-start;text-decoration:none" aria-expanded="${open}" data-act="more" data-id="${a.id}">${open ? 'Скрыть' : 'Подробнее ›'}</button>
+        ${open ? `<div class="desc" style="border-top:1px solid var(--sep);padding-top:6px">${esc(a.details)} <span class="muted">Версия: ${esc(a.version)}</span></div>` : ''}</div>`;
+    }).join('')}
+  </div></main>`;
+}
+
+function settings() {
+  return `<main class="settings">
+    <div class="scol">
+      <div class="panel sblock"><h2 class="h" style="font-size:12px">Игра и загрузки</h2>
+        <div style="display:flex;flex-direction:column;gap:4px"><span class="muted" style="font-size:13px">Папка игры</span>
+          <div style="display:flex;gap:6px"><span class="field" style="flex-grow:1;min-width:0;padding:8px 10px;font-size:13px;border-color:var(--line);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">C:\\Program Files (x86)\\Steam\\steamapps\\common\\Dawn of War II - Retribution</span><button class="btn">Изменить</button></div></div>
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+          <label>Язык<select class="field"><option>Русский</option><option>English</option><option>Español</option><option>Français</option><option>Deutsch</option></select></label>
+          <label>Кэш версий<select class="field"><option>6 ГБ</option><option>2 ГБ</option><option>12 ГБ</option></select></label>
+        </div>
+        <label>Своё зеркало загрузки<input class="field" placeholder="https://…"></label>
+        <div style="display:flex;align-items:center;gap:10px"><span style="flex-grow:1">Анонимный счётчик запусков</span>${toggle('stats', S.stats, 'Анонимный счётчик запусков')}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px"><button class="btn">Починить файлы</button><button class="btn">Открыть папку игры</button></div>
+      </div>
+      <div class="panel sblock"><h2 class="h" style="font-size:12px">Логи</h2>
+        <p style="margin:0;color:var(--soft);font-size:14px">Логи игры, дополнений и лаунчера и дампы падений за последние дни. Помогают разработчикам понять, что сломалось.</p>
+        <button class="btn gold" style="height:40px;font:700 12px Cinzel,serif;letter-spacing:1px;text-transform:uppercase" data-act="sendLogs">Отправить логи разработчикам</button>
+        <span class="muted small">${S.logsSent ? 'Последняя отправка: сегодня в ' + S.logsSent + ' · видно в переписке справа' : 'Ещё не отправлялись'}</span>
+      </div>
+      <div class="sblock" style="border:1px solid var(--line);background:var(--deep);padding:8px 14px">
+        <button class="ghead" style="position:static;background:none;border:none;height:30px;font-size:11px;letter-spacing:2px" aria-expanded="${S.devOpen}" data-act="dev"><span>Для разработчиков</span><span aria-hidden="true">${S.devOpen ? '▴' : '▾'}</span></button>
+        ${S.devOpen ? `<div style="display:flex;align-items:center;gap:8px;color:var(--soft);font-size:14px"><span style="flex-grow:1">Диагностика (FrameProbe): логи тормозов обсервера</span>${toggle('diag', S.diag, 'Диагностика')}</div>` : ''}
+      </div>
+      <div class="muted small">Elite Launcher 1.2.10 · <a href="#">Code signing policy</a> · <a href="#">Политика приватности</a></div>
+    </div>
+    <section class="panel col report" aria-label="Сообщить о проблеме">
+      <div class="phead" style="align-items:baseline;padding:10px 14px 8px"><h2 class="h" style="font-size:12px">Сообщить о проблеме</h2><span class="muted small">переписка с разработчиками · ответ придёт сюда</span></div>
+      <div class="scroll msgs" style="min-height:160px">${msgs(S.devThread)}</div>
+      <div class="report-compose"><label for="report" class="sr">Опишите проблему</label>
+        <textarea id="report" class="field" rows="3" placeholder="Что случилось? Например: после обновления игра вылетает на загрузке карты. Скриншот — Ctrl+V.">${esc(S.reportDraft)}</textarea>
+        <div class="row"><button class="btn" style="height:38px">Скриншот</button>
+          <span style="display:flex;align-items:center;gap:8px;flex-grow:1">${toggle('attachLogs', S.attachLogs, 'Приложить логи к сообщению')} Приложить логи</span>
+          <button class="btn gold" style="height:38px;padding:0 18px;font:700 12px Cinzel,serif;letter-spacing:1px;text-transform:uppercase" data-act="sendReport">Отправить</button></div>
+      </div>
+    </section>
+  </main>`;
+}
+
+function render() {
+  const ps = playState();
+  const keepFocus = document.activeElement && document.activeElement.id;
+  const body = S.tab === 'home' ? home(ps) : (S.tab === 'addons' ? addons() : settings());
+  document.getElementById('app').innerHTML = header() + body + (S.tab === 'home' ? '' : `<footer>${statusStrip(ps)}</footer>`);
+  if (keepFocus) { const el = document.getElementById(keepFocus); if (el) { el.focus(); if (el.setSelectionRange && el.value) el.setSelectionRange(el.value.length, el.value.length); } }
+}
+
+function play() {
+  if (S.phase !== 'idle') return;
+  if (S.selected === S.installed) return set({ phase: 'ingame', verOpen: false });
+  set({ phase: 'updating', progress: 0, verOpen: false });
+  clearInterval(timer);
+  timer = setInterval(() => {
+    const p = S.progress + 4;
+    if (p >= 100) { clearInterval(timer); set({ progress: 100, phase: 'ingame', installed: S.selected }); }
+    else set({ progress: p });
+  }, 200);
+}
+function sendChat() {
+  const t = S.chatDraft.trim();
+  if (!t) return;
+  const m = { time: now(), who: 'Вы', text: t };
+  if (S.chatTab === 'all') set({ chatDraft: '', general: S.general.concat([m]).slice(-12) });
+  else set({ chatDraft: '', dms: Object.assign({}, S.dms, { [S.chatTab]: (S.dms[S.chatTab] || []).concat([m]) }) });
+}
+
+const actions = {
+  tab: (id) => set({ tab: id, verOpen: false, menuFor: null }),
+  scenario: (id) => { clearInterval(timer); S = initial(id); render(); },
+  group: (id) => set({ groupOpen: Object.assign({}, S.groupOpen, { [id]: !S.groupOpen[id] }) }),
+  showAll: (id) => set({ showAll: Object.assign({}, S.showAll, { [id]: true }) }),
+  menu: (id) => set({ menuFor: S.menuFor === id ? null : id }),
+  closeMenu: () => set({ menuFor: null }),
+  dm: (id) => set({ dmTabs: S.dmTabs.includes(id) ? S.dmTabs : S.dmTabs.concat([id]), dms: S.dms[id] ? S.dms : Object.assign({}, S.dms, { [id]: [] }), chatTab: id, menuFor: null }),
+  chatTab: (id) => set({ chatTab: id }),
+  closeDm: (id) => set({ dmTabs: S.dmTabs.filter((x) => x !== id), chatTab: S.chatTab === id ? 'all' : S.chatTab }),
+  send: sendChat,
+  addon: (id) => set({ addons: Object.assign({}, S.addons, { [id]: !S.addons[id] }) }),
+  fixConflict: () => set({ conflict: false, addons: Object.assign({}, S.addons, { obsfix: true }) }),
+  more: (id) => set({ open: Object.assign({}, S.open, { [id]: !S.open[id] }) }),
+  toggleVer: () => { if (S.phase === 'idle') set({ verOpen: !S.verOpen, menuFor: null }); },
+  pickVer: (id) => set({ selected: id, verOpen: false }),
+  play: play,
+  cancel: () => { clearInterval(timer); set({ phase: 'idle', progress: 0 }); },
+  reset: () => set({ phase: 'idle', progress: 0 }),
+  stats: () => set({ stats: !S.stats }),
+  diag: () => set({ diag: !S.diag }),
+  attachLogs: () => set({ attachLogs: !S.attachLogs }),
+  dev: () => set({ devOpen: !S.devOpen }),
+  sendLogs: () => set({ devThread: S.devThread.concat([{ time: now(), who: 'Лаунчер', text: 'Логи отправлены: 7 файлов, 2.4 МБ · id 7f3a9c' }]), logsSent: now() }),
+  sendReport: () => {
+    const t = S.reportDraft.trim();
+    if (!t) return;
+    set({ reportDraft: '', devThread: S.devThread.concat([{ time: now(), who: 'Вы', text: t + (S.attachLogs ? ' (логи приложены)' : '') }]) });
+  }
+};
+
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-act]');
+  if (!el || el.disabled) return;
+  if (el.tagName === 'A') e.preventDefault();
+  actions[el.dataset.act](el.dataset.id);
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.id === 'chatin') sendChat(); });
+document.addEventListener('input', (e) => {
+  if (e.target.id === 'who') set({ whoQuery: e.target.value });
+  else if (e.target.id === 'chatin') S.chatDraft = e.target.value;
+  else if (e.target.id === 'report') S.reportDraft = e.target.value;
+});
+
+S = initial('update');
+render();
+</script>
+</body>
+</html>
