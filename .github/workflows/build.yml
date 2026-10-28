@@ -1,13 +1,8 @@
 name: build
-# Every push and pull request builds and tests everything (a check, nothing leaves CI).
-# Only main ships: installers to the download folder, the vX.Y.Z tag, and a GitHub Release (with updater.json for
-# the launcher self-update) for a new X.Y.0 - or for any version by "Run workflow" with the release box ticked.
+# OFF for now (owner, 28.10): no automatic runs, and nothing ships even from a manual run - the deploy and release
+# jobs below are switched off with `if: false`. Turn them back on together with the triggers when the build is fixed
+# (last failure: "failed to decode pubkey: Missing comment in public key" in the Build step).
 on:
-  push:
-    branches: ["**"]
-    paths-ignore: ["**.md", "design/**"]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
     inputs:
       release:
@@ -329,7 +324,7 @@ jobs:
   # download folder) for a new X.Y.0, or for any version through "Run workflow" with the release box ticked.
   release:
     needs: [version, publish]
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || needs.version.outputs.release == 'true')
+    if: false   # off for now, see the top of the file
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -380,7 +375,7 @@ jobs:
   # scoped on the server, write-only into that one folder.
   deploy:
     needs: [version, launcher]
-    if: github.ref == 'refs/heads/main'
+    if: false   # off for now, see the top of the file
     runs-on: ubuntu-24.04
     environment: dow2
     env:
