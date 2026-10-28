@@ -588,6 +588,9 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
     let st = app.state::<App>();
     let dir = game_dir(&st);
     let installed = dir.as_ref().map(|d| update::Game::new(d).load_state()).unwrap_or_default();
+    let uid = fb_uid(&st);
+    let fb_name = st.settings.lock().unwrap().fb_name.clone();
+    let elite_v = installed.version.clone();
     let comps: Vec<String> = {
         let cfg = st.config.lock().unwrap().clone().unwrap_or_default();
         let s = st.settings.lock().unwrap().clone();
@@ -721,9 +724,14 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
         let hosts: Vec<&str> = option_env!("ELITE_LOG_HOSTS").unwrap_or("").split(';').map(str::trim).filter(|x| !x.is_empty()).collect();
         if hosts.is_empty() { return Err("log upload is not configured in this build".into()); }
         for host in hosts {
-            match ureq::post(&format!("{host}/stats/api/logs?who={who}")).set("Content-Type", "text/plain; charset=utf-8").send_bytes(out.as_bytes()) {
+            match ureq::post(&format!("{host}/stats/api/logs?who={who}&uid={uid}")).set("Content-Type", "text/plain; charset=utf-8").send_bytes(out.as_bytes()) {
                 Ok(r) => {
                     let v: Value = serde_json::from_str(&r.into_string().unwrap_or_default()).unwrap_or_default();
+                    let note = json!({"uid": uid, "name": if fb_name.is_empty() { who.clone() } else { fb_name.clone() },
+                        "text": format!("📋 Отправил логи · sent logs: {} ({} files). Ответ придёт сюда · the answer comes here.", v["id"].as_str().unwrap_or("?"), n),
+                        "launcher": LAUNCHER_VERSION, "os": os_name(), "elite": elite_v}).to_string();
+                    let _ = ureq::post(&format!("{host}/ladder/api/fb/send")).timeout(Duration::from_secs(20))
+                        .set("Content-Type", "application/json").send_string(&note);
                     // запомним, докуда дошли по каждому растущему логу — в следующий раз только новый хвост
                     let _ = std::fs::write(data_dir().join("log_sent.json"), serde_json::to_vec(&Value::Object(newmarks.clone())).unwrap_or_default());
                     return Ok(format!("{} ({} files)", v["id"].as_str().unwrap_or("ok"), n));
