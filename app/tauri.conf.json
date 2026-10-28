@@ -18,6 +18,7 @@
     "shortDescription": "Install, update and launch Elite Mod for Dawn of War II: Retribution",
     "category": "Game",
     "license": "MIT",
-    "licenseFile": "installer-notice.txt"
+    "licenseFile": "installer-notice.txt",
+    "windows": { "nsis": { "installerHooks": "installer-hooks.nsh", "languages": ["Russian", "English"] } }
   }
 }

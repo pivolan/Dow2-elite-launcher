@@ -27,6 +27,7 @@ const T = {
     "updating": "Updating…",
     "running": "Game is running",
     "gameRunningAddons": "The game is running: close it to change add-ons. Updates are installed once it closes.",
+    "inGameDir": "The launcher is in the Dawn of War II folder - this can crash the game. Move the launcher folder anywhere else (for example to Documents) and start it from there.",
     "installed": "Installed",
     "current": "You have: {v}",
     "notInstalled": "Elite is not installed yet",
@@ -120,6 +121,7 @@ const T = {
     "updating": "Обновление…",
     "running": "Игра запущена",
     "gameRunningAddons": "Игра запущена: закройте её, чтобы менять дополнения. Обновления установятся после закрытия.",
+    "inGameDir": "Лаунчер лежит в папке с Dawn of War II — из-за этого игра может падать. Перенесите папку лаунчера в любое другое место (например, в «Документы») и запускайте оттуда.",
     "installed": "Установлена",
     "current": "У вас: {v}",
     "notInstalled": "Elite ещё не установлен",
@@ -213,6 +215,7 @@ const T = {
     "updating": "Actualizando…",
     "running": "Juego en marcha",
     "gameRunningAddons": "El juego está en marcha: ciérralo para cambiar los complementos. Las actualizaciones se instalan al cerrarlo.",
+    "inGameDir": "El launcher está en la carpeta de Dawn of War II: esto puede hacer que el juego se cierre. Mueve la carpeta del launcher a otro sitio y ábrelo desde allí.",
     "installed": "Instalada",
     "current": "Tienes: {v}",
     "notInstalled": "Elite aún no está instalado",
@@ -301,6 +304,7 @@ const T = {
     "updating": "Mise à jour…",
     "running": "Jeu en cours",
     "gameRunningAddons": "Le jeu est lancé : fermez-le pour modifier les modules. Les mises à jour s’installent à sa fermeture.",
+    "inGameDir": "Le launcher est dans le dossier de Dawn of War II : le jeu peut planter. Déplacez le dossier du launcher ailleurs et lancez-le depuis là.",
     "installed": "Installée",
     "current": "Vous avez : {v}",
     "notInstalled": "Elite n'est pas encore installé",
@@ -389,6 +393,7 @@ const T = {
     "updating": "Aktualisiere…",
     "running": "Spiel läuft",
     "gameRunningAddons": "Das Spiel läuft: schließe es, um Add-ons zu ändern. Updates werden nach dem Schließen installiert.",
+    "inGameDir": "Der Launcher liegt im Dawn-of-War-II-Ordner – das kann das Spiel abstürzen lassen. Verschiebe den Launcher-Ordner woandershin und starte ihn von dort.",
     "installed": "Installiert",
     "current": "Installiert: {v}",
     "notInstalled": "Elite ist noch nicht installiert",
@@ -477,7 +482,7 @@ function toast(msg, err) {
 function channelOf(id) { return (S.config?.channels || []).find(c => c.id === id); }
 
 function render() {
-  lang = S.lang || (navigator.language || 'en').slice(0, 2);
+  lang = S.lang || 'ru';                     // Russian unless the player picked another language in Settings
   if (!T[lang]) lang = 'en';
   document.documentElement.lang = lang;
   document.querySelectorAll('[data-t]').forEach(e => e.textContent = t(e.dataset.t));
@@ -488,8 +493,9 @@ function render() {
 
   // launcher self-update: offered, never forced
   const lu = S.launcher_update;
-  $('launcherBanner').classList.toggle('hidden', !lu);
-  if (lu) { $('launcherBanner').textContent = L(lu.text) || t('launcherUpdate', { v: lu.version }); $('launcherBanner').onclick = () => open(lu.url); }
+  $('launcherBanner').classList.toggle('hidden', !lu && !S.in_game_dir);
+  if (S.in_game_dir) { $('launcherBanner').textContent = t('inGameDir'); $('launcherBanner').onclick = null; }
+  else if (lu) { $('launcherBanner').textContent = L(lu.text) || t('launcherUpdate', { v: lu.version }); $('launcherBanner').onclick = () => open(lu.url); }
 
   // announcements
   const today = new Date().toISOString().slice(0, 10);
