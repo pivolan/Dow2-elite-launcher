@@ -388,6 +388,18 @@ fn comp_on(dir: &std::path::Path, c: &elite_core::config::Component, s: &Setting
     s.components.get(&c.id).copied().unwrap_or(c.default) && found_conflicts(dir, c).is_empty()
 }
 
+/// The launch config lists exactly the add-ons that are on and whose DLL is in place. Elite updates and Elite's own
+/// tools rewrite Elite.launchconfig, so this runs before every start, not only when a checkbox changes.
+fn sync_injected(dir: &std::path::Path, cfg: &LauncherConfig, s: &Settings) {
+    let main = update::Game::new(dir);
+    for c in cfg.components.iter().filter(|c| !c.inject.is_empty()) {
+        let on = comp_on(dir, c, s) && dir.join("Elite_DLLs").join(&c.inject).is_file();
+        if let Ok(names) = elite::set_injected_all(dir, &c.inject, on) {
+            for name in names { main.accept_local_edit(&name); }
+        }
+    }
+}
+
 /// Turn off launcher copies of components that now have a hand-installed copy (checked before every game start).
 fn drop_conflicting(dir: &std::path::Path, cfg: &LauncherConfig) {
     let main = update::Game::new(dir);
@@ -576,10 +588,27 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
     let st = app.state::<App>();
     let dir = game_dir(&st);
     let installed = dir.as_ref().map(|d| update::Game::new(d).load_state()).unwrap_or_default();
-    let comps: Vec<String> = st.config.lock().unwrap().clone().unwrap_or_default().components.iter().map(|c| c.version.clone()).collect();
+    let comps: Vec<String> = {
+        let cfg = st.config.lock().unwrap().clone().unwrap_or_default();
+        let s = st.settings.lock().unwrap().clone();
+        cfg.components.iter().map(|c| match dir.as_ref() {
+            Some(d) => {
+                let on = s.components.get(&c.id).copied().unwrap_or(c.default);
+                let have = update::Game::component(d, &c.id).load_state().version;
+                let conf = found_conflicts(d, c);
+                let dll = !c.inject.is_empty() && d.join("Elite_DLLs").join(&c.inject).is_file();
+                let injected = !c.inject.is_empty() && std::fs::read_to_string(d.join(elite::LAUNCHCONFIG)).map(|t| t.lines()
+                    .any(|l| l.strip_prefix("InjectedFiles=").map_or(false, |r| r.split(',').any(|x| x.trim().eq_ignore_ascii_case(&c.inject))))).unwrap_or(false);
+                format!("{}: {} (latest {}, installed {}{}{}{})", c.id, if on { "ON" } else { "off" }, c.version,
+                    if have.is_empty() { "-" } else { &have }, if dll { ", dll" } else { "" }, if injected { ", injected" } else { "" },
+                    if conf.is_empty() { String::new() } else { format!(", hand-installed copy: {}", conf.join(" ")) })
+            }
+            None => format!("{}: {}", c.id, c.version),
+        }).collect()
+    };
     tauri::async_runtime::spawn_blocking(move || {
-        let mut out = format!("Elite Launcher {} · {} · Elite {} ({}) · add-ons {:?}\ngame: {}\n\n",
-            LAUNCHER_VERSION, os_name(), installed.version, installed.channel, comps,
+        let mut out = format!("Elite Launcher {} · {} · Elite {} ({})\nadd-ons:\n  {}\ngame: {}\n\n",
+            LAUNCHER_VERSION, os_name(), installed.version, installed.channel, comps.join("\n  "),
             dir.as_ref().map(|d| d.display().to_string()).unwrap_or_default());
         // всё, что может помочь понять краш: логи дополнений, логи игры, дампы, отчёты Windows об ошибках
         let mut files: Vec<PathBuf> = Vec::new();
@@ -720,6 +749,7 @@ fn play(app: State<'_, App>) -> Result<(), String> {
     let dir = game_dir(&app).ok_or("game folder not found")?;
     let cfg = app.config.lock().unwrap().clone().unwrap_or_default();
     drop_conflicting(&dir, &cfg);
+    sync_injected(&dir, &cfg, &app.settings.lock().unwrap().clone());
     let mut cmd = match os_name() {
         "windows" => cfg.launch.windows.clone(),
         "macos" => cfg.launch.macos.clone(),
