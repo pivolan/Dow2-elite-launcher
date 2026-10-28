@@ -142,10 +142,11 @@ Other languages can sit next to `en.md` later (`ru.md`, …); only `en.md` is re
 | `ELITE_MIRRORS` | built-in mirrors, `https://a/;https://b/` |
 | `ELITE_LOG_HOSTS` | where "Send logs", the usage count and the chat go, `https://a;https://b` |
 | `TAURI_SIGNING_PRIVATE_KEY` | self-update key made with `cargo tauri signer generate -w elite-updater.key`: the content of `elite-updater.key` |
-| `TAURI_SIGNING_PUBLIC_KEY` | its public half: the content of `elite-updater.key.pub` |
 | `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` | the key's password (optional: leave it out for a key without one) |
 
-Keep the self-update key pair safe outside the repository: installed launchers only accept updates signed with it.
+The public half of that key is in the repository, `keys/updater.pub` (the content of `elite-updater.key.pub`), and is
+compiled into the launcher. Keep the private key out of the repository: installed launchers install any update signed
+with it. A new key pair means a new `keys/updater.pub`, and launchers built before it have to be updated by hand once.
 
 
 | Job | What |

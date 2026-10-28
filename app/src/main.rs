@@ -28,9 +28,9 @@ use tauri_plugin_updater::UpdaterExt;
 /// Built-in mirrors, set at build time: `ELITE_MIRRORS="https://a/;https://b/" cargo build`.
 /// Not stored in the repository; more mirrors can come later from the signed launcher.json.
 const BUILTIN_MIRRORS: &str = match option_env!("ELITE_MIRRORS") { Some(v) => v, None => "" };
-/// Public key of the launcher self-update (tauri-plugin-updater), set at build time from the
-/// TAURI_SIGNING_PUBLIC_KEY secret. Empty in local builds: the launcher then only links to the download page.
-const UPDATER_PUBKEY: &str = match option_env!("TAURI_SIGNING_PUBLIC_KEY") { Some(v) => v, None => "" };
+/// Public key of the launcher self-update (tauri-plugin-updater): only updates signed with its private half
+/// (the TAURI_SIGNING_PRIVATE_KEY secret, CI only) are installed. A new key pair means a new `keys/updater.pub`.
+const UPDATER_PUBKEY: &str = include_str!("../../keys/updater.pub");
 const DEFAULT_CACHE_MB: u64 = 6144;
 
 #[derive(Clone, Default, Serialize, Deserialize)]
@@ -232,12 +232,9 @@ fn is_game_running() -> bool {
     }
 }
 
-/// Can this copy replace itself? Not without the updater key, and not the portable zip: there is no installer
-/// next to it, and the Windows update (the NSIS installer) would put a second copy into AppData instead.
+/// Can this copy replace itself? Not the portable zip: there is no installer next to it, and the Windows
+/// update (the NSIS installer) would put a second copy into AppData instead.
 fn self_update_supported() -> bool {
-    if UPDATER_PUBKEY.trim().is_empty() {
-        return false;
-    }
     let Ok(exe) = std::env::current_exe() else { return false };
     if cfg!(windows) {
         exe.parent().is_some_and(|d| d.join("uninstall.exe").is_file())
@@ -1038,7 +1035,7 @@ fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
-        .plugin(tauri_plugin_updater::Builder::new().pubkey(UPDATER_PUBKEY).build())
+        .plugin(tauri_plugin_updater::Builder::new().pubkey(UPDATER_PUBKEY.trim()).build())
         .manage(App {
             settings: Mutex::new(settings),
             config: Mutex::new(config),

@@ -20,9 +20,6 @@ env:
   ELITE_MIRRORS: ${{ secrets.ELITE_MIRRORS }}
   # where "Send logs" uploads to (secret): "https://a;https://b"
   ELITE_LOG_HOSTS: ${{ secrets.ELITE_LOG_HOSTS }}
-  # public half of the launcher self-update key (`cargo tauri signer generate`), compiled into the launcher;
-  # the private half (TAURI_SIGNING_PRIVATE_KEY) is passed only to the steps that sign
-  TAURI_SIGNING_PUBLIC_KEY: ${{ secrets.TAURI_SIGNING_PUBLIC_KEY }}
 
 jobs:
   version:
@@ -39,7 +36,7 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
         run: |
           missing=""
-          for k in ELITE_MIRRORS ELITE_LOG_HOSTS TAURI_SIGNING_PUBLIC_KEY TAURI_SIGNING_PRIVATE_KEY; do
+          for k in ELITE_MIRRORS ELITE_LOG_HOSTS TAURI_SIGNING_PRIVATE_KEY; do
             [ -n "$(printenv "$k" | tr -d '[:space:]')" ] || missing="$missing $k"
           done
           if [ -n "$missing" ]; then
@@ -140,9 +137,10 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: |
-          # updates come from the releases of the repository that builds it, so a fork can test the whole cycle
+          # the public key is keys/updater.pub (the launcher compiles it in too); updates come from the releases
+          # of the repository that builds it, so a fork can test the whole cycle
           printf '{"bundle":{"createUpdaterArtifacts":true},"plugins":{"updater":{"pubkey":"%s","endpoints":["https://github.com/%s/releases/latest/download/updater.json"]}}}' \
-            "$TAURI_SIGNING_PUBLIC_KEY" "$GITHUB_REPOSITORY" > "$RUNNER_TEMP/updater.conf.json"
+            "$(tr -d '[:space:]' < keys/updater.pub)" "$GITHUB_REPOSITORY" > "$RUNNER_TEMP/updater.conf.json"
           cargo tauri build ${{ matrix.args }} --config "$RUNNER_TEMP/updater.conf.json"
       - uses: actions/upload-artifact@v4
         with:

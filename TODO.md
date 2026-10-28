@@ -37,7 +37,8 @@
 | Адрес `updater.json` берётся из репозитория, который собирает, чтобы весь цикл можно было проверить в форке | SiritosKon | ✅ |
 | Проверка новой версии лаунчера раз в 15 минут вместо 6 часов | SiritosKon | ✅ |
 | Проверить в форке `SiritosKon/Dow2-elite-launcher`: свои секреты, релиз 1.3.0, установка, релиз 1.3.1, обновление по кнопке на Windows | SiritosKon | — |
-| Секреты в основном репозитории: `ELITE_MIRRORS`, `ELITE_LOG_HOSTS`, `TAURI_SIGNING_PUBLIC_KEY`, `TAURI_SIGNING_PRIVATE_KEY` (+ `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`). Ключи самообновления сгенерированы, их надо передать владельцу | pivolan | — |
+| Открытый ключ самообновления лежит в репозитории (`keys/updater.pub`) и вшивается в лаунчер | SiritosKon | ✅ |
+| Секреты в основном репозитории: `ELITE_MIRRORS`, `ELITE_LOG_HOSTS`, `TAURI_SIGNING_PRIVATE_KEY` (+ `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`). Закрытый ключ сгенерирован, его надо передать владельцу; в репозиторий его не кладём: с ним любой подпишет обновление, которое поставят все лаунчеры | pivolan | — |
 | `launcher.json`: ссылка на 1.3.0 для игроков на 1.2.x; автоматч первым с `"default": true` | pivolan | — |
 
 ### Потом: свой движок вместо плагина
