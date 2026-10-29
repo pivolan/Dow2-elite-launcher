@@ -11,7 +11,7 @@
   <header>
     <div class="brand"><span class="logo">ELITE Launcher</span><span class="hdr-ver" id="hdrVer"></span><span class="sub" id="subtitle">Dawn of War II · Retribution</span></div>
     <div class="launcher-banner hidden" id="launcherBanner"><span id="launcherText"></span><button class="btn gold small hidden" id="launcherBtn"></button></div>
-    <nav><button class="tab on" data-view="home" data-t="home"></button><button class="tab" data-view="hotkeys" data-t="hotkeys"></button><button class="tab" data-view="settings" data-t="settings"></button></nav>
+    <nav><button class="tab on" data-view="home" data-t="home"></button><button class="tab" data-view="addons" data-t="components"></button><button class="tab" data-view="hotkeys" data-t="hotkeys"></button><button class="tab" data-view="settings" data-t="settings"></button></nav>
   </header>
 
   <main id="home" class="view home">
@@ -44,11 +44,15 @@
     </section>
 
     <aside class="col">
+      <section class="panel on-box" id="onBox">
+        <div class="h" data-t="online"></div>
+        <div class="on-groups" id="onGroups"></div>
+        <button class="more hidden" id="onLadder" data-t="onLadder"></button>
+      </section>
       <section class="panel addons hidden" id="compBox">
-        <div class="h" data-t="components"></div>
+        <div class="h"><span data-t="components"></span><button class="h-link" id="allComps" data-t="allAddons"></button></div>
         <div id="components" class="addon-list"></div>
       </section>
-      <div class="spacer"></div>
       <div class="upd-box hidden" id="updBox"><div class="upd-text" id="updText"></div><button class="btn gold small" id="updateBtn"></button></div>
       <div class="ver-warn hidden" id="verWarn"></div>
       <div class="ver-pick">
@@ -57,6 +61,13 @@
       </div>
       <button class="play" id="play"></button>
     </aside>
+  </main>
+
+  <main id="addons" class="view hidden">
+    <section class="panel addons-page">
+      <div class="h" data-t="components"></div>
+      <div class="addon-all" id="allCompList"></div>
+    </section>
   </main>
 
   <main id="hotkeys" class="view hidden">

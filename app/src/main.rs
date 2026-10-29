@@ -401,7 +401,7 @@ fn get_status(app: State<'_, App>) -> Value {
         "dismissed": s.dismissed,
         "mirror_count": mirrors(&s, cfg.as_ref()).count(),
         "components": cfgd.components.iter().map(|c| json!({
-            "id": c.id, "name": c.name, "description": c.description, "latest": c.version,
+            "id": c.id, "name": c.name, "description": c.description, "latest": c.version, "home": c.home,
             "enabled": s.components.get(&c.id).copied().unwrap_or(c.default),
             "conflicts": dir.as_ref().map(|d| found_conflicts(d, c)).unwrap_or_default(),
             "installed": dir.as_ref().map(|d| update::Game::component(d, &c.id).load_state().version).unwrap_or_default(),
@@ -1095,6 +1095,27 @@ async fn fb_thread(app: AppHandle) -> Result<Value, String> {
     }).await.map_err(|e| e.to_string())?
 }
 
+// ---------- Online: who is looking for a game, the matches being set up or played ----------
+/// The same list the ladder page shows (/ladder/api/mm/live of the ladder service on the log hosts), plus the host
+/// that answered, for links to its ladder page.
+#[tauri::command]
+async fn online_live() -> Result<Value, String> {
+    tauri::async_runtime::spawn_blocking(|| {
+        let mut last = "the ladder server is not configured in this build".to_string();
+        for host in fb_hosts() {
+            match ureq::get(&format!("{host}/ladder/api/mm/live")).timeout(Duration::from_secs(10)).call() {
+                Ok(r) => {
+                    let mut v: Value = serde_json::from_str(&r.into_string().unwrap_or_default()).map_err(|e| e.to_string())?;
+                    v["host"] = json!(host);
+                    return Ok(v);
+                }
+                Err(e) => last = e.to_string(),
+            }
+        }
+        Err(last)
+    }).await.map_err(|e| e.to_string())?
+}
+
 /// Repositories whose GitHub Releases become news: CI makes every release from the changelog,
 /// so a new launcher or patch set shows up in the news without anyone writing it by hand.
 const NEWS_REPOS: [&str; 2] = ["pivolan/Dow2-elite-launcher", "pivolan/Dow2-patches"];
@@ -1288,7 +1309,7 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             get_status, refresh, set_channel, switch_to, send_logs, set_comp_option, set_setting, set_component, remove_conflicts, pick_game_dir, open_url, open_game_dir, start_update, cancel_update, play,
-            fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels, launcher_check, launcher_install,
+            fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels, launcher_check, launcher_install, online_live,
             hotkeys_get, hotkeys_save, hotkeys_reset, uninstall_elite
         ])
         .run(tauri::generate_context!())

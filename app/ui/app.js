@@ -136,7 +136,28 @@ const T = {
     "launcherUpdateBtn": "Update the launcher",
     "launcherUpdating": "Updating the launcher… {p}",
     "launcherFail": "Could not update the launcher: {e}",
-    "noNews": "No news yet"
+    "noNews": "No news yet",
+    "online": "Online",
+    "onSearching": "Looking for a game",
+    "onStateCreating": "Getting ready",
+    "onStateLobby": "In the lobby",
+    "onStatePlaying": "Playing",
+    "onNobody": "Nobody is looking for a game. Start the game and press “Find a Game”.",
+    "onOffline": "No connection to the ladder server, trying again…",
+    "onIdle": "In the lobby",
+    "onLoading": "Loading who is online…",
+    "onLadder": "Ladder and match history ›",
+    "race_space_marines": "Space Marines",
+    "race_chaos_marines": "Chaos",
+    "race_eldar": "Eldar",
+    "race_orks": "Orks",
+    "race_tyranids": "Tyranids",
+    "race_imperial_guard": "Imperial Guard",
+    "race_t_tau": "Tau",
+    "race_z_unecron": "Necrons",
+    "race_ordo_malleus": "Ordo Malleus",
+    "allAddons": "All ›",
+    "onInMatchH": "In a match"
   },
   ru: {
     "fbTitle": "Написать разработчикам",
@@ -268,7 +289,28 @@ const T = {
     "launcherUpdateBtn": "Обновить лаунчер",
     "launcherUpdating": "Обновляю лаунчер… {p}",
     "launcherFail": "Не удалось обновить лаунчер: {e}",
-    "noNews": "Новостей пока нет"
+    "noNews": "Новостей пока нет",
+    "online": "Онлайн",
+    "onSearching": "Ищут игру",
+    "onStateCreating": "Собирается",
+    "onStateLobby": "В лобби",
+    "onStatePlaying": "Идёт",
+    "onNobody": "Никто не ищет игру. Запусти игру и нажми «Find a Game».",
+    "onOffline": "Нет связи с сервером ладдера, пробую снова…",
+    "onIdle": "В лобби",
+    "onLoading": "Загружаю, кто онлайн…",
+    "onLadder": "Ладдер и история матчей ›",
+    "race_space_marines": "Космодесант",
+    "race_chaos_marines": "Хаос",
+    "race_eldar": "Эльдар",
+    "race_orks": "Орки",
+    "race_tyranids": "Тираниды",
+    "race_imperial_guard": "Имперская гвардия",
+    "race_t_tau": "Тау",
+    "race_z_unecron": "Некроны",
+    "race_ordo_malleus": "Ордо Маллеус",
+    "allAddons": "Все ›",
+    "onInMatchH": "В матче"
   },
   es: {
     "fbTitle": "Escribir a los desarrolladores",
@@ -395,7 +437,28 @@ const T = {
     "launcherUpdateBtn": "Actualizar el launcher",
     "launcherUpdating": "Actualizando el launcher… {p}",
     "launcherFail": "No se pudo actualizar el launcher: {e}",
-    "noNews": "Aún no hay noticias"
+    "noNews": "Aún no hay noticias",
+    "online": "En línea",
+    "onSearching": "Buscan partida",
+    "onStateCreating": "Preparándose",
+    "onStateLobby": "En el lobby",
+    "onStatePlaying": "En curso",
+    "onNobody": "Nadie busca partida. Inicia el juego y pulsa «Find a Game».",
+    "onOffline": "Sin conexión con el servidor de la ladder, reintentando…",
+    "onIdle": "En el lobby",
+    "onLoading": "Cargando quién está en línea…",
+    "onLadder": "Ladder e historial de partidas ›",
+    "race_space_marines": "Marines Espaciales",
+    "race_chaos_marines": "Caos",
+    "race_eldar": "Eldar",
+    "race_orks": "Orkos",
+    "race_tyranids": "Tiránidos",
+    "race_imperial_guard": "Guardia Imperial",
+    "race_t_tau": "Tau",
+    "race_z_unecron": "Necrones",
+    "race_ordo_malleus": "Ordo Malleus",
+    "allAddons": "Todos ›",
+    "onInMatchH": "En partida"
   },
   fr: {
     "fbTitle": "Écrire aux développeurs",
@@ -522,7 +585,28 @@ const T = {
     "launcherUpdateBtn": "Mettre à jour le launcher",
     "launcherUpdating": "Mise à jour du launcher… {p}",
     "launcherFail": "Impossible de mettre à jour le launcher : {e}",
-    "noNews": "Pas encore d’actualités"
+    "noNews": "Pas encore d’actualités",
+    "online": "En ligne",
+    "onSearching": "Cherchent une partie",
+    "onStateCreating": "En préparation",
+    "onStateLobby": "Dans le salon",
+    "onStatePlaying": "En cours",
+    "onNobody": "Personne ne cherche de partie. Lancez le jeu et appuyez sur « Find a Game ».",
+    "onOffline": "Pas de connexion au serveur du ladder, nouvel essai…",
+    "onIdle": "Dans le salon",
+    "onLoading": "Chargement des joueurs en ligne…",
+    "onLadder": "Ladder et historique des parties ›",
+    "race_space_marines": "Space Marines",
+    "race_chaos_marines": "Chaos",
+    "race_eldar": "Eldar",
+    "race_orks": "Orks",
+    "race_tyranids": "Tyranides",
+    "race_imperial_guard": "Garde impériale",
+    "race_t_tau": "Tau",
+    "race_z_unecron": "Nécrons",
+    "race_ordo_malleus": "Ordo Malleus",
+    "allAddons": "Tous ›",
+    "onInMatchH": "En partie"
   },
   de: {
     "fbTitle": "An die Entwickler schreiben",
@@ -649,7 +733,28 @@ const T = {
     "launcherUpdateBtn": "Launcher aktualisieren",
     "launcherUpdating": "Launcher wird aktualisiert… {p}",
     "launcherFail": "Launcher konnte nicht aktualisiert werden: {e}",
-    "noNews": "Noch keine Neuigkeiten"
+    "noNews": "Noch keine Neuigkeiten",
+    "online": "Online",
+    "onSearching": "Suchen ein Spiel",
+    "onStateCreating": "Wird vorbereitet",
+    "onStateLobby": "In der Lobby",
+    "onStatePlaying": "Läuft",
+    "onNobody": "Niemand sucht ein Spiel. Starte das Spiel und drücke „Find a Game“.",
+    "onOffline": "Keine Verbindung zum Ladder-Server, neuer Versuch…",
+    "onIdle": "In der Lobby",
+    "onLoading": "Lade, wer online ist…",
+    "onLadder": "Ladder und Spielverlauf ›",
+    "race_space_marines": "Space Marines",
+    "race_chaos_marines": "Chaos",
+    "race_eldar": "Eldar",
+    "race_orks": "Orks",
+    "race_tyranids": "Tyraniden",
+    "race_imperial_guard": "Imperiale Armee",
+    "race_t_tau": "Tau",
+    "race_z_unecron": "Necrons",
+    "race_ordo_malleus": "Ordo Malleus",
+    "allAddons": "Alle ›",
+    "onInMatchH": "Im Spiel"
   },
 };
 
@@ -682,15 +787,52 @@ function verOpen(on) {
   $('verBtn').classList.toggle('on', on);
 }
 
+// "Version 0.7.0", plus the one the next update brings
+function compVer(c) {
+  const v = x => 'v' + String(x || '').replace(new RegExp('^' + c.id + '-'), '');
+  return c.installed ? t('addonVer', { v: v(c.installed) }) + (c.latest && c.latest !== c.installed ? ', ' + t('addonNext', { v: v(c.latest) }) : '')
+    : c.latest ? t('addonVer', { v: v(c.latest) }) : '';
+}
+
+// add-on rows: a switch each and its own options under it once it is on; the details behind "?" on the home screen,
+// written out on the Add-ons tab (full)
+function compList(box, list, full) {
+  const lock = S.busy || S.game_running;   // the game holds the add-on files while it runs
+  const nameHtml = c => { const n = L(c.name) || c.id, m = n.match(/^(.+?)\s*\(([^()]+)\)$/); return m ? `${esc(m[1])}<small>${esc(m[2])}</small>` : esc(n); };
+  box.innerHTML = (S.game_running ? `<div class="addon-note">${esc(t('gameRunningAddons'))}</div>` : '')
+    + list.map(c => `<div class="addon ${c.enabled ? '' : 'off'}"><div class="addon-row"><span class="addon-name" title="${esc(L(c.name) || c.id)}">${nameHtml(c)}</span>`
+      + (c.enabled && (c.conflicts || []).length ? `<span class="addon-warn" title="${esc(t('conflictActive'))}">!</span>` : '')
+      + (full ? '' : `<button class="qm ${$('pop').dataset.id === c.id ? 'on' : ''}" data-info="${esc(c.id)}" aria-label="${esc(t('addonInfo', { name: L(c.name) || c.id }))}">?</button>`)
+      + `<label class="switch"><input type="checkbox" role="switch" data-id="${esc(c.id)}" aria-label="${esc(L(c.name) || c.id)}" ${c.enabled ? 'checked' : ''} ${lock ? 'disabled' : ''}><i></i></label></div>`
+      + (full ? (L(c.description) ? `<p class="addon-desc">${esc(L(c.description))}</p>` : '')
+          + `<div class="addon-ver">${esc([compVer(c), t('addonLater')].filter(Boolean).join(' · '))}</div>`
+          + (c.enabled && (c.conflicts || []).length ? `<div class="addon-note">${esc(t('conflictActive'))}</div>` : '') : '')
+      + (c.enabled && (c.options || []).length ? '<div class="addon-opts">' + c.options.map(o => `<label class="addon-opt"><input type="checkbox" data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${o.on ? 'checked' : ''} ${lock ? 'disabled' : ''}>${esc(L(o.name) || o.id)}</label>`).join('') + '</div>' : '')
+      + '</div>').join('');
+  box.querySelectorAll('.qm').forEach(b => b.onclick = e => { e.stopPropagation(); popAddon(b, list.find(c => c.id === b.dataset.info)); });
+  box.querySelectorAll('input[data-opt]').forEach(cb => cb.onchange = () =>
+    invoke('set_comp_option', { comp: cb.dataset.comp, opt: cb.dataset.opt, on: cb.checked }).then(reload).catch(e => toast(e, true)));
+  box.querySelectorAll('input[data-id]').forEach(cb => cb.onchange = async () => {
+    const comp = list.find(c => c.id === cb.dataset.id);
+    if (cb.checked && comp && (comp.conflicts || []).length) {
+      const del = await askConflict(comp.conflicts);
+      if (del) {
+        try { toast(t('conflictRemoved', { files: (await invoke('remove_conflicts', { id: comp.id })).join(', ') })); }
+        catch (e) { toast(e, true); }
+      }
+    }
+    await invoke('set_component', { id: cb.dataset.id, on: cb.checked });
+    if (S.installed_version) { try { await invoke('start_update', { repair: false, componentsOnly: true }); S.busy = true; render(); } catch (e) { toast(e, true); } }
+    else reload();
+  });
+}
+
 // details of an add-on next to its "?": description, version, a hand-installed copy in the game folder
 function popAddon(btn, c) {
   const pop = $('pop');
   if (!c || (pop.dataset.id === c.id && !pop.classList.contains('hidden'))) return popClose();
-  const v = x => 'v' + String(x || '').replace(new RegExp('^' + c.id + '-'), '');
-  const ver = c.installed ? t('addonVer', { v: v(c.installed) }) + (c.latest && c.latest !== c.installed ? ', ' + t('addonNext', { v: v(c.latest) }) : '')
-    : c.latest ? t('addonVer', { v: v(c.latest) }) : '';
   pop.innerHTML = `<b>${esc(L(c.name) || c.id)}</b>` + (L(c.description) ? `<p>${esc(L(c.description))}</p>` : '')
-    + `<div class="v">${esc([ver, t('addonLater')].filter(Boolean).join(' · '))}</div>`
+    + `<div class="v">${esc([compVer(c), t('addonLater')].filter(Boolean).join(' · '))}</div>`
     + (c.enabled && (c.conflicts || []).length ? `<div class="w">${esc(t('conflictActive'))}</div>` : '');
   pop.dataset.id = c.id;
   pop.classList.remove('hidden');
@@ -834,34 +976,13 @@ function render() {
   $('verWarn').classList.toggle('hidden', !notMain);
   if (notMain) $('verWarn').textContent = t('youPlay', { name: L(activeCh.name) }) + ' ' + t('notMain', { name: L(mainCh.name) });
 
-  // add-ons: a switch each, the details behind "?"; an add-on's own options show up under it once it is on
+  // add-ons: the ones players switch most on the home screen (launcher.json "home"), all of them on the Add-ons tab
   const comps = S.components || [];
-  $('compBox').classList.toggle('hidden', !comps.length);
-  const lockC = S.busy || S.game_running;   // the game holds the add-on files while it runs
-  const nameHtml = c => { const n = L(c.name) || c.id, m = n.match(/^(.+?)\s*\(([^()]+)\)$/); return m ? `${esc(m[1])}<small>${esc(m[2])}</small>` : esc(n); };
-  $('components').innerHTML = (S.game_running ? `<div class="addon-note">${esc(t('gameRunningAddons'))}</div>` : '')
-    + comps.map(c => `<div class="addon ${c.enabled ? '' : 'off'}"><div class="addon-row"><span class="addon-name" title="${esc(L(c.name) || c.id)}">${nameHtml(c)}</span>`
-      + (c.enabled && (c.conflicts || []).length ? `<span class="addon-warn" title="${esc(t('conflictActive'))}">!</span>` : '')
-      + `<button class="qm ${$('pop').dataset.id === c.id ? 'on' : ''}" data-info="${esc(c.id)}" aria-label="${esc(t('addonInfo', { name: L(c.name) || c.id }))}">?</button>`
-      + `<label class="switch"><input type="checkbox" role="switch" data-id="${esc(c.id)}" aria-label="${esc(L(c.name) || c.id)}" ${c.enabled ? 'checked' : ''} ${lockC ? 'disabled' : ''}><i></i></label></div>`
-      + (c.enabled && (c.options || []).length ? '<div class="addon-opts">' + c.options.map(o => `<label class="addon-opt"><input type="checkbox" data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${o.on ? 'checked' : ''} ${lockC ? 'disabled' : ''}>${esc(L(o.name) || o.id)}</label>`).join('') + '</div>' : '')
-      + '</div>').join('');
-  $('components').querySelectorAll('.qm').forEach(b => b.onclick = e => { e.stopPropagation(); popAddon(b, comps.find(c => c.id === b.dataset.info)); });
-  $('components').querySelectorAll('input[data-opt]').forEach(cb => cb.onchange = () =>
-    invoke('set_comp_option', { comp: cb.dataset.comp, opt: cb.dataset.opt, on: cb.checked }).then(reload).catch(e => toast(e, true)));
-  $('components').querySelectorAll('input[data-id]').forEach(cb => cb.onchange = async () => {
-    const comp = comps.find(c => c.id === cb.dataset.id);
-    if (cb.checked && comp && (comp.conflicts || []).length) {
-      const del = await askConflict(comp.conflicts);
-      if (del) {
-        try { toast(t('conflictRemoved', { files: (await invoke('remove_conflicts', { id: comp.id })).join(', ') })); }
-        catch (e) { toast(e, true); }
-      }
-    }
-    await invoke('set_component', { id: cb.dataset.id, on: cb.checked });
-    if (S.installed_version) { try { await invoke('start_update', { repair: false, componentsOnly: true }); S.busy = true; render(); } catch (e) { toast(e, true); } }
-    else reload();
-  });
+  const pinned = comps.some(c => c.home) ? comps.filter(c => c.home)
+    : comps.filter(c => /automatch|relay/i.test(c.id));   // until launcher.json marks them
+  $('compBox').classList.toggle('hidden', !pinned.length);
+  compList($('components'), pinned, false);
+  compList($('allCompList'), comps, true);
 
   // Play
   const play = $('play');
@@ -908,6 +1029,7 @@ function render() {
   $('repair').disabled = S.busy || S.game_running || !S.installed_version;
   $('about').textContent = `Elite Launcher ${S.launcher_version} · ${S.os}`;
   $('hdrVer').textContent = S.launcher_version ? 'v' + S.launcher_version : '';
+  onRender();
 }
 
 function renderProgress(p) {
@@ -1010,6 +1132,7 @@ document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
   document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('hidden', v.id !== b.dataset.view));
 });
+$('allComps').onclick = () => document.querySelector('.tab[data-view="addons"]').click();
 $('cancel').onclick = () => invoke('cancel_update');
 $('browse').onclick = pickDir;
 $('openDir').onclick = () => invoke('open_game_dir').catch(e => toast(e, true));
@@ -1043,6 +1166,67 @@ reload().then(refresh);
 launcherCheck();
 // every 15 minutes: new Elite versions, announcements and a newer launcher
 setInterval(() => { if (S && !S.busy) refresh(); launcherCheck(); }, 15 * 60 * 1000);
+
+
+// ---------- Online (home, above the add-ons): who is looking for a game, who is in a match ----------
+// The same list the ladder page shows: /ladder/api/mm/live of the ladder service on the log hosts, every 15 seconds
+// (every minute while the window is hidden). Only names here; the details are on the ladder page linked below the block.
+const ON = { d: null, err: false, timer: null, shut: new Set() };
+// the groups the player folded stay folded (only a convenience: without storage everything opens)
+try { ON.shut = new Set(JSON.parse(localStorage.getItem('onShut') || '[]')); } catch (e) {}
+const RACES = ['space_marines', 'chaos_marines', 'eldar', 'orks', 'tyranids', 'imperial_guard', 't_tau', 'z_unecron', 'ordo_malleus'];
+const raceImg = r => RACES.includes(r) ? `<img class="race" src="races/${r}.png" alt="${esc(t('race_' + r))}" title="${esc(t('race_' + r))}">` : '<span class="race"></span>';
+const onWho = p => `<button class="nm" data-steam="${esc(p.steam || '')}" title="${esc(p.steam ? 'Steam ' + p.steam : '')}">${esc(p.name || 'Player')}</button>`;
+
+function onRender() {
+  if (!S) return;
+  const d = ON.d, look = (d?.searching || []).filter(p => p.mode !== 'watch'), matches = d?.matches || [];   // spectators wait to watch, not to play
+  // a group folds on a click on its heading
+  const group = (key, title, n, body) => {
+    const open = !ON.shut.has(key);
+    return `<div class="on-g ${key} ${open ? '' : 'shut'}"><button class="on-gh" data-g="${key}" aria-expanded="${open}" ${body ? '' : 'disabled'}>`
+      + `<i></i>${esc(title)}<span>${esc(String(n))}</span>${body ? '<b class="chev"></b>' : ''}</button>${open ? body : ''}</div>`;
+  };
+  const st = { creating: 'onStateCreating', lobby: 'onStateLobby', playing: 'onStatePlaying' };
+  let html = '';
+  // first load: grey rows in place of the names; no answer: say so
+  if (!d) html = ON.err ? `<div class="on-empty">${esc(t('onOffline'))}</div>`
+    : `<div class="on-skel" role="status" aria-label="${esc(t('onLoading'))}">${'<div><i></i><b></b></div>'.repeat(5)}</div>`;
+  else {
+    if (ON.err) html += `<div class="on-stale">${esc(t('onOffline'))}</div>`;   // the last list stays, marked as old
+    if (look.length) html += group('look', t('onSearching'), look.length,
+      look.map(p => `<div class="on-p">${raceImg(p.race)}${onWho(p)}<span class="tag">${esc(p.mode)}</span></div>`).join(''));
+    if (matches.length) html += group('match', t('onInMatchH'), matches.reduce((n, m) => n + (m.team1 || []).length + (m.team2 || []).length, 0),
+      // a match is two lines, one per team, so 2v2 and 3v3 fit too; the mode's colour says whether it is on already
+      matches.map(m => `<div class="on-m"><span class="tag ${esc(m.state)}" title="${esc(t(st[m.state] || 'onStateCreating'))}">${esc(m.mode)}</span>`
+        + `<div class="tms"><div>${(m.team1 || []).map(onWho).join(', ')}</div><div><span class="vs">vs</span> ${(m.team2 || []).map(onWho).join(', ')}</div></div></div>`).join(''));
+    if (!look.length && !matches.length) html += `<div class="on-empty">${esc(t('onNobody'))}</div>`;
+    // in the lobby, the last group: online (whoever talked to the ladder server in the last minute, the number on the
+    // ladder page) minus those looking for a game or watching and those in a match; only a number, the server sends no names
+    const inMatches = matches.reduce((n, m) => n + (m.team1 || []).length + (m.team2 || []).length + (m.watchers || []).length, 0);
+    html += group('idle', t('onIdle'), Math.max(0, (Number(d.online) || 0) - (d.searching || []).length - inMatches), '');
+  }
+  $('onGroups').innerHTML = html;
+  $('onGroups').querySelectorAll('.nm[data-steam]').forEach(b => b.onclick = () => b.dataset.steam && open('https://steamcommunity.com/profiles/' + b.dataset.steam));
+  $('onGroups').querySelectorAll('[data-g]').forEach(b => b.onclick = () => {
+    ON.shut.has(b.dataset.g) ? ON.shut.delete(b.dataset.g) : ON.shut.add(b.dataset.g);
+    try { localStorage.setItem('onShut', JSON.stringify([...ON.shut])); } catch (e) {}
+    onRender();
+  });
+  $('onLadder').classList.toggle('hidden', !d?.host);
+  $('onLadder').onclick = () => open((ON.d?.host || '') + '/ladder/');
+}
+async function onLoad() {
+  try { ON.d = await invoke('online_live'); ON.err = false; }
+  catch (e) { ON.err = true; }
+  onRender();
+}
+function onPoll() {
+  clearTimeout(ON.timer);
+  onLoad().finally(() => { ON.timer = setTimeout(onPoll, document.hidden ? 60000 : 15000); });
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) onPoll(); });
+onPoll();
 
 
 // ---------- feedback chat with the developers ----------
