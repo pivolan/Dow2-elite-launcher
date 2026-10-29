@@ -794,18 +794,18 @@ function compVer(c) {
     : c.latest ? t('addonVer', { v: v(c.latest) }) : '';
 }
 
-// an add-on's options: ticks, or a list when the option has choices; options of one group under its heading
+// an add-on's options: ticks, or a list when the option has choices; the options of one group in a block under its heading
 function optsHtml(c, lock) {
-  let grp = '';
-  return c.options.map(o => {
-    const g = L(o.group), head = g && g !== grp ? `<div class="addon-grp">${esc(g)}</div>` : '';
-    grp = g;
+  const one = o => {
     const data = `data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${lock ? 'disabled' : ''}`;
-    return head + ((o.choices || []).length
-      ? `<label class="addon-opt pick">${esc(L(o.name) || o.id)}<select ${data}>`
+    return (o.choices || []).length
+      ? `<label class="addon-opt pick"><span>${esc(L(o.name) || o.id)}</span><select ${data}>`
         + o.choices.map(ch => `<option value="${esc(ch.value)}" ${ch.value === o.value ? 'selected' : ''}>${esc(L(ch.name) || ch.value)}</option>`).join('') + '</select></label>'
-      : `<label class="addon-opt"><input type="checkbox" ${data} ${o.on ? 'checked' : ''}>${esc(L(o.name) || o.id)}</label>`);
-  }).join('');
+      : `<label class="addon-opt"><input type="checkbox" ${data} ${o.on ? 'checked' : ''}>${esc(L(o.name) || o.id)}</label>`;
+  };
+  const parts = [];
+  c.options.forEach(o => { const g = L(o.group), last = parts[parts.length - 1]; last && last.g === g ? last.list.push(o) : parts.push({ g, list: [o] }); });
+  return parts.map(p => p.g ? `<div class="addon-sub"><div class="addon-grp">${esc(p.g)}</div>${p.list.map(one).join('')}</div>` : p.list.map(one).join('')).join('');
 }
 
 // add-on rows: a switch each and its own options under it once it is on; the details behind "?" on the home screen,

@@ -76,9 +76,12 @@ nav{margin-left:auto;display:flex;gap:4px}
 .addon-opts{padding:0 0 6px 12px;margin-top:-4px}
 .addon-opt{display:flex;align-items:center;gap:8px;min-height:24px;font-size:13px;color:#c9b98f;cursor:pointer}
 .addon-opt input{flex:none;width:14px;height:14px;margin:0;accent-color:var(--gold)}
-.addon-opt.pick{cursor:default}
-.addon-opt.pick select{margin-left:auto;padding:2px 24px 2px 6px;font-size:12px;background-position:right 7px center}
-.addon-grp{margin:6px 0 1px;font:700 10px Cinzel,serif;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+/* a group of options (the match timer inside Lobby rating): a block with a line on the left, a list right after its label */
+.addon-sub{margin:6px 0 2px;padding:2px 0 2px 10px;border-left:2px solid var(--line2)}
+.addon-grp{margin-bottom:2px;font:700 10px Cinzel,serif;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase}
+.addon-opt.pick{gap:10px;cursor:default}
+.addon-opt.pick span{flex:none;min-width:22px}
+.addon-opt.pick select{flex:0 1 190px;min-width:0;height:24px;padding:0 24px 0 6px;font-size:12px;background-position:right 7px center}
 .addon-note{font-size:12px;color:var(--amber);padding:2px 0 8px}
 
 /* on/off switch: a real checkbox drawn as a toggle */
