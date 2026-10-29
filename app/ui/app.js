@@ -7,6 +7,20 @@ const $ = id => document.getElementById(id);
 
 const T = {
   en: {
+    "chAll": "General",
+    "chDev": "Developers",
+    "chLogin": "Sign in with Steam",
+    "chLogout": "Sign out",
+    "chSignInToWrite": "Sign in with Steam to write in the chat.",
+    "chPlaceholder": "Message… (Enter sends, Shift+Enter a new line)",
+    "chMembers": "In the launcher",
+    "chEmpty": "Quiet here. Say hi!",
+    "chWaitLogin": "Sign in with Steam in the browser, then come back here.",
+    "st_menu": "in the menu",
+    "st_game": "in the game",
+    "st_search": "looking for a game",
+    "st_match": "in a match",
+    "chSignedIn": "Signed in as {name}",
     "fbTitle": "Write to the developers",
     "fbName": "Your name:",
     "fbAttach": "🖼 Picture",
@@ -160,6 +174,20 @@ const T = {
     "onInMatchH": "In a match"
   },
   ru: {
+    "chAll": "Общий",
+    "chDev": "Разработчикам",
+    "chLogin": "Войти через Steam",
+    "chLogout": "Выйти",
+    "chSignInToWrite": "Чтобы писать в чат, войдите через Steam.",
+    "chPlaceholder": "Сообщение… (Enter — отправить, Shift+Enter — новая строка)",
+    "chMembers": "В лаунчере",
+    "chEmpty": "Пока тихо. Напишите первым!",
+    "chWaitLogin": "Войдите через Steam в браузере и вернитесь сюда.",
+    "st_menu": "в меню",
+    "st_game": "в игре",
+    "st_search": "ищет игру",
+    "st_match": "в матче",
+    "chSignedIn": "Вы вошли как {name}",
     "fbTitle": "Написать разработчикам",
     "fbName": "Как вас зовут:",
     "fbAttach": "🖼 Картинка",
@@ -313,6 +341,20 @@ const T = {
     "onInMatchH": "В матче"
   },
   es: {
+    "chAll": "General",
+    "chDev": "Desarrolladores",
+    "chLogin": "Entrar con Steam",
+    "chLogout": "Salir",
+    "chSignInToWrite": "Entra con Steam para escribir en el chat.",
+    "chPlaceholder": "Mensaje… (Enter envía, Shift+Enter nueva línea)",
+    "chMembers": "En el launcher",
+    "chEmpty": "Todo tranquilo. ¡Saluda!",
+    "chWaitLogin": "Entra con Steam en el navegador y vuelve aquí.",
+    "st_menu": "en el menú",
+    "st_game": "en el juego",
+    "st_search": "buscando partida",
+    "st_match": "en partida",
+    "chSignedIn": "Conectado como {name}",
     "fbTitle": "Escribir a los desarrolladores",
     "fbName": "Tu nombre:",
     "fbAttach": "🖼 Imagen",
@@ -461,6 +503,20 @@ const T = {
     "onInMatchH": "En partida"
   },
   fr: {
+    "chAll": "Général",
+    "chDev": "Développeurs",
+    "chLogin": "Se connecter avec Steam",
+    "chLogout": "Se déconnecter",
+    "chSignInToWrite": "Connectez-vous avec Steam pour écrire dans le chat.",
+    "chPlaceholder": "Message… (Entrée envoie, Maj+Entrée nouvelle ligne)",
+    "chMembers": "Dans le launcher",
+    "chEmpty": "C'est calme. Dites bonjour !",
+    "chWaitLogin": "Connectez-vous avec Steam dans le navigateur, puis revenez ici.",
+    "st_menu": "au menu",
+    "st_game": "en jeu",
+    "st_search": "cherche une partie",
+    "st_match": "en match",
+    "chSignedIn": "Connecté : {name}",
     "fbTitle": "Écrire aux développeurs",
     "fbName": "Votre nom :",
     "fbAttach": "🖼 Image",
@@ -609,6 +665,20 @@ const T = {
     "onInMatchH": "En partie"
   },
   de: {
+    "chAll": "Allgemein",
+    "chDev": "Entwickler",
+    "chLogin": "Mit Steam anmelden",
+    "chLogout": "Abmelden",
+    "chSignInToWrite": "Mit Steam anmelden, um im Chat zu schreiben.",
+    "chPlaceholder": "Nachricht… (Enter sendet, Umschalt+Enter neue Zeile)",
+    "chMembers": "Im Launcher",
+    "chEmpty": "Noch still hier. Sag hallo!",
+    "chWaitLogin": "Im Browser mit Steam anmelden und hierher zurückkommen.",
+    "st_menu": "im Menü",
+    "st_game": "im Spiel",
+    "st_search": "sucht ein Spiel",
+    "st_match": "im Match",
+    "chSignedIn": "Angemeldet als {name}",
     "fbTitle": "An die Entwickler schreiben",
     "fbName": "Dein Name:",
     "fbAttach": "🖼 Bild",
@@ -1300,6 +1370,85 @@ async function fbLoad() {
   if (atEnd || !FB.shown) box.scrollTop = box.scrollHeight; FB.shown = true;
 }
 fbInit();
+
+// ---------- players' chat: rooms, Steam sign-in, who has the launcher open (ladder service /ladder/api/c/*) ----------
+const CH = { room: 'all', last: {}, msgs: {}, me: null, timer: null };
+try { CH.room = localStorage.getItem('chRoom') || 'all'; } catch (e) {}
+function chShowRoom() {
+  document.querySelectorAll('.ch-tab').forEach(b => b.classList.toggle('on', b.dataset.room === CH.room));
+  $('chatPane').classList.toggle('hidden', CH.room === 'dev');
+  $('devPane').classList.toggle('hidden', CH.room !== 'dev');
+  if (CH.room !== 'dev') { chRender(true); chLoad(); }
+}
+function chMe() {
+  const me = CH.me && CH.me.signed_in ? CH.me : null;
+  $('meChip').innerHTML = me
+    ? (me.avatar ? `<img src="${esc(me.avatar)}" alt="">` : '') + `<span class="nm" title="${esc(t('chSignedIn', { name: me.name }))}">${esc(me.name || me.steam)}</span><button class="out" id="chOut">${esc(t('chLogout'))}</button>`
+    : (CH.me && CH.me.configured === false ? '' : `<button class="btn gold small" id="chIn">${esc(t('chLogin'))}</button>`);
+  if ($('chOut')) $('chOut').onclick = chLogout;
+  if ($('chIn')) $('chIn').onclick = chLogin;
+  $('chLoginRow').classList.toggle('hidden', !!me);
+  $('chSendRow').classList.toggle('hidden', !me);
+}
+async function chLogin() {
+  document.querySelectorAll('#chIn,#chIn2').forEach(b => b.disabled = true);
+  toast(t('chWaitLogin'));
+  try { CH.me = await invoke('c_login'); chMe(); chHello(); toast(t('chSignedIn', { name: CH.me.name })); }
+  catch (e) { toast(e, true); }
+  document.querySelectorAll('#chIn,#chIn2').forEach(b => b.disabled = false);
+}
+async function chLogout() { try { CH.me = await invoke('c_logout'); } catch (e) {} chMe(); }
+async function chLoad() {
+  const r = CH.room; if (r === 'dev') return;
+  let d; try { d = await invoke('c_api', { path: `msgs?room=${r}&after=${CH.last[r] || 0}` }); } catch (e) { return; }
+  const list = CH.msgs[r] || (CH.msgs[r] = []);
+  let changed = false;
+  for (const m of d.msgs || []) if (!list.some(x => x.id === m.id)) { list.push(m); changed = true; }
+  if ((d.deleted || []).length) { const n = list.length; CH.msgs[r] = list.filter(m => !d.deleted.includes(m.id)); changed = changed || n !== CH.msgs[r].length; }
+  const l2 = CH.msgs[r]; if (l2.length > 300) l2.splice(0, l2.length - 300);
+  if (l2.length) CH.last[r] = Math.max(CH.last[r] || 0, l2[l2.length - 1].id);
+  if (r === CH.room && (changed || !CH.shown)) chRender();
+}
+function chRender(force) {
+  const box = $('chMsgs'), list = CH.msgs[CH.room] || [];
+  const atEnd = box.scrollTop + box.clientHeight > box.scrollHeight - 30;
+  const when = ts => new Date(ts * 1000).toLocaleString(lang, { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+  const mine = CH.me && CH.me.signed_in ? CH.me.steam : '';
+  box.innerHTML = list.length ? list.map(m => `<div class="ch-m ${m.steam === mine ? 'mine' : ''}">` + (m.avatar ? `<img class="av" src="${esc(m.avatar)}" alt="">` : '<i class="av"></i>')
+    + `<div><div class="w"><b data-steam="${esc(m.steam)}">${esc(m.name)}</b>${when(m.ts)}</div><div class="tx">${esc(m.text)}</div></div></div>`).join('')
+    : `<div class="ch-empty">${esc(t('chEmpty'))}</div>`;
+  box.querySelectorAll('b[data-steam]').forEach(b => b.onclick = () => open('https://steamcommunity.com/profiles/' + b.dataset.steam));
+  if (atEnd || force || !CH.shown) box.scrollTop = box.scrollHeight; CH.shown = true;
+}
+async function chSay() {
+  const text = $('chText').value.trim(); if (!text || CH.room === 'dev') return;
+  $('chSend').disabled = true;
+  try {
+    const r = await invoke('c_api', { path: 'say', body: { room: CH.room, text } });
+    if (r.ok) { $('chText').value = ''; await chLoad(); chRender(true); } else toast(r.error || 'error', true);
+  } catch (e) { toast(e, true); }
+  $('chSend').disabled = false;
+}
+async function chHello() {
+  let d; try { d = await invoke('c_api', { path: 'hello', body: { state: S && S.game_running ? 'game' : 'menu' } }); } catch (e) { return; }
+  if (d.signed_in === false && CH.me && CH.me.signed_in) { CH.me = await invoke('c_logout'); chMe(); }   // the session is gone on the server
+  const list = d.online || [];
+  $('chMembersH').textContent = t('chMembers') + ' · ' + list.length;
+  $('chMembers').innerHTML = list.map(u => `<div class="ch-u" data-steam="${esc(u.steam)}" title="${esc(u.name + ' — ' + t('st_' + u.state))}">`
+    + (u.avatar ? `<img class="av" src="${esc(u.avatar)}" alt="">` : '<i class="av"></i>') + `<span class="nm">${esc(u.name)}</span>`
+    + (u.rating ? `<span class="rt">${Number(u.rating) | 0}</span>` : '') + `<span class="st st-${esc(u.state)}"></span></div>`).join('');
+  $('chMembers').querySelectorAll('.ch-u').forEach(b => b.onclick = () => open('https://steamcommunity.com/profiles/' + b.dataset.steam));
+}
+async function chInit() {
+  try { CH.me = await invoke('c_status'); } catch (e) {}
+  document.querySelectorAll('.ch-tab').forEach(b => b.onclick = () => { CH.room = b.dataset.room; try { localStorage.setItem('chRoom', CH.room); } catch (e) {} chShowRoom(); });
+  $('chIn2').onclick = chLogin;
+  $('chSend').onclick = chSay;
+  $('chText').onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); chSay(); } };
+  chMe(); chShowRoom(); chHello();
+  setInterval(chLoad, 5000); setInterval(chHello, 30000);
+}
+chInit();
 
 // ---------------- hotkeys ----------------
 const HK = { data: null, edits: {}, grid: false, wait: null };
