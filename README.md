@@ -134,8 +134,11 @@ The version lives in `Cargo.toml` (`[workspace.package] version`) and in `app/ta
 To ship one: raise the version in both, write its notes to `changelog/<version>/en.md` (a list of changes) and merge to `main`.
 Other languages can sit next to `en.md` later (`ru.md`, …); only `en.md` is required.
 
-`.github/workflows/build.yml` runs by hand (Actions → build → *Run workflow*). It needs these **repository secrets**
-(Settings → Secrets and variables → Actions → *Repository secrets*, not an environment) and fails right away without them:
+`.github/workflows/build.yml` runs on every push and on pull requests to `main`: on a branch it only builds and tests
+(nothing leaves CI); a push to `main` (a merged pull request) also ships — installers to the download folder, the tag,
+and for a new `X.Y.0` the GitHub Release the launchers update from. Work in branches, merge to `main` when it is ready.
+It needs these **repository secrets** (Settings → Secrets and variables → Actions → *Repository secrets*, not an
+environment); `main` fails right away without them, a fork's pull request builds without them as a check:
 
 | Secret | What |
 |---|---|
@@ -174,7 +177,7 @@ An update reaches players only when the version in `updater.json` is higher than
 | `publisher` | `elite-publish` and `elite-cli` for each OS |
 | `publish` | dry run: publishes the installers into a temporary store with a one-off key, signs a `launcher.json`, verifies all signatures, then deletes it all; the upload to the mirrors is skipped for now |
 | `release` | only on `main`: tags `vX.Y.Z` if it is new; for a new `X.Y.0` also a GitHub Release with the files of the download folder, `updater.json` for the self-update (`scripts/updater_manifest.py`), the notes of every version since the previous `X.Y.0` and the code signing policy |
-| `deploy` | only on `main`: the installers go to the download folder on the server (dormant until `DEPLOY_HOST` is set) |
+| `deploy` | only on `main`: the installers and `latest.json` go to the download folder on the server (the site reads `latest.json` for its links); `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY`, `DEPLOY_KNOWN_HOSTS` in the `dow2` environment |
 
 Tags are set by CI, not by hand. A release for a patch version is published by hand: Actions → build → *Run workflow* on
 `main` with *release* ticked. The release is built from the code its version tag points to, even if `main` has moved on.

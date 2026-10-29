@@ -7,6 +7,7 @@ pub mod cdc;
 pub mod config;
 pub mod elite;
 pub mod game;
+pub mod hotkeys;
 pub mod manifest;
 pub mod net;
 pub mod sign;

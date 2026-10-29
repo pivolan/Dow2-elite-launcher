@@ -19,6 +19,28 @@ const T = {
     "fbTooBig": "Picture is too big (max 8 MB)",
     "home": "Home",
     "settings": "Settings",
+    "hotkeys": "Hotkeys",
+    "hkGrid": "Grid hotkeys (QWER / ASDF / ZXCV)",
+    "hkGridNote": "abilities and unit building by position on the keyboard instead of first letters; the same switch as Options → Grid Hotkeys in the game",
+    "hkMain": "Main commands",
+    "hkAll": "All keys",
+    "hkSearch": "Search: command or key",
+    "hkReset": "Game defaults",
+    "hkHow": "click a key, then press the new one (with Ctrl / Shift / Alt if you want); Esc cancels. Applies at the next game start.",
+    "hkSaved": "Hotkeys saved — they apply at the next game start",
+    "hkDup": "Same key twice: {k}",
+    "hkCustom": "your changes: {n}",
+    "hkNone": "game defaults",
+    "hkAb": "Abilities",
+    "hkUc1": "Build, row 1",
+    "hkUc2": "Build, row 2",
+    "hkUc3": "Build, row 3",
+    "hkPress": "press a key…",
+    "unTitle": "Remove Elite",
+    "unBtn": "Remove Elite completely",
+    "unNote": "the mod, all add-ons and the launcher's files in the game folder; then Steam checks the game and you have clean vanilla",
+    "unSure": "Sure? Press again to remove",
+    "unDone": "Elite removed ({n} files). Steam is checking the game files now",
     "news": "News",
     "version": "Version",
     "links": "Links",
@@ -27,6 +49,7 @@ const T = {
     "updating": "Updating…",
     "running": "Game is running",
     "gameRunningAddons": "The game is running: close it to change add-ons. Updates are installed once it closes.",
+    "inGameDir": "The launcher is in the Dawn of War II folder - this can crash the game. Move the launcher folder anywhere else (for example to Documents) and start it from there.",
     "installed": "Installed",
     "current": "You have: {v}",
     "notInstalled": "Elite is not installed yet",
@@ -149,6 +172,28 @@ const T = {
     "fbTooBig": "Картинка слишком большая (до 8 МБ)",
     "home": "Главная",
     "settings": "Настройки",
+    "hotkeys": "Горячие клавиши",
+    "hkGrid": "Сетка клавиш (QWER / ASDF / ZXCV)",
+    "hkGridNote": "способности и постройка юнитов по положению на клавиатуре, а не по первым буквам; тот же переключатель, что «Параметры → Grid Hotkeys» в игре",
+    "hkMain": "Основные команды",
+    "hkAll": "Все клавиши",
+    "hkSearch": "Поиск: команда или клавиша",
+    "hkReset": "Как в игре по умолчанию",
+    "hkHow": "нажмите на клавишу, затем новую (можно с Ctrl / Shift / Alt); Esc — отмена. Действует со следующего запуска игры.",
+    "hkSaved": "Клавиши сохранены — заработают при следующем запуске игры",
+    "hkDup": "Одна клавиша дважды: {k}",
+    "hkCustom": "ваших изменений: {n}",
+    "hkNone": "как в игре по умолчанию",
+    "hkAb": "Способности",
+    "hkUc1": "Постройка, ряд 1",
+    "hkUc2": "Постройка, ряд 2",
+    "hkUc3": "Постройка, ряд 3",
+    "hkPress": "нажмите клавишу…",
+    "unTitle": "Удалить Elite",
+    "unBtn": "Удалить Elite полностью",
+    "unNote": "мод, все дополнения и файлы лаунчера в папке игры; затем Steam проверит игру — останется чистая ванила",
+    "unSure": "Точно? Нажмите ещё раз, чтобы удалить",
+    "unDone": "Elite удалён ({n} файлов). Steam сейчас проверяет файлы игры",
     "news": "Новости",
     "version": "Версия",
     "links": "Ссылки",
@@ -157,6 +202,7 @@ const T = {
     "updating": "Обновление…",
     "running": "Игра запущена",
     "gameRunningAddons": "Игра запущена: закройте её, чтобы менять дополнения. Обновления установятся после закрытия.",
+    "inGameDir": "Лаунчер лежит в папке с Dawn of War II — из-за этого игра может падать. Перенесите папку лаунчера в любое другое место (например, в «Документы») и запускайте оттуда.",
     "installed": "Установлена",
     "current": "У вас: {v}",
     "notInstalled": "Elite ещё не установлен",
@@ -279,6 +325,28 @@ const T = {
     "fbTooBig": "Imagen demasiado grande (máx. 8 MB)",
     "home": "Inicio",
     "settings": "Ajustes",
+    "hotkeys": "Hotkeys",
+    "hkGrid": "Grid hotkeys (QWER / ASDF / ZXCV)",
+    "hkGridNote": "abilities and unit building by position on the keyboard instead of first letters; the same switch as Options → Grid Hotkeys in the game",
+    "hkMain": "Main commands",
+    "hkAll": "All keys",
+    "hkSearch": "Search: command or key",
+    "hkReset": "Game defaults",
+    "hkHow": "click a key, then press the new one (with Ctrl / Shift / Alt if you want); Esc cancels. Applies at the next game start.",
+    "hkSaved": "Hotkeys saved — they apply at the next game start",
+    "hkDup": "Same key twice: {k}",
+    "hkCustom": "your changes: {n}",
+    "hkNone": "game defaults",
+    "hkAb": "Abilities",
+    "hkUc1": "Build, row 1",
+    "hkUc2": "Build, row 2",
+    "hkUc3": "Build, row 3",
+    "hkPress": "press a key…",
+    "unTitle": "Remove Elite",
+    "unBtn": "Remove Elite completely",
+    "unNote": "the mod, all add-ons and the launcher's files in the game folder; then Steam checks the game and you have clean vanilla",
+    "unSure": "Sure? Press again to remove",
+    "unDone": "Elite removed ({n} files). Steam is checking the game files now",
     "news": "Noticias",
     "version": "Versión",
     "links": "Enlaces",
@@ -287,6 +355,7 @@ const T = {
     "updating": "Actualizando…",
     "running": "Juego en marcha",
     "gameRunningAddons": "El juego está en marcha: ciérralo para cambiar los complementos. Las actualizaciones se instalan al cerrarlo.",
+    "inGameDir": "El launcher está en la carpeta de Dawn of War II: esto puede hacer que el juego se cierre. Mueve la carpeta del launcher a otro sitio y ábrelo desde allí.",
     "installed": "Instalada",
     "current": "Tienes: {v}",
     "notInstalled": "Elite aún no está instalado",
@@ -404,6 +473,28 @@ const T = {
     "fbTooBig": "Image trop grande (max 8 Mo)",
     "home": "Accueil",
     "settings": "Paramètres",
+    "hotkeys": "Hotkeys",
+    "hkGrid": "Grid hotkeys (QWER / ASDF / ZXCV)",
+    "hkGridNote": "abilities and unit building by position on the keyboard instead of first letters; the same switch as Options → Grid Hotkeys in the game",
+    "hkMain": "Main commands",
+    "hkAll": "All keys",
+    "hkSearch": "Search: command or key",
+    "hkReset": "Game defaults",
+    "hkHow": "click a key, then press the new one (with Ctrl / Shift / Alt if you want); Esc cancels. Applies at the next game start.",
+    "hkSaved": "Hotkeys saved — they apply at the next game start",
+    "hkDup": "Same key twice: {k}",
+    "hkCustom": "your changes: {n}",
+    "hkNone": "game defaults",
+    "hkAb": "Abilities",
+    "hkUc1": "Build, row 1",
+    "hkUc2": "Build, row 2",
+    "hkUc3": "Build, row 3",
+    "hkPress": "press a key…",
+    "unTitle": "Remove Elite",
+    "unBtn": "Remove Elite completely",
+    "unNote": "the mod, all add-ons and the launcher's files in the game folder; then Steam checks the game and you have clean vanilla",
+    "unSure": "Sure? Press again to remove",
+    "unDone": "Elite removed ({n} files). Steam is checking the game files now",
     "news": "Actualités",
     "version": "Version",
     "links": "Liens",
@@ -412,6 +503,7 @@ const T = {
     "updating": "Mise à jour…",
     "running": "Jeu en cours",
     "gameRunningAddons": "Le jeu est lancé : fermez-le pour modifier les modules. Les mises à jour s’installent à sa fermeture.",
+    "inGameDir": "Le launcher est dans le dossier de Dawn of War II : le jeu peut planter. Déplacez le dossier du launcher ailleurs et lancez-le depuis là.",
     "installed": "Installée",
     "current": "Vous avez : {v}",
     "notInstalled": "Elite n'est pas encore installé",
@@ -529,6 +621,28 @@ const T = {
     "fbTooBig": "Bild zu groß (max. 8 MB)",
     "home": "Start",
     "settings": "Einstellungen",
+    "hotkeys": "Hotkeys",
+    "hkGrid": "Grid hotkeys (QWER / ASDF / ZXCV)",
+    "hkGridNote": "abilities and unit building by position on the keyboard instead of first letters; the same switch as Options → Grid Hotkeys in the game",
+    "hkMain": "Main commands",
+    "hkAll": "All keys",
+    "hkSearch": "Search: command or key",
+    "hkReset": "Game defaults",
+    "hkHow": "click a key, then press the new one (with Ctrl / Shift / Alt if you want); Esc cancels. Applies at the next game start.",
+    "hkSaved": "Hotkeys saved — they apply at the next game start",
+    "hkDup": "Same key twice: {k}",
+    "hkCustom": "your changes: {n}",
+    "hkNone": "game defaults",
+    "hkAb": "Abilities",
+    "hkUc1": "Build, row 1",
+    "hkUc2": "Build, row 2",
+    "hkUc3": "Build, row 3",
+    "hkPress": "press a key…",
+    "unTitle": "Remove Elite",
+    "unBtn": "Remove Elite completely",
+    "unNote": "the mod, all add-ons and the launcher's files in the game folder; then Steam checks the game and you have clean vanilla",
+    "unSure": "Sure? Press again to remove",
+    "unDone": "Elite removed ({n} files). Steam is checking the game files now",
     "news": "Neuigkeiten",
     "version": "Version",
     "links": "Links",
@@ -537,6 +651,7 @@ const T = {
     "updating": "Aktualisiere…",
     "running": "Spiel läuft",
     "gameRunningAddons": "Das Spiel läuft: schließe es, um Add-ons zu ändern. Updates werden nach dem Schließen installiert.",
+    "inGameDir": "Der Launcher liegt im Dawn-of-War-II-Ordner – das kann das Spiel abstürzen lassen. Verschiebe den Launcher-Ordner woandershin und starte ihn von dort.",
     "installed": "Installiert",
     "current": "Installiert: {v}",
     "notInstalled": "Elite ist noch nicht installiert",
@@ -739,6 +854,10 @@ function popClose() {
 let LU = null;
 function renderLauncherBanner() {
   const lu = S.launcher_update, v = LU ? LU.version : lu?.version, b = $('launcherBanner');
+  if (S.in_game_dir) {                      // the launcher sits in the game folder: say so first, it breaks the game
+    b.classList.remove('hidden'); b.classList.remove('link'); $('launcherBtn').classList.add('hidden');
+    $('launcherText').textContent = t('inGameDir'); b.onclick = null; return;
+  }
   b.classList.toggle('hidden', !v);
   if (!v) return;
   b.classList.toggle('link', !LU);
@@ -746,7 +865,7 @@ function renderLauncherBanner() {
   if (LU) {
     $('launcherText').textContent = LU.installing ? t('launcherUpdating', { p: LU.pct || '' }) : t('launcherNew', { v });
     $('launcherBtn').textContent = t('launcherUpdateBtn');
-    $('launcherBtn').disabled = !!S.busy;
+    $('launcherBtn').disabled = !!S.busy || !!S.game_running;
     $('launcherBtn').onclick = launcherInstall;
     b.onclick = null;
   } else {
@@ -772,7 +891,7 @@ function syncTrayLabels() {
 }
 
 function render() {
-  lang = S.lang || (navigator.language || 'en').slice(0, 2);
+  lang = S.lang || 'ru';                     // Russian unless the player picked another language in Settings
   if (!T[lang]) lang = 'en';
   document.documentElement.lang = lang;
   syncTrayLabels();
@@ -1165,3 +1284,102 @@ async function fbLoad() {
   if (atEnd || !FB.shown) box.scrollTop = box.scrollHeight; FB.shown = true;
 }
 fbInit();
+
+// ---------------- hotkeys ----------------
+const HK = { data: null, edits: {}, grid: false, wait: null };
+const AB = [1, 2, 3, 4, 5, 6, 7].map(i => 'grid:AB_key_' + i);
+const UC = r => [1, 2, 3, 4, 5, 6, 7].map(c => `grid:UC_Row${r}_Col${c}`);
+const MAIN = ['attack', 'retreat', 'retreat_queue', 'repair', 'reinforce', 'overwatch', 'attackground', 'attackmelee', 'halt', 'stance', 'rally', 'unload',
+  'retire', 'select_all', 'select_hq', 'select_hero', 'retreat_hero', 'retreat_all', 'retreat_beacon', 'next_primary_selection', 'event_cue_cycle', 'systemmenu'];
+const hkKey = b => b.scope + ':' + b.name;
+const HK_RU = { attack: 'Атака', retreat: 'Отступление', retreat_queue: 'Отступление в очередь', repair: 'Ремонт', reinforce: 'Подкрепление', overwatch: 'Наблюдение (overwatch)',
+  attackground: 'Атака по земле', attackmelee: 'Рукопашная атака', halt: 'Стоп', stance: 'Стойка', rally: 'Точка сбора', unload: 'Высадить', retire: 'Распустить',
+  select_all: 'Выбрать всех', select_hq: 'Выбрать штаб', select_hero: 'Выбрать героя', retreat_hero: 'Отступление героя', retreat_all: 'Отступление всех',
+  retreat_beacon: 'Маяк отступления', next_primary_selection: 'Следующий выбранный', event_cue_cycle: 'К последнему событию', systemmenu: 'Меню' };
+function hkVal(k) { const b = HK.data.map[k]; return k in HK.edits ? HK.edits[k] : b ? b.value : ''; }
+function hkPretty(name) { return name.replace(/_/g, ' ').replace(/^AB key /, '').replace(/^UC Row(\d) Col(\d)/, 'row $1 · $2'); }
+async function hkLoad() {
+  try { const d = await invoke('hotkeys_get'); HK.data = d; HK.data.map = {}; d.bindings.forEach(b => HK.data.map[hkKey(b)] = b); HK.grid = d.grid; HK.edits = {}; hkRender(); }
+  catch (e) { $('hkGridBox').innerHTML = `<div class="note">${esc(String(e))}</div>`; }
+}
+// with Grid Hotkeys on, the grid table re-assigns some commands (reinforce, melee, stance, repair) - those are the ones that work
+function hkMainKey(n) { return HK.grid && HK.data.map['grid:' + n] ? 'grid:' + n : ':' + n; }
+function hkDups() {
+  // keys used twice among commands that work at the same moment: a selected squad (main commands + abilities with the grid on);
+  // building keys work only with a building selected - checked among themselves
+  const groups = [MAIN.map(hkMainKey).concat(HK.grid ? AB : []), HK.grid ? UC(1).concat(UC(2), UC(3)) : []];
+  const dup = new Set();
+  groups.forEach(keys => { const seen = {};
+    keys.filter(k => HK.data.map[k]).forEach(k => { const v = hkVal(k).toLowerCase(); if (!v) return; (seen[v] = seen[v] || []).push(k); });
+    // only clashes the player made: the game's own defaults share some keys on purpose (context decides)
+    Object.values(seen).forEach(ks => { if (ks.length > 1 && ks.some(k => hkVal(k) !== HK.data.map[k].default)) ks.forEach(k => dup.add(k)); }); });
+  return dup;
+}
+function hkBtn(k) {
+  const b = HK.data.map[k]; if (!b) return '<span></span>';
+  const chg = hkVal(k) !== b.default;
+  return `<button class="kk${chg ? ' chg' : ''}" data-k="${esc(k)}" title="${esc(b.name)} — ${esc(t('hkNone'))}: ${esc(b.default)}">${esc(hkVal(k))}</button>`;
+}
+function hkRender() {
+  if (!HK.data) return;
+  $('hkGrid').checked = HK.grid;
+  const g = $('hkGridBox'); g.classList.toggle('off', !HK.grid);
+  g.innerHTML = [[t('hkAb'), AB], [t('hkUc1'), UC(1)], [t('hkUc2'), UC(2)], [t('hkUc3'), UC(3)]]
+    .map(([l, ks]) => `<span class="lbl">${esc(l)}</span>` + ks.map(hkBtn).join('')).join('');
+  $('hkMain').innerHTML = MAIN.filter(n => HK.data.map[':' + n]).map(n => `<div class="hk-row"><span title="${esc(n)}">${esc(lang === 'ru' && HK_RU[n] || hkPretty(n))}</span>${hkBtn(hkMainKey(n))}</div>`).join('');
+  const q = ($('hkSearch').value || '').toLowerCase(); let sec = '';
+  $('hkAllList').innerHTML = HK.data.bindings.filter(b => !q || b.name.toLowerCase().includes(q) || hkVal(hkKey(b)).toLowerCase() === q || b.section.toLowerCase().includes(q)).slice(0, 400)
+    .map(b => (b.section !== sec ? `<div class="hk-sec">${esc(sec = b.section)}</div>` : '') + `<div class="hk-row"><span>${esc(hkPretty(b.name))}</span>${hkBtn(hkKey(b))}</div>`).join('');
+  const dup = hkDups();
+  document.querySelectorAll('#hotkeys .kk').forEach(el => { el.classList.toggle('dup', dup.has(el.dataset.k)); el.onclick = () => hkWait(el); });
+  const n = Object.keys(HK.edits).filter(k => HK.edits[k] !== HK.data.map[k].value).length + HK.data.bindings.filter(b => b.value !== b.default && !(hkKey(b) in HK.edits)).length;
+  $('hkState').textContent = n ? t('hkCustom', { n }) : t('hkNone');
+}
+function hkWait(el) {
+  document.querySelectorAll('#hotkeys .kk.wait').forEach(x => { x.classList.remove('wait'); x.textContent = hkVal(x.dataset.k); });
+  HK.wait = el.dataset.k; el.classList.add('wait'); el.textContent = t('hkPress');
+}
+const KEYMAP = { Space: 'Space', Tab: 'Tab', Enter: 'Enter', Backspace: 'Backspace', Comma: 'Comma', Period: 'Period', Slash: 'Slash', Semicolon: 'Semicolon',
+  Quote: 'Apostrophe', BracketLeft: 'LBracket', BracketRight: 'RBracket', Backslash: 'Backslash', Minus: 'Minus', Equal: 'Equal', Backquote: 'Grave',
+  ArrowUp: 'Up', ArrowDown: 'Down', ArrowLeft: 'Left', ArrowRight: 'Right', Delete: 'Delete', Insert: 'Insert', Home: 'Home', End: 'End', PageUp: 'PageUp',
+  PageDown: 'PageDown', Pause: 'Pause', CapsLock: 'CapsLock', NumpadAdd: 'NumpadPlus', NumpadSubtract: 'NumpadMinus', NumpadMultiply: 'NumpadMultiply',
+  NumpadDivide: 'NumpadSlash', NumpadDecimal: 'NumpadPeriod' };
+function dowKey(e) {
+  let k = null; const c = e.code;
+  if (/^Key[A-Z]$/.test(c)) k = c.slice(3); else if (/^Digit\d$/.test(c)) k = c.slice(5); else if (/^F([1-9]|1[0-2])$/.test(c)) k = c;
+  else if (/^Numpad\d$/.test(c)) k = c; else k = KEYMAP[c] || null;
+  if (!k) return null;
+  return (e.ctrlKey ? 'Control+' : '') + (e.shiftKey ? 'Shift+' : '') + (e.altKey ? 'Alt+' : '') + k;
+}
+document.addEventListener('keydown', e => {
+  if (!HK.wait) return;
+  if (['ControlLeft', 'ControlRight', 'ShiftLeft', 'ShiftRight', 'AltLeft', 'AltRight', 'MetaLeft', 'MetaRight'].includes(e.code)) return;
+  e.preventDefault(); e.stopPropagation();
+  const k = HK.wait; HK.wait = null;
+  if (e.code !== 'Escape') { const v = dowKey(e); if (v) HK.edits[k] = v; }
+  hkRender();
+}, true);
+$('hkGrid').onchange = e => { HK.grid = e.target.checked; hkRender(); };
+$('hkSearch').oninput = () => hkRender();
+$('hkSave').onclick = async () => {
+  const dup = hkDups();
+  try { const d = await invoke('hotkeys_save', { changes: HK.edits, grid: HK.grid }); HK.data = d; HK.data.map = {}; d.bindings.forEach(b => HK.data.map[hkKey(b)] = b); HK.grid = d.grid; HK.edits = {}; hkRender();
+    toast(dup.size ? t('hkSaved') + '. ' + t('hkDup', { k: [...dup].map(k => hkVal(k)).filter((v, i, a) => a.indexOf(v) === i).join(', ') }) : t('hkSaved'), !!dup.size); }
+  catch (e) { toast(String(e), true); }
+};
+$('hkReset').onclick = async () => {
+  try { const d = await invoke('hotkeys_reset'); HK.data = d; HK.data.map = {}; d.bindings.forEach(b => HK.data.map[hkKey(b)] = b); HK.grid = d.grid; HK.edits = {}; hkRender(); toast(t('hkSaved')); }
+  catch (e) { toast(String(e), true); }
+};
+document.querySelector('.tab[data-view="hotkeys"]').addEventListener('click', () => { if (!HK.data) hkLoad(); });
+
+// ---------------- remove Elite completely ----------------
+let unArmed = 0;
+$('uninstall').onclick = async () => {
+  const b = $('uninstall');
+  if (Date.now() - unArmed > 6000) { unArmed = Date.now(); b.textContent = t('unSure'); setTimeout(() => { if (Date.now() - unArmed >= 6000) b.textContent = t('unBtn'); }, 6100); return; }
+  unArmed = 0; b.disabled = true;
+  try { const r = await invoke('uninstall_elite'); toast(t('unDone', { n: r.files })); refresh(); }
+  catch (e) { toast(String(e), true); }
+  b.disabled = false; b.textContent = t('unBtn');
+};

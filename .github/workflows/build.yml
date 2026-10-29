@@ -1,5 +1,7 @@
 name: build
-# push/pull_request triggers are off for now: builds and deploys only by a manual run
+# OFF for now (owner, 28.10): no automatic runs, and nothing ships even from a manual run - the deploy and release
+# jobs below are switched off with `if: false`. Turn them back on together with the triggers when the build is fixed
+# (last failure: "failed to decode pubkey: Missing comment in public key" in the Build step).
 on:
   workflow_dispatch:
     inputs:
@@ -39,7 +41,10 @@ jobs:
           for k in ELITE_MIRRORS ELITE_LOG_HOSTS TAURI_SIGNING_PRIVATE_KEY; do
             [ -n "$(printenv "$k" | tr -d '[:space:]')" ] || missing="$missing $k"
           done
-          if [ -n "$missing" ]; then
+          if [ -n "$missing" ] && [ "$GITHUB_REF" != refs/heads/main ]; then
+            # a pull request from a fork gets no secrets: still a useful build check, it never ships anything
+            echo "::warning::No secrets here:$missing - this build can't reach the mirrors, only a check"
+          elif [ -n "$missing" ]; then
             echo "::error::Missing repository secrets:$missing. Add them in Settings > Secrets and variables > Actions > Repository secrets (not in an environment: the build jobs don't use one)."
             exit 1
           fi
@@ -137,11 +142,18 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: |
-          # the public key is keys/updater.pub (the launcher compiles it in too); updates come from the releases
-          # of the repository that builds it, so a fork can test the whole cycle
+          # the public key is keys/updater.pub in the repository root, one level up from app/ (the launcher compiles
+          # it in too); updates come from the releases of the repository that builds it, so a fork can test the whole cycle.
+          # Read into a variable: without the file the step stops here, not after the whole build with an empty key
+          pubkey="$(tr -d '[:space:]' < ../keys/updater.pub)"
           printf '{"bundle":{"createUpdaterArtifacts":true},"plugins":{"updater":{"pubkey":"%s","endpoints":["https://github.com/%s/releases/latest/download/updater.json"]}}}' \
-            "$(tr -d '[:space:]' < keys/updater.pub)" "$GITHUB_REPOSITORY" > "$RUNNER_TEMP/updater.conf.json"
-          cargo tauri build ${{ matrix.args }} --config "$RUNNER_TEMP/updater.conf.json"
+            "$pubkey" "$GITHUB_REPOSITORY" > "$RUNNER_TEMP/updater.conf.json"
+          # on failure the last lines go into the run's annotations: readable without access to the logs
+          set -o pipefail
+          cargo tauri build ${{ matrix.args }} --config "$RUNNER_TEMP/updater.conf.json" 2>&1 | tee "$RUNNER_TEMP/build.log" || {
+            grep -E -i 'error|panicked|failed|incorrect|invalid' "$RUNNER_TEMP/build.log" | grep -v '^warning' | tail -n 8 | while IFS= read -r l; do echo "::error::${l:0:400}"; done
+            exit 1
+          }
       - uses: actions/upload-artifact@v4
         with:
           name: elite-launcher-${{ matrix.os }}
@@ -314,7 +326,7 @@ jobs:
   # download folder) for a new X.Y.0, or for any version through "Run workflow" with the release box ticked.
   release:
     needs: [version, publish]
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || needs.version.outputs.release == 'true')
+    if: false   # off for now, see the top of the file
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -365,7 +377,7 @@ jobs:
   # scoped on the server, write-only into that one folder.
   deploy:
     needs: [version, launcher]
-    if: github.ref == 'refs/heads/main'
+    if: false   # off for now, see the top of the file
     runs-on: ubuntu-24.04
     environment: dow2
     env:

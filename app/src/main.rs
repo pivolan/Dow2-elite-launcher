@@ -62,6 +62,8 @@ struct Settings {
     fb_name: String,
     /// Hide the window to the tray once the game starts. None = on.
     tray_on_play: Option<bool>,
+    /// Hotkeys the player changed: "scope:name" -> "Control+A" ("grid:AB_key_1" for Grid Hotkeys); see elite_core::hotkeys.
+    hotkeys: BTreeMap<String, String>,
 }
 
 struct App {
@@ -214,6 +216,76 @@ fn current_channel(app: &App, cfg: &LauncherConfig, installed: &update::State) -
         .unwrap_or_default()
 }
 
+/// Hotkeys: every binding of the game (defaults + the player's changes) and the Grid Hotkeys setting.
+#[tauri::command]
+fn hotkeys_get(app: State<'_, App>) -> Result<Value, String> {
+    let o = app.settings.lock().unwrap().hotkeys.clone();
+    elite_core::hotkeys::load(&o)
+}
+
+/// Save the player's hotkeys: only the bindings that differ from the game's defaults are kept.
+#[tauri::command]
+fn hotkeys_save(app: State<'_, App>, changes: BTreeMap<String, String>, grid: bool) -> Result<Value, String> {
+    ensure_game_closed(&app)?;     // the game rewrites configuration.lua when it closes
+    let mut s = app.settings.lock().unwrap();
+    let defaults: BTreeMap<String, String> = elite_core::hotkeys::load(&BTreeMap::new())?["bindings"].as_array().cloned().unwrap_or_default()
+        .iter().map(|b| (format!("{}:{}", b["scope"].as_str().unwrap_or(""), b["name"].as_str().unwrap_or("")), b["default"].as_str().unwrap_or("").to_string())).collect();
+    for (k, v) in changes {
+        if defaults.get(&k) == Some(&v) { s.hotkeys.remove(&k); } else if defaults.contains_key(&k) { s.hotkeys.insert(k, v); }
+    }
+    elite_core::hotkeys::apply(&s.hotkeys, Some(grid))?;
+    save_settings(&s);
+    let o = s.hotkeys.clone(); drop(s);
+    elite_core::hotkeys::load(&o)
+}
+
+/// Back to the game's own hotkeys: no keydefaults.lua, no changes kept (Grid Hotkeys stays as it is).
+#[tauri::command]
+fn hotkeys_reset(app: State<'_, App>) -> Result<Value, String> {
+    ensure_game_closed(&app)?;
+    let mut s = app.settings.lock().unwrap();
+    s.hotkeys.clear();
+    elite_core::hotkeys::apply(&s.hotkeys, None)?;
+    save_settings(&s); drop(s);
+    elite_core::hotkeys::load(&BTreeMap::new())
+}
+
+/// Remove Elite completely: the mod, every add-on, the launcher's files in the game folder, then Steam checks the game
+/// files and restores what Elite replaced - a clean vanilla game to start over from.
+#[tauri::command]
+fn uninstall_elite(app: State<'_, App>, handle: AppHandle) -> Result<Value, String> {
+    ensure_game_closed(&app)?;
+    if app.busy.load(Ordering::Relaxed) { return Err("files are being updated, wait a few seconds".into()); }
+    let dir = game_dir(&app).ok_or("game folder not found")?;
+    if !dir.join("DOW2.exe").is_file() { return Err("this is not the game folder".into()); }
+    let cfg = app.config.lock().unwrap().clone().unwrap_or_default();
+    let mut files = 0usize;
+    for c in &cfg.components { files += update::Game::component(&dir, &c.id).uninstall().unwrap_or(0); restore_originals(&dir, &c.id); }
+    files += update::Game::new(&dir).uninstall().map_err(|e| e.to_string())?;
+    // what Elite and the add-ons leave next to the game: their folders, launch configs, the stand-alone patch loader
+    let mut gone = Vec::new();
+    for d in ["Elite", "Elite_bin", "Elite_bin_Test", "Elite_Test", "Elite_DLLs", "dow2-patches", ".elite_launcher"] {
+        let p = dir.join(d);
+        if p.is_dir() && std::fs::remove_dir_all(&p).is_ok() { gone.push(d.to_string()); }
+    }
+    if let Ok(rd) = std::fs::read_dir(&dir) {
+        for e in rd.flatten() {
+            let n = e.file_name().to_string_lossy().to_string(); let l = n.to_ascii_lowercase();
+            let elite_file = l.starts_with("elite") && (l.ends_with(".exe") || l.ends_with(".module") || l.contains(".launchconfig") || l.ends_with(".config")
+                || l.ends_with(".lua") || l.ends_with(".shells") || l.ends_with(".cullsphere") || l.ends_with(".bmp") || l.ends_with(".ico"));
+            let loader = l == "winmm.dll" && std::fs::read(e.path()).map(|b| b.windows(12).any(|w| w == b"dow2-patches")).unwrap_or(false);
+            if (elite_file || loader) && e.path().is_file() && std::fs::remove_file(e.path()).is_ok() { gone.push(n); }
+        }
+    }
+    {
+        let mut s = app.settings.lock().unwrap();
+        s.channel = None; s.prev_channel = None; save_settings(&s);
+    }
+    // Steam puts back the original files Elite had replaced (and the ones we just removed if they were the game's)
+    let _ = handle.opener().open_url("steam://validate/56400", None::<&str>);
+    Ok(json!({"files": files, "removed": gone}))
+}
+
 /// Is the game (DOW2.exe) running? Its DLLs are locked then: add-ons can not be switched or updated under it.
 fn is_game_running() -> bool {
     #[cfg(windows)]
@@ -263,6 +335,7 @@ async fn launcher_check(app: AppHandle) -> Option<Value> {
 /// closes this window itself; elsewhere we restart into the new copy.
 #[tauri::command]
 async fn launcher_install(app: AppHandle) -> Result<(), String> {
+    ensure_game_closed(&app.state::<App>())?;   // the installer closes the launcher; never in the middle of a game
     let upd = app.state::<App>().launcher_update.lock().unwrap().clone().ok_or("no launcher update found")?;
     let h = app.clone();
     let mut done = 0u64;
@@ -286,6 +359,12 @@ fn ensure_game_closed(app: &App) -> Result<(), String> {
 }
 
 /// Everything the window needs to draw itself.
+/// The launcher itself sits in the game folder (or below it): its files there break the game (crash while a match loads).
+fn launcher_in_game_dir() -> bool {
+    let Ok(exe) = std::env::current_exe() else { return false };
+    exe.ancestors().skip(1).take(3).any(|d| d.join("DOW2.exe").is_file())
+}
+
 #[tauri::command]
 fn get_status(app: State<'_, App>) -> Value {
     let cfg = app.config.lock().unwrap().clone();
@@ -300,6 +379,7 @@ fn get_status(app: State<'_, App>) -> Value {
     });
     json!({
         "launcher_version": LAUNCHER_VERSION,
+        "in_game_dir": launcher_in_game_dir(),
         "os": os_name(),
         "lang": s.lang,
         "config": cfg,
@@ -462,6 +542,18 @@ fn comp_on(dir: &std::path::Path, c: &elite_core::config::Component, s: &Setting
     s.components.get(&c.id).copied().unwrap_or(c.default) && found_conflicts(dir, c).is_empty()
 }
 
+/// The launch config lists exactly the add-ons that are on and whose DLL is in place. Elite updates and Elite's own
+/// tools rewrite Elite.launchconfig, so this runs before every start, not only when a checkbox changes.
+fn sync_injected(dir: &std::path::Path, cfg: &LauncherConfig, s: &Settings) {
+    let main = update::Game::new(dir);
+    for c in cfg.components.iter().filter(|c| !c.inject.is_empty()) {
+        let on = comp_on(dir, c, s) && dir.join("Elite_DLLs").join(&c.inject).is_file();
+        if let Ok(names) = elite::set_injected_all(dir, &c.inject, on) {
+            for name in names { main.accept_local_edit(&name); }
+        }
+    }
+}
+
 /// Turn off launcher copies of components that now have a hand-installed copy (checked before every game start).
 fn drop_conflicting(dir: &std::path::Path, cfg: &LauncherConfig) {
     let main = update::Game::new(dir);
@@ -514,6 +606,41 @@ fn remove_conflicts(app: State<'_, App>, id: String) -> Result<Vec<String>, Stri
     Ok(removed)
 }
 
+fn backup_dir(dir: &std::path::Path, id: &str) -> PathBuf {
+    let id: String = id.chars().filter(|c| c.is_ascii_alphanumeric() || *c == '-' || *c == '_').collect();
+    dir.join(".elite_launcher").join("backup").join(id)
+}
+/// Copy the game files this add-on is about to overwrite (only files that exist and have no backup yet).
+fn backup_originals(dir: &std::path::Path, id: &str, man: &elite_core::manifest::Manifest) {
+    let b = backup_dir(dir, id);
+    for f in &man.files {
+        if f.path.contains("..") { continue; }
+        let src = update::Game::new(dir).file(&f.path);
+        let dst = b.join(f.path.replace('/', std::path::MAIN_SEPARATOR_STR));
+        if src.is_file() && !dst.exists() {
+            if let Some(p) = dst.parent() { let _ = std::fs::create_dir_all(p); }
+            let _ = std::fs::copy(&src, &dst);
+        }
+    }
+}
+/// Put back the originals saved by backup_originals and forget the backup.
+fn restore_originals(dir: &std::path::Path, id: &str) {
+    let b = backup_dir(dir, id);
+    fn walk(root: &std::path::Path, cur: &std::path::Path, dir: &std::path::Path) {
+        let Ok(rd) = std::fs::read_dir(cur) else { return };
+        for e in rd.flatten() {
+            let p = e.path();
+            if p.is_dir() { walk(root, &p, dir); continue; }
+            if let Ok(rel) = p.strip_prefix(root) {
+                let dst = dir.join(rel);
+                if let Some(d) = dst.parent() { let _ = std::fs::create_dir_all(d); }
+                let _ = std::fs::copy(&p, &dst);
+            }
+        }
+    }
+    if b.is_dir() { walk(&b, &b, dir); let _ = std::fs::remove_dir_all(&b); }
+}
+
 /// Install ticked components, remove unticked ones, keep Elite.launchconfig in sync.
 fn sync_components(dir: &std::path::Path, cfg: &LauncherConfig, s: &Settings, m: &Mirrors, progress: &mut dyn FnMut(&update::Progress)) -> Result<(), update::Error> {
     let main = update::Game::new(dir);
@@ -525,12 +652,15 @@ fn sync_components(dir: &std::path::Path, cfg: &LauncherConfig, s: &Settings, m:
         let g = update::Game::component(dir, &c.id);
         if on {
             let man = update::load_manifest(&g, m, &c.version)?;
+            // an add-on that replaces game files (e.g. a translation): keep the originals the first time, put them back when it is off
+            if g.load_state().version.is_empty() { backup_originals(dir, &c.id, &man); }
             update::apply(&g, m, &man, &update::Options { verify_all: false, cache_limit: s.cache_mb.unwrap_or(DEFAULT_CACHE_MB) << 20, channel: c.id.clone() }, progress)?;
             if c.id == "lobbystats" {
                 elite::clean_lobbystats_ini(dir).map_err(|e| update::Error::Io(e.to_string()))?;
             }
         } else if !g.load_state().version.is_empty() {
             g.uninstall()?;
+            restore_originals(dir, &c.id);
         }
         if !c.inject.is_empty() {
             for name in elite::set_injected_all(dir, &c.inject, on).map_err(|e| update::Error::Io(e.to_string()))? {
@@ -650,10 +780,31 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
     let st = app.state::<App>();
     let dir = game_dir(&st);
     let installed = dir.as_ref().map(|d| update::Game::new(d).load_state()).unwrap_or_default();
-    let comps: Vec<String> = st.config.lock().unwrap().clone().unwrap_or_default().components.iter().map(|c| c.version.clone()).collect();
+    let uid = fb_uid(&st);
+    let running = st.game_running.load(Ordering::Relaxed);
+    let fb_name = st.settings.lock().unwrap().fb_name.clone();
+    let elite_v = installed.version.clone();
+    let comps: Vec<String> = {
+        let cfg = st.config.lock().unwrap().clone().unwrap_or_default();
+        let s = st.settings.lock().unwrap().clone();
+        cfg.components.iter().map(|c| match dir.as_ref() {
+            Some(d) => {
+                let on = s.components.get(&c.id).copied().unwrap_or(c.default);
+                let have = update::Game::component(d, &c.id).load_state().version;
+                let conf = found_conflicts(d, c);
+                let dll = !c.inject.is_empty() && d.join("Elite_DLLs").join(&c.inject).is_file();
+                let injected = !c.inject.is_empty() && std::fs::read_to_string(d.join(elite::LAUNCHCONFIG)).map(|t| t.lines()
+                    .any(|l| l.strip_prefix("InjectedFiles=").map_or(false, |r| r.split(',').any(|x| x.trim().eq_ignore_ascii_case(&c.inject))))).unwrap_or(false);
+                format!("{}: {} (latest {}, installed {}{}{}{})", c.id, if on { "ON" } else { "off" }, c.version,
+                    if have.is_empty() { "-" } else { &have }, if dll { ", dll" } else { "" }, if injected { ", injected" } else { "" },
+                    if conf.is_empty() { String::new() } else { format!(", hand-installed copy: {}", conf.join(" ")) })
+            }
+            None => format!("{}: {}", c.id, c.version),
+        }).collect()
+    };
     tauri::async_runtime::spawn_blocking(move || {
-        let mut out = format!("Elite Launcher {} · {} · Elite {} ({}) · add-ons {:?}\ngame: {}\n\n",
-            LAUNCHER_VERSION, os_name(), installed.version, installed.channel, comps,
+        let mut out = format!("Elite Launcher {} · {} · Elite {} ({})\nadd-ons:\n  {}\ngame: {}\n\n",
+            LAUNCHER_VERSION, os_name(), installed.version, installed.channel, comps.join("\n  "),
             dir.as_ref().map(|d| d.display().to_string()).unwrap_or_default());
         // всё, что может помочь понять краш: логи дополнений, логи игры, дампы, отчёты Windows об ошибках
         let mut files: Vec<PathBuf> = Vec::new();
@@ -687,7 +838,8 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
         let mut wer_roots: Vec<PathBuf> = Vec::new();
         if let Some(la) = dirs::data_local_dir() {
             let mut v = Vec::new(); walk(&la.join("CrashDumps"), 0, &mut v);
-            v.retain(|(_, p)| is_game(p) && recent(p, 7)); v.sort_by(|a, b| b.0.cmp(&a.0));
+            let starter = |p: &std::path::Path| p.file_name().map(|x| x.to_string_lossy().to_ascii_lowercase()).map_or(false, |n| n.starts_with("elite.exe") || n.starts_with("elite_test.exe"));
+            v.retain(|(_, p)| is_game(p) && !starter(p) && recent(p, 7)); v.sort_by(|a, b| b.0.cmp(&a.0));
             files.extend(v.into_iter().take(2).map(|x| x.1));
             wer_roots.push(la.join("Microsoft").join("Windows").join("WER"));
         }
@@ -707,12 +859,19 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
             .unwrap_or_default();
         let mut newmarks: serde_json::Map<String, Value> = serde_json::Map::new();
         let mut n = 0; let mut total = 0usize;
+        let mut sent_dumps: Vec<PathBuf> = Vec::new(); let mut sent_addon_logs: Vec<PathBuf> = Vec::new();
         for f in files {
             let Ok(b) = std::fs::read(&f) else { continue };
             if total > 30 << 20 { out += &format!("=== {} ({} bytes) — skipped, upload is full ===\n", f.display(), b.len()); continue; }
             let ext = ext_of(&f);
             if ext == "dmp" || ext == "mdmp" {
                 use base64::Engine;
+                let fname = f.file_name().map(|x| x.to_string_lossy().to_ascii_lowercase()).unwrap_or_default();
+                if fname.starts_with("elite.exe") || fname.starts_with("elite_test.exe") { continue; }
+                let key = f.display().to_string();
+                if marks.get(&key).and_then(|v| v.as_array()).and_then(|a| a.first()).and_then(|x| x.as_u64()) == Some(b.len() as u64) { continue; }
+                newmarks.insert(key, serde_json::json!([b.len() as u64, "dump"]));
+                sent_dumps.push(f.clone());
                 if b.len() > 12 << 20 { out += &format!("=== {} ({} bytes) — dump too big, skipped ===\n", f.display(), b.len()); continue; }
                 out += &format!("=== {} ({} bytes, base64) ===\n", f.display(), b.len());
                 out += &base64::engine::general_purpose::STANDARD.encode(&b);
@@ -736,7 +895,9 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
                     let u: Vec<u16> = b[2..].chunks_exact(2).map(|c| u16::from_le_bytes([c[0], c[1]])).collect();
                     String::from_utf16_lossy(&u)
                 } else { String::from_utf8_lossy(&b[start..]).into_owned() };
-                let tail = if text.len() > 4 << 20 { let mut k = text.len() - (4 << 20); while !text.is_char_boundary(k) { k += 1; } &text[k..] } else { &text[..] };
+                let cap = 256usize << 10;
+                let tail = if text.len() > cap { let mut k = text.len() - cap; while !text.is_char_boundary(k) { k += 1; } &text[k..] } else { &text[..] };
+                if ext == "log" && f.parent().and_then(|p| p.file_name()).map_or(false, |n| n.eq_ignore_ascii_case("Elite_DLLs")) { sent_addon_logs.push(f.clone()); }
                 if incr && start > 0 && tail.is_empty() { continue; }   // с прошлой отправки ничего нового — файл не шлём
                 let tag = if start > 0 { format!(", +{} new", b.len() - start) } else { String::new() };
                 out += &format!("=== {} ({} bytes{}) ===\n", f.display(), b.len(), tag);
@@ -766,11 +927,20 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
         let hosts: Vec<&str> = option_env!("ELITE_LOG_HOSTS").unwrap_or("").split(';').map(str::trim).filter(|x| !x.is_empty()).collect();
         if hosts.is_empty() { return Err("log upload is not configured in this build".into()); }
         for host in hosts {
-            match ureq::post(&format!("{host}/stats/api/logs?who={who}")).set("Content-Type", "text/plain; charset=utf-8").send_bytes(out.as_bytes()) {
+            match ureq::post(&format!("{host}/stats/api/logs?who={who}&uid={uid}")).set("Content-Type", "text/plain; charset=utf-8").send_bytes(out.as_bytes()) {
                 Ok(r) => {
                     let v: Value = serde_json::from_str(&r.into_string().unwrap_or_default()).unwrap_or_default();
+                    let note = json!({"uid": uid, "name": if fb_name.is_empty() { who.clone() } else { fb_name.clone() },
+                        "text": format!("📋 Отправил логи · sent logs: {} ({} files). Ответ придёт сюда · the answer comes here.", v["id"].as_str().unwrap_or("?"), n),
+                        "launcher": LAUNCHER_VERSION, "os": os_name(), "elite": elite_v}).to_string();
+                    let _ = ureq::post(&format!("{host}/ladder/api/fb/send")).timeout(Duration::from_secs(20))
+                        .set("Content-Type", "application/json").send_string(&note);
                     // запомним, докуда дошли по каждому растущему логу — в следующий раз только новый хвост
                     let _ = std::fs::write(data_dir().join("log_sent.json"), serde_json::to_vec(&Value::Object(newmarks.clone())).unwrap_or_default());
+                    if !running {
+                        for f in &sent_addon_logs { let _ = std::fs::OpenOptions::new().write(true).truncate(true).open(f); }
+                        for f in &sent_dumps { let _ = std::fs::remove_file(f); }
+                    }
                     return Ok(format!("{} ({} files)", v["id"].as_str().unwrap_or("ok"), n));
                 }
                 Err(e) => last = e.to_string(),
@@ -804,6 +974,8 @@ fn start_game(app: &App) -> Result<(), String> {
     let dir = game_dir(&app).ok_or("game folder not found")?;
     let cfg = app.config.lock().unwrap().clone().unwrap_or_default();
     drop_conflicting(&dir, &cfg);
+    sync_injected(&dir, &cfg, &app.settings.lock().unwrap().clone());
+    elite_core::hotkeys::refresh_if_stale(&app.settings.lock().unwrap().hotkeys);     // a patch brought new defaults
     let mut cmd = match os_name() {
         "windows" => cfg.launch.windows.clone(),
         "macos" => cfg.launch.macos.clone(),
@@ -1137,7 +1309,8 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             get_status, refresh, set_channel, switch_to, send_logs, set_comp_option, set_setting, set_component, remove_conflicts, pick_game_dir, open_url, open_game_dir, start_update, cancel_update, play,
-            fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels, launcher_check, launcher_install, online_live
+            fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels, launcher_check, launcher_install, online_live,
+            hotkeys_get, hotkeys_save, hotkeys_reset, uninstall_elite
         ])
         .run(tauri::generate_context!())
         .expect("error while running Elite Launcher");

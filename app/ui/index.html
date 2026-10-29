@@ -11,7 +11,7 @@
   <header>
     <div class="brand"><span class="logo">ELITE Launcher</span><span class="hdr-ver" id="hdrVer"></span><span class="sub" id="subtitle">Dawn of War II · Retribution</span></div>
     <div class="launcher-banner hidden" id="launcherBanner"><span id="launcherText"></span><button class="btn gold small hidden" id="launcherBtn"></button></div>
-    <nav><button class="tab on" data-view="home" data-t="home"></button><button class="tab" data-view="addons" data-t="components"></button><button class="tab" data-view="settings" data-t="settings"></button></nav>
+    <nav><button class="tab on" data-view="home" data-t="home"></button><button class="tab" data-view="addons" data-t="components"></button><button class="tab" data-view="hotkeys" data-t="hotkeys"></button><button class="tab" data-view="settings" data-t="settings"></button></nav>
   </header>
 
   <main id="home" class="view home">
@@ -70,13 +70,30 @@
     </section>
   </main>
 
+  <main id="hotkeys" class="view hidden">
+    <section class="panel hk">
+      <div class="h"><span data-t="hotkeys"></span><span class="hk-note" id="hkState"></span></div>
+      <div class="hk-top">
+        <label class="chk"><input type="checkbox" id="hkGrid"><span data-t="hkGrid"></span></label>
+        <span class="note" data-t="hkGridNote"></span>
+      </div>
+      <div class="hk-grid" id="hkGridBox"></div>
+      <div class="h small" data-t="hkMain"></div>
+      <div class="hk-list" id="hkMain"></div>
+      <details class="hk-all"><summary data-t="hkAll"></summary>
+        <input id="hkSearch" data-tp="hkSearch"><div class="hk-list" id="hkAllList"></div></details>
+      <div class="row hk-act"><button class="btn gold" id="hkSave" data-t="save"></button><button class="btn" id="hkReset" data-t="hkReset"></button>
+        <span class="note" data-t="hkHow"></span></div>
+    </section>
+  </main>
+
   <main id="settings" class="view hidden">
     <section class="panel settings">
       <div class="h" data-t="settings"></div>
       <label data-t="gameFolder"></label>
       <div class="row"><div class="path" id="gameDir"></div><button class="btn" id="browse" data-t="browse"></button><button class="btn" id="openDir" data-t="open"></button></div>
       <label data-t="language"></label>
-      <div class="row"><select id="lang"><option value="">Auto</option><option value="en">English</option><option value="ru">Русский</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option></select></div>
+      <div class="row"><select id="lang"><option value="">По умолчанию (Русский)</option><option value="en">English</option><option value="ru">Русский</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option></select></div>
       <label data-t="cache"></label>
       <div class="row"><select id="cache"><option value="0">0</option><option value="2048">2 GB</option><option value="6144">6 GB</option><option value="12288">12 GB</option></select><span class="note" data-t="cacheNote"></span></div>
       <label data-t="mirror"></label>
@@ -92,6 +109,8 @@
       <label data-t="diagTitle"></label>
       <div class="row"><input id="diagName" data-tp="diagName"><button class="btn gold" id="sendLogs" data-t="sendLogs"></button></div>
       <div class="note" data-t="sendLogsNote"></div>
+      <label data-t="unTitle"></label>
+      <div class="row"><button class="btn red" id="uninstall" data-t="unBtn"></button><span class="note" data-t="unNote"></span></div>
       <div class="about" id="about"></div>
     </section>
   </main>
