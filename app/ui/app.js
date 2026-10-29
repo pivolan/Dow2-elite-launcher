@@ -897,8 +897,8 @@ function render() {
   syncTrayLabels();
   document.querySelectorAll('[data-t]').forEach(e => e.textContent = t(e.dataset.t));
   document.querySelectorAll('[data-tp]').forEach(e => e.placeholder = t(e.dataset.tp));
+  document.querySelectorAll('[data-ta]').forEach(e => { e.title = t(e.dataset.ta); e.setAttribute('aria-label', e.title); });   // icon buttons
   const cfg = S.config || {};
-  $('subtitle').textContent = L(cfg.subtitle) || 'Dawn of War II · Retribution';
 
   renderLauncherBanner();
 
@@ -947,7 +947,7 @@ function render() {
     $('pick').onclick = pickDir; $('rescan').onclick = reload;
   } else setup.classList.add('hidden');
 
-  // versions: a picker above Play; the main one marked, the installed one ticked, any other one switches in one click
+  // versions: a picker next to Play at the bottom; the main one marked, the installed one ticked, any other one switches in one click
   const chans = cfg.channels || [];
   const activeCh = chans.find(c => c.version === S.installed_version && c.id === S.installed_channel) || chans.find(c => c.version === S.installed_version);
   const mainCh = chans.find(c => c.id === S.main_channel);
@@ -976,10 +976,10 @@ function render() {
   $('verWarn').classList.toggle('hidden', !notMain);
   if (notMain) $('verWarn').textContent = t('youPlay', { name: L(activeCh.name) }) + ' ' + t('notMain', { name: L(mainCh.name) });
 
-  // add-ons: the ones players switch most on the home screen (launcher.json "home"), all of them on the Add-ons tab
+  // add-ons: only the game server on the home screen (or what launcher.json marks "home"), all of them on the Add-ons tab
   const comps = S.components || [];
   const pinned = comps.some(c => c.home) ? comps.filter(c => c.home)
-    : comps.filter(c => /automatch|relay/i.test(c.id));   // until launcher.json marks them
+    : comps.filter(c => c.id === 'relay');   // until launcher.json marks them
   $('compBox').classList.toggle('hidden', !pinned.length);
   compList($('components'), pinned, false);
   compList($('allCompList'), comps, true);
@@ -995,7 +995,7 @@ function render() {
   else { play.textContent = t('play'); play.disabled = false; }
   play.onclick = () => (S.installed_version ? doPlay() : switchTo(S.main_channel || S.channel));
 
-  // a newer version of the installed one: offered right above the version picker, never forced
+  // a newer version of the installed one: offered at the bottom of the home screen's right column, never forced
   const target = channelOf(S.installed_channel) || channelOf(S.channel);
   const showUpd = !!(S.game_found && target && S.installed_version && target.version !== S.installed_version && !S.busy && !S.game_running && !S.last_error);
   $('updBox').classList.toggle('hidden', !showUpd);
