@@ -13,7 +13,7 @@ use std::collections::BTreeMap;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::path::PathBuf;
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 use tauri::menu::{MenuBuilder, MenuItem, MenuItemBuilder};
@@ -1134,9 +1134,17 @@ fn c_profile(s: &Settings) -> Value {
 #[tauri::command]
 fn c_status(app: State<'_, App>) -> Value { c_profile(&app.settings.lock().unwrap()) }
 
+/// The sign-in being waited for: a new click or Cancel bumps it, and the older wait stops by itself, so the button
+/// never stays grey for minutes when the browser tab was closed.
+static LOGIN_GEN: AtomicU64 = AtomicU64::new(0);
+
+#[tauri::command]
+fn c_login_cancel() { LOGIN_GEN.fetch_add(1, Ordering::SeqCst); }
+
 #[tauri::command]
 async fn c_login(app: AppHandle) -> Result<Value, String> {
     let host = fb_hosts().into_iter().next().ok_or("the server is not configured in this build")?;
+    let attempt = LOGIN_GEN.fetch_add(1, Ordering::SeqCst) + 1;
     let mut b = [0u8; 24];
     getrandom::getrandom(&mut b).map_err(|e| e.to_string())?;
     let nonce: String = b.iter().map(|x| format!("{x:02x}")).collect();
@@ -1146,6 +1154,7 @@ async fn c_login(app: AppHandle) -> Result<Value, String> {
         // the player signs in in the browser: ask for the token every 2 s, for up to 5 minutes
         for _ in 0..150 {
             std::thread::sleep(Duration::from_secs(2));
+            if LOGIN_GEN.load(Ordering::SeqCst) != attempt { return Err("cancelled".to_string()); }
             for h in fb_hosts() {
                 let Ok(r) = ureq::get(&format!("{h}/ladder/api/c/claim?nonce={nonce}")).timeout(Duration::from_secs(10)).call() else { continue };
                 let v: Value = serde_json::from_str(&r.into_string().unwrap_or_default()).unwrap_or_default();
@@ -1424,7 +1433,7 @@ fn main() {
             get_status, refresh, set_channel, switch_to, send_logs, set_comp_option, set_setting, set_component, remove_conflicts, pick_game_dir, open_url, set_comp_value, open_game_dir, start_update, cancel_update, play,
             fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels, launcher_check, launcher_install, online_live,
             hotkeys_get, hotkeys_save, hotkeys_reset, uninstall_elite,
-            c_status, c_login, c_logout, c_api
+            c_status, c_login, c_login_cancel, c_logout, c_api
         ])
         .run(tauri::generate_context!())
         .expect("error while running Elite Launcher");

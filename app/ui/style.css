@@ -173,9 +173,16 @@ footer{display:flex;gap:12px;align-items:center;height:76px;flex:none;padding:0 
 .meta{font-size:12px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .meta:empty{display:none}
 
-/* settings */
+/* settings: two tabs, General and Hotkeys, over one scrolling panel */
 #settings{display:flex;justify-content:center}
-.settings{width:100%;max-width:820px;overflow:auto}
+.set-wrap{width:100%;max-width:900px;min-height:0;display:flex;flex-direction:column}
+.set-tabs{display:flex;gap:4px;margin-bottom:-1px}
+.set-tab{background:none;border:1px solid transparent;border-bottom:0;color:var(--muted);font:700 12px Cinzel,serif;letter-spacing:2px;height:34px;padding:0 16px;text-transform:uppercase}
+.set-tab:hover{color:var(--bone)}
+.set-tab.on{color:var(--gold2);border-color:var(--line);background:#1a1611}
+.set-wrap>.panel{flex:1;min-height:0;overflow:auto}
+.settings{width:100%}
+.settings>label:first-child{margin-top:4px}
 .settings label{display:block;font:700 12px Cinzel,serif;letter-spacing:2px;color:var(--muted);margin:16px 0 6px;text-transform:uppercase}
 .settings .row{display:flex;gap:8px;align-items:center}
 .settings label.chk{display:flex;font:14px Spectral,serif;letter-spacing:0;text-transform:none;color:var(--bone);margin:0;cursor:pointer}
@@ -281,10 +288,10 @@ input[type=checkbox]{flex:none;width:16px;height:16px;padding:0;accent-color:var
 }
 
 /* hotkeys */
-#hotkeys{overflow:auto}
 .hk .h.small{margin:14px 0 6px;font-size:11px}
 .hk-note{font:400 12px Spectral,serif;letter-spacing:0;text-transform:none;color:var(--muted)}
 .hk-top{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.hk-act .hk-note{color:var(--gold2)}
 .hk-grid{display:grid;grid-template-columns:110px repeat(7,minmax(54px,1fr));gap:4px;margin:6px 0}
 .hk-grid.off{opacity:.45}
 .hk-grid .lbl{font-size:12px;color:var(--muted);align-self:center}
@@ -302,36 +309,42 @@ input[type=checkbox]{flex:none;width:16px;height:16px;padding:0;accent-color:var
 .hk-sec{grid-column:1/-1;margin-top:8px;color:var(--gold);font-size:12px}
 .hk-act{margin-top:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 
-/* players' chat (Steam sign-in) with rooms, who has the launcher open; the developers' chat is the last tab */
-.me-chip{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--soft);white-space:nowrap}
-.me-chip img{width:26px;height:26px;border:1px solid var(--line2)}
-.me-chip .nm{max-width:140px;overflow:hidden;text-overflow:ellipsis;color:var(--bone)}
-.me-chip .out{background:none;border:none;color:var(--dim);font-size:12px;padding:0 4px;cursor:pointer}
-.me-chip .out:hover{color:var(--gold2)}
+/* the player's card above the news: avatar, name, 1v1 rating and place, games of the season; signed out - the Steam button */
+.me-box{flex:none;position:relative;display:flex;gap:10px;align-items:center;padding:10px 12px}
+.me-av{flex:none;width:44px;height:44px;border:1px solid var(--line2);background:#0e0c09;display:block}
+.me-info{flex:1;min-width:0;line-height:1.3}
+.me-info .nm{display:block;max-width:100%;padding-right:40px;font:700 15px Cinzel,serif;color:var(--gold2)}
+.me-rt{font-size:12px;color:var(--muted)}
+.me-rt b{font-weight:600;color:var(--bone)}
+.me-st{font-size:12px;color:var(--dim)}
+.me-out{position:absolute;top:6px;right:8px;padding:0;border:0;background:none;color:var(--dim);font-size:11px}
+.me-out:hover{color:var(--gold2)}
+.me-box:not(:has(.me-av)){flex-direction:column;align-items:stretch;gap:8px}
+.me-note{font-size:13px;line-height:1.35;color:var(--muted)}
+.me-act{display:flex;align-items:center;gap:12px}
+.me-cancel{padding:0;border:0;background:none;color:var(--muted);font-size:13px;text-decoration:underline}
+.me-cancel:hover{color:var(--gold2)}
+
+/* players' chat (Steam sign-in), one room next to the developers' chat */
 .ch-head{margin-bottom:8px}
 .ch-tabs{display:flex;gap:4px;flex:1;min-width:0}
 .ch-tab{background:none;border:1px solid transparent;color:var(--muted);font:700 11px Cinzel,serif;letter-spacing:1px;padding:4px 10px;text-transform:uppercase}
 .ch-tab:hover{color:var(--bone)}
 .ch-tab.on{color:var(--gold2);border-color:var(--line2);background:var(--panel2)}
 .ch-pane,.dev-pane{flex:1;min-height:0;display:flex;flex-direction:column}
-.ch-body{flex:1;min-height:0;display:grid;grid-template-columns:1fr 190px;gap:10px}
-.ch-msgs{min-height:80px;overflow:auto;display:flex;flex-direction:column;gap:6px;padding:2px;user-select:text}
+.ch-msgs{flex:1;min-height:80px;overflow:auto;display:flex;flex-direction:column;gap:6px;padding:2px;user-select:text}
 .ch-m{display:flex;gap:8px;align-items:flex-start;font-size:14px}
 .ch-m .tx{white-space:pre-wrap;word-wrap:break-word;color:var(--bone)}
 .ch-m .w{font-size:11px;color:var(--dim)}
 .ch-m .w b{font-weight:600;color:var(--gold);cursor:pointer;margin-right:6px}
 .ch-m.mine .w b{color:var(--gold2)}
 .av{flex:none;width:28px;height:28px;border:1px solid var(--line);background:#0e0c09;display:block}
-.ch-members{min-height:0;overflow:auto;border-left:1px solid var(--sep);padding-left:10px}
-.ch-mh{font:700 11px Cinzel,serif;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
-.ch-u{display:flex;align-items:center;gap:6px;padding:3px 0;font-size:13px;cursor:pointer}
-.ch-u:hover .nm{color:var(--gold2)}
-.ch-u .av{width:22px;height:22px}
-.ch-u .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--soft)}
-.ch-u .rt{font-size:11px;color:var(--dim)}
-.ch-u .st{flex:none;width:8px;height:8px;border-radius:50%;background:var(--green)}
-.ch-u .st-game,.ch-u .st-match{background:var(--blood2)}
-.ch-u .st-search{background:var(--amber)}
+.on-u .av{width:20px;height:20px}
+.on-u .rt{flex:none;font-size:11px;color:var(--dim)}
+.on-u .st{flex:none;width:8px;height:8px;border-radius:50%;background:var(--green)}
+.on-u .st-game,.on-u .st-match{background:var(--blood2)}
+.on-u .st-search{background:var(--amber)}
+.on-g.launcher .on-gh i{background:var(--green)}
 .ch-send{display:flex;gap:8px;margin-top:8px}
 .ch-send textarea{flex:1;resize:none;background:#0e0c09;border:1px solid var(--line);color:var(--bone);padding:6px 8px;font:14px inherit;user-select:text}
 .ch-login{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:13px;color:var(--muted)}

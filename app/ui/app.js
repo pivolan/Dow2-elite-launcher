@@ -7,6 +7,13 @@ const $ = id => document.getElementById(id);
 
 const T = {
   en: {
+    "setGeneral": "General",
+    "chWaiting": "Waiting for the Steam sign-in in the browser…",
+    "chCancel": "Cancel",
+    "prNote": "Your name, 1v1 rating and the players’ chat.",
+    "prGames": "Games: {n} · {pct}% won",
+    "prNoGames": "No ladder games this season yet",
+    "prRankT": "Place on the ladder (1v1, this season)",
     "chAll": "General",
     "chDev": "Developers",
     "chLogin": "Sign in with Steam",
@@ -158,7 +165,7 @@ const T = {
     "onStatePlaying": "Playing",
     "onNobody": "Nobody is looking for a game. Start the game and press “Find a Game”.",
     "onOffline": "No connection to the ladder server, trying again…",
-    "onIdle": "In the lobby",
+    "onIdle": "In the game, in the menu",
     "onLoading": "Loading who is online…",
     "onLadder": "Ladder and match history ›",
     "race_space_marines": "Space Marines",
@@ -174,6 +181,13 @@ const T = {
     "onInMatchH": "In a match"
   },
   ru: {
+    "setGeneral": "Общие",
+    "chWaiting": "Ждём вход через Steam в браузере…",
+    "chCancel": "Отмена",
+    "prNote": "Ник, рейтинг 1v1 и чат с игроками.",
+    "prGames": "Игр: {n} · побед {pct}%",
+    "prNoGames": "В этом сезоне ещё без игр в ладдере",
+    "prRankT": "Место в ладдере (1v1, этот сезон)",
     "chAll": "Общий",
     "chDev": "Разработчикам",
     "chLogin": "Войти через Steam",
@@ -325,7 +339,7 @@ const T = {
     "onStatePlaying": "Идёт",
     "onNobody": "Никто не ищет игру. Запусти игру и нажми «Find a Game».",
     "onOffline": "Нет связи с сервером ладдера, пробую снова…",
-    "onIdle": "В лобби",
+    "onIdle": "В игре, в меню",
     "onLoading": "Загружаю, кто онлайн…",
     "onLadder": "Ладдер и история матчей ›",
     "race_space_marines": "Космодесант",
@@ -341,6 +355,13 @@ const T = {
     "onInMatchH": "В матче"
   },
   es: {
+    "setGeneral": "General",
+    "chWaiting": "Esperando el inicio de sesión de Steam en el navegador…",
+    "chCancel": "Cancelar",
+    "prNote": "Tu nombre, rating 1v1 y el chat de jugadores.",
+    "prGames": "Partidas: {n} · {pct}% ganadas",
+    "prNoGames": "Aún sin partidas de ladder esta temporada",
+    "prRankT": "Puesto en el ladder (1v1, esta temporada)",
     "chAll": "General",
     "chDev": "Desarrolladores",
     "chLogin": "Entrar con Steam",
@@ -487,7 +508,7 @@ const T = {
     "onStatePlaying": "En curso",
     "onNobody": "Nadie busca partida. Inicia el juego y pulsa «Find a Game».",
     "onOffline": "Sin conexión con el servidor de la ladder, reintentando…",
-    "onIdle": "En el lobby",
+    "onIdle": "En el juego, en el menú",
     "onLoading": "Cargando quién está en línea…",
     "onLadder": "Ladder e historial de partidas ›",
     "race_space_marines": "Marines Espaciales",
@@ -503,6 +524,13 @@ const T = {
     "onInMatchH": "En partida"
   },
   fr: {
+    "setGeneral": "Général",
+    "chWaiting": "En attente de la connexion Steam dans le navigateur…",
+    "chCancel": "Annuler",
+    "prNote": "Votre nom, classement 1v1 et le chat des joueurs.",
+    "prGames": "Parties : {n} · {pct} % gagnées",
+    "prNoGames": "Aucune partie classée cette saison",
+    "prRankT": "Place au classement (1v1, cette saison)",
     "chAll": "Général",
     "chDev": "Développeurs",
     "chLogin": "Se connecter avec Steam",
@@ -649,7 +677,7 @@ const T = {
     "onStatePlaying": "En cours",
     "onNobody": "Personne ne cherche de partie. Lancez le jeu et appuyez sur « Find a Game ».",
     "onOffline": "Pas de connexion au serveur du ladder, nouvel essai…",
-    "onIdle": "Dans le salon",
+    "onIdle": "En jeu, dans le menu",
     "onLoading": "Chargement des joueurs en ligne…",
     "onLadder": "Ladder et historique des parties ›",
     "race_space_marines": "Space Marines",
@@ -665,6 +693,13 @@ const T = {
     "onInMatchH": "En partie"
   },
   de: {
+    "setGeneral": "Allgemein",
+    "chWaiting": "Warte auf die Steam-Anmeldung im Browser…",
+    "chCancel": "Abbrechen",
+    "prNote": "Dein Name, 1v1-Rating und der Spieler-Chat.",
+    "prGames": "Spiele: {n} · {pct} % gewonnen",
+    "prNoGames": "Diese Saison noch keine Ladder-Spiele",
+    "prRankT": "Platz in der Ladder (1v1, diese Saison)",
     "chAll": "Allgemein",
     "chDev": "Entwickler",
     "chLogin": "Mit Steam anmelden",
@@ -811,7 +846,7 @@ const T = {
     "onStatePlaying": "Läuft",
     "onNobody": "Niemand sucht ein Spiel. Starte das Spiel und drücke „Find a Game“.",
     "onOffline": "Keine Verbindung zum Ladder-Server, neuer Versuch…",
-    "onIdle": "In der Lobby",
+    "onIdle": "Im Spiel, im Menü",
     "onLoading": "Lade, wer online ist…",
     "onLadder": "Ladder und Spielverlauf ›",
     "race_space_marines": "Space Marines",
@@ -1257,7 +1292,7 @@ setInterval(() => { if (S && !S.busy) refresh(); launcherCheck(); }, 15 * 60 * 1
 // ---------- Online (home, above the add-ons): who is looking for a game, who is in a match ----------
 // The same list the ladder page shows: /ladder/api/mm/live of the ladder service on the log hosts, every 15 seconds
 // (every minute while the window is hidden). Only names here; the details are on the ladder page linked below the block.
-const ON = { d: null, err: false, timer: null, shut: new Set() };
+const ON = { d: null, err: false, timer: null, shut: new Set(), users: [] };   // users: who has the launcher open (from the players' chat "hello")
 // the groups the player folded stay folded (only a convenience: without storage everything opens)
 try { ON.shut = new Set(JSON.parse(localStorage.getItem('onShut') || '[]')); } catch (e) {}
 const RACES = ['space_marines', 'chaos_marines', 'eldar', 'orks', 'tyranids', 'imperial_guard', 't_tau', 'z_unecron', 'ordo_malleus'];
@@ -1287,10 +1322,16 @@ function onRender() {
       matches.map(m => `<div class="on-m"><span class="tag ${esc(m.state)}" title="${esc(t(st[m.state] || 'onStateCreating'))}">${esc(m.mode)}</span>`
         + `<div class="tms"><div>${(m.team1 || []).map(onWho).join(', ')}</div><div><span class="vs">vs</span> ${(m.team2 || []).map(onWho).join(', ')}</div></div></div>`).join(''));
     if (!look.length && !matches.length) html += `<div class="on-empty">${esc(t('onNobody'))}</div>`;
-    // in the lobby, the last group: online (whoever talked to the ladder server in the last minute, the number on the
-    // ladder page) minus those looking for a game or watching and those in a match; only a number, the server sends no names
+    // who has the launcher open (signed in with Steam): the avatar, the 1v1 rating and a dot for menu / game / search / match
+    const users = ON.users;
+    if (users.length) html += group('launcher', t('chMembers'), users.length, users.map(u => '<div class="on-p on-u">'
+      + (u.avatar ? `<img class="av" src="${esc(u.avatar)}" alt="">` : '<i class="av"></i>') + onWho(u)
+      + (u.rating ? `<span class="rt">${Number(u.rating) | 0}</span>` : '') + `<span class="st st-${esc(u.state)}" title="${esc(t('st_' + u.state))}"></span></div>`).join(''));
+    // the last group, only a number: games that talked to the ladder server in the last minute (the number on the ladder
+    // page) minus those looking for a game or watching, those in a match and those already named above with the game on
     const inMatches = matches.reduce((n, m) => n + (m.team1 || []).length + (m.team2 || []).length + (m.watchers || []).length, 0);
-    html += group('idle', t('onIdle'), Math.max(0, (Number(d.online) || 0) - (d.searching || []).length - inMatches), '');
+    const named = users.filter(u => u.state === 'game').length;
+    html += group('idle', t('onIdle'), Math.max(0, (Number(d.online) || 0) - (d.searching || []).length - inMatches - named), '');
   }
   $('onGroups').innerHTML = html;
   $('onGroups').querySelectorAll('.nm[data-steam]').forEach(b => b.onclick = () => b.dataset.steam && open('https://steamcommunity.com/profiles/' + b.dataset.steam));
@@ -1371,33 +1412,58 @@ async function fbLoad() {
 }
 fbInit();
 
-// ---------- players' chat: rooms, Steam sign-in, who has the launcher open (ladder service /ladder/api/c/*) ----------
-const CH = { room: 'all', last: {}, msgs: {}, me: null, timer: null };
-try { CH.room = localStorage.getItem('chRoom') || 'all'; } catch (e) {}
+// ---------- players' chat, Steam sign-in and the player's card (ladder service /ladder/api/c/*) ----------
+// One room for everyone (the server also has ru / en, nobody wrote there) next to the developers' chat.
+const CH = { room: 'all', last: {}, msgs: {}, me: null, prof: null, waiting: false, timer: null };
+try { CH.room = localStorage.getItem('chRoom') === 'dev' ? 'dev' : 'all'; } catch (e) {}
 function chShowRoom() {
   document.querySelectorAll('.ch-tab').forEach(b => b.classList.toggle('on', b.dataset.room === CH.room));
   $('chatPane').classList.toggle('hidden', CH.room === 'dev');
   $('devPane').classList.toggle('hidden', CH.room !== 'dev');
   if (CH.room !== 'dev') { chRender(true); chLoad(); }
 }
+// the card above the news: avatar, name, 1v1 rating, place and games of the season; signed out - the Steam button
 function chMe() {
-  const me = CH.me && CH.me.signed_in ? CH.me : null;
-  $('meChip').innerHTML = me
-    ? (me.avatar ? `<img src="${esc(me.avatar)}" alt="">` : '') + `<span class="nm" title="${esc(t('chSignedIn', { name: me.name }))}">${esc(me.name || me.steam)}</span><button class="out" id="chOut">${esc(t('chLogout'))}</button>`
-    : (CH.me && CH.me.configured === false ? '' : `<button class="btn gold small" id="chIn">${esc(t('chLogin'))}</button>`);
-  if ($('chOut')) $('chOut').onclick = chLogout;
-  if ($('chIn')) $('chIn').onclick = chLogin;
+  const me = CH.me && CH.me.signed_in ? CH.me : null, box = $('meBox');
+  box.classList.toggle('hidden', !CH.me || CH.me.configured === false);
+  if (me) {
+    const p = CH.prof || {}, st = p.stats;
+    const rating = p.rating || (ON.users.find(u => u.steam === me.steam) || {}).rating;
+    const line = [rating ? `<b>${Number(rating) | 0}</b> 1v1` : '', st && st.rank ? `<span title="${esc(t('prRankT'))}">#${Number(st.rank) | 0}</span>` : ''].filter(Boolean).join(' · ');
+    const games = !st ? '' : st.games ? `<div class="me-st" title="${esc(st.wins + ' – ' + st.losses)}">${esc(t('prGames', { n: st.games, pct: Math.round(100 * st.wins / st.games) }))}</div>`
+      : `<div class="me-st">${esc(t('prNoGames'))}</div>`;
+    box.innerHTML = (me.avatar ? `<img class="me-av" src="${esc(me.avatar)}" alt="">` : '<i class="me-av"></i>')
+      + `<div class="me-info"><button class="nm" id="meName" title="${esc(t('chSignedIn', { name: me.name }))}">${esc(me.name || me.steam)}</button>`
+      + (line ? `<div class="me-rt">${line}</div>` : '') + games + `</div><button class="me-out" id="chOut">${esc(t('chLogout'))}</button>`;
+    $('meName').onclick = () => open('https://steamcommunity.com/profiles/' + me.steam);
+    $('chOut').onclick = chLogout;
+  } else {
+    // waiting for the browser: the button stays live (a new click opens Steam again), Cancel stops the wait
+    box.innerHTML = `<div class="me-note">${esc(t(CH.waiting ? 'chWaiting' : 'prNote'))}</div><div class="me-act"><button class="btn gold small" id="chIn">${esc(t('chLogin'))}</button>`
+      + (CH.waiting ? `<button class="me-cancel" id="chCancel">${esc(t('chCancel'))}</button>` : '') + '</div>';
+    $('chIn').onclick = chLogin;
+    if ($('chCancel')) $('chCancel').onclick = () => { invoke('c_login_cancel').catch(() => {}); CH.waiting = false; chMe(); };
+  }
   $('chLoginRow').classList.toggle('hidden', !!me);
   $('chSendRow').classList.toggle('hidden', !me);
 }
 async function chLogin() {
-  document.querySelectorAll('#chIn,#chIn2').forEach(b => b.disabled = true);
+  CH.waiting = true; chMe();
   toast(t('chWaitLogin'));
-  try { CH.me = await invoke('c_login'); chMe(); chHello(); toast(t('chSignedIn', { name: CH.me.name })); }
-  catch (e) { toast(e, true); }
-  document.querySelectorAll('#chIn,#chIn2').forEach(b => b.disabled = false);
+  try {
+    CH.me = await invoke('c_login'); CH.waiting = false; chMe(); chHello(); chProfile();
+    toast(t('chSignedIn', { name: CH.me.name }));
+  } catch (e) {
+    if (String(e) === 'cancelled') return;   // a newer click or Cancel took over
+    CH.waiting = false; chMe(); toast(e, true);
+  }
 }
-async function chLogout() { try { CH.me = await invoke('c_logout'); } catch (e) {} chMe(); }
+async function chLogout() { try { CH.me = await invoke('c_logout'); } catch (e) {} CH.prof = null; chMe(); }
+async function chProfile() {
+  if (!CH.me || !CH.me.signed_in) return;
+  try { const d = await invoke('c_api', { path: 'me', body: {} }); if (d.ok) CH.prof = d; } catch (e) { return; }
+  chMe();
+}
 async function chLoad() {
   const r = CH.room; if (r === 'dev') return;
   let d; try { d = await invoke('c_api', { path: `msgs?room=${r}&after=${CH.last[r] || 0}` }); } catch (e) { return; }
@@ -1431,13 +1497,9 @@ async function chSay() {
 }
 async function chHello() {
   let d; try { d = await invoke('c_api', { path: 'hello', body: { state: S && S.game_running ? 'game' : 'menu' } }); } catch (e) { return; }
-  if (d.signed_in === false && CH.me && CH.me.signed_in) { CH.me = await invoke('c_logout'); chMe(); }   // the session is gone on the server
-  const list = d.online || [];
-  $('chMembersH').textContent = t('chMembers') + ' · ' + list.length;
-  $('chMembers').innerHTML = list.map(u => `<div class="ch-u" data-steam="${esc(u.steam)}" title="${esc(u.name + ' — ' + t('st_' + u.state))}">`
-    + (u.avatar ? `<img class="av" src="${esc(u.avatar)}" alt="">` : '<i class="av"></i>') + `<span class="nm">${esc(u.name)}</span>`
-    + (u.rating ? `<span class="rt">${Number(u.rating) | 0}</span>` : '') + `<span class="st st-${esc(u.state)}"></span></div>`).join('');
-  $('chMembers').querySelectorAll('.ch-u').forEach(b => b.onclick = () => open('https://steamcommunity.com/profiles/' + b.dataset.steam));
+  if (d.signed_in === false && CH.me && CH.me.signed_in) { CH.me = await invoke('c_logout'); CH.prof = null; chMe(); }   // the session is gone on the server
+  ON.users = d.online || []; onRender();       // shown in the Online block on the right
+  if (CH.me && CH.me.signed_in && !CH.prof) chMe();   // the rating from this list until the profile answers
 }
 async function chInit() {
   try { CH.me = await invoke('c_status'); } catch (e) {}
@@ -1445,8 +1507,8 @@ async function chInit() {
   $('chIn2').onclick = chLogin;
   $('chSend').onclick = chSay;
   $('chText').onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); chSay(); } };
-  chMe(); chShowRoom(); chHello();
-  setInterval(chLoad, 5000); setInterval(chHello, 30000);
+  chMe(); chShowRoom(); chHello(); chProfile();
+  setInterval(chLoad, 5000); setInterval(chHello, 30000); setInterval(chProfile, 10 * 60 * 1000);
 }
 chInit();
 
@@ -1536,7 +1598,12 @@ $('hkReset').onclick = async () => {
   try { const d = await invoke('hotkeys_reset'); HK.data = d; HK.data.map = {}; d.bindings.forEach(b => HK.data.map[hkKey(b)] = b); HK.grid = d.grid; HK.edits = {}; hkRender(); toast(t('hkSaved')); }
   catch (e) { toast(String(e), true); }
 };
-document.querySelector('.tab[data-view="hotkeys"]').addEventListener('click', () => { if (!HK.data) hkLoad(); });
+// Settings has two tabs, General and Hotkeys (the bindings are read when the tab is first opened)
+document.querySelectorAll('.set-tab').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.set-tab').forEach(x => x.classList.toggle('on', x === b));
+  ['setMain', 'hotkeys'].forEach(id => $(id).classList.toggle('hidden', id !== b.dataset.set));
+  if (b.dataset.set === 'hotkeys' && !HK.data) hkLoad();
+});
 
 // ---------------- remove Elite completely ----------------
 let unArmed = 0;
