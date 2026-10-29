@@ -858,6 +858,7 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
             take(d.join("Elite_DLLs"), 0, &["log", "ini", "txt", "dmp"], 30, 40, &mut files);
             take(d.clone(), 0, &["log", "txt", "dmp", "mdmp", "launchconfig"], 7, 20, &mut files);
         }
+        take(data_dir(), 0, &["log", "old"], 30, 4, &mut files);   // the launcher's own: community.log (Steam sign-in, chat)
         if let Some(doc) = dirs::document_dir() {
             take(doc.join("My Games").join("Dawn of War II - Retribution"), 3, &["txt", "log", "dmp", "mdmp", "xml", "ini"], 3, 40, &mut files);
         }
@@ -1128,7 +1129,67 @@ async fn fb_thread(app: AppHandle) -> Result<Value, String> {
 // a Steam sign-in: the browser goes through Steam's own OpenID page (the launcher never sees the password), the server
 // checks the answer with Steam and hands the launcher a session token for the random nonce it made.
 fn c_profile(s: &Settings) -> Value {
-    json!({"signed_in": !s.c_token.is_empty(), "steam": s.c_steam, "name": s.c_name, "avatar": s.c_avatar, "configured": !fb_hosts().is_empty()})
+    let local = elite_core::game::steam_local_user();
+    json!({"signed_in": !s.c_token.is_empty(), "steam": s.c_steam, "name": s.c_name, "avatar": s.c_avatar, "configured": !fb_hosts().is_empty(),
+           "local_name": local.as_ref().map(|l| l.1.clone()).unwrap_or_default(), "local_found": local.is_some()})
+}
+
+/// community.log in the launcher's folder: every sign-in step and failed call (goes with "Send logs"); kept under 256 KB.
+fn c_log(msg: &str) {
+    let p = data_dir().join("community.log");
+    if std::fs::metadata(&p).map(|m| m.len() > 256 << 10).unwrap_or(false) { let _ = std::fs::rename(&p, data_dir().join("community.log.old")); }
+    let t = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0);
+    if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(&p) {
+        use std::io::Write;
+        let _ = writeln!(f, "{t} {msg}");
+    }
+}
+
+fn c_save(app: &AppHandle, v: &Value) -> Value {
+    let st = app.state::<App>();
+    let mut s = st.settings.lock().unwrap();
+    s.c_token = v["token"].as_str().unwrap_or("").into();
+    s.c_steam = v["steam"].as_str().unwrap_or("").into();
+    s.c_name = v["name"].as_str().unwrap_or("").into();
+    s.c_avatar = v["avatar"].as_str().unwrap_or("").into();
+    save_settings(&s);
+    c_profile(&s)
+}
+
+/// POST /ladder/api/c/local: the Steam account of this computer + the hashed machine id (+ the token of a browser
+/// sign-in, which binds this computer to the account). Ok(answer) whatever it says; Err only if no server answered.
+fn c_local_call(token: &str) -> Result<Value, String> {
+    let Some((steam, name)) = elite_core::game::steam_local_user() else {
+        c_log("local: no Steam account found on this computer (loginusers.vdf / ActiveUser)");
+        return Ok(json!({"ok": false, "no_steam": true, "error": "no Steam account found on this computer"}));
+    };
+    let device = elite_core::game::machine_id();
+    c_log(&format!("local: steam {steam} name {name:?} device {}", if device.is_empty() { "-" } else { &device[..8] }));
+    let body = json!({"steam": steam, "name": name, "device": device, "token": token, "launcher": LAUNCHER_VERSION, "os": os_name()}).to_string();
+    let mut last = "the server is not configured in this build".to_string();
+    for h in fb_hosts() {
+        match ureq::post(&format!("{h}/ladder/api/c/local")).timeout(Duration::from_secs(20)).set("Content-Type", "application/json").send_string(&body) {
+            Ok(r) => {
+                let v: Value = serde_json::from_str(&r.into_string().unwrap_or_default()).unwrap_or_default();
+                c_log(&format!("local: {h} -> ok={} {}", v["ok"], v["error"].as_str().unwrap_or("")));
+                return Ok(v);
+            }
+            Err(e) => { c_log(&format!("local: {h} failed: {e}")); last = e.to_string(); }
+        }
+    }
+    Err(last)
+}
+
+/// Sign in with the Steam account of this computer, no browser. {need_browser: true} when the account is bound to
+/// another computer; {no_steam: true} when Steam has no logged-in account here.
+#[tauri::command]
+async fn c_login_local(app: AppHandle) -> Result<Value, String> {
+    let app2 = app.clone();
+    tauri::async_runtime::spawn_blocking(move || {
+        let v = c_local_call("")?;
+        if v["ok"].as_bool() == Some(true) { return Ok(c_save(&app2, &v)); }
+        Ok(v)
+    }).await.map_err(|e| e.to_string())?
 }
 
 #[tauri::command]
@@ -1140,29 +1201,30 @@ async fn c_login(app: AppHandle) -> Result<Value, String> {
     let mut b = [0u8; 24];
     getrandom::getrandom(&mut b).map_err(|e| e.to_string())?;
     let nonce: String = b.iter().map(|x| format!("{x:02x}")).collect();
-    app.opener().open_url(format!("{host}/ladder/api/c/login?nonce={nonce}"), None::<&str>).map_err(|e| e.to_string())?;
+    c_log(&format!("browser: opening {host}/ladder/api/c/login (nonce {})", &nonce[..8]));
+    if let Err(e) = app.opener().open_url(format!("{host}/ladder/api/c/login?nonce={nonce}"), None::<&str>) { c_log(&format!("browser: could not open: {e}")); return Err(e.to_string()); }
     let app2 = app.clone();
     tauri::async_runtime::spawn_blocking(move || {
         // the player signs in in the browser: ask for the token every 2 s, for up to 5 minutes
         for _ in 0..150 {
             std::thread::sleep(Duration::from_secs(2));
             for h in fb_hosts() {
-                let Ok(r) = ureq::get(&format!("{h}/ladder/api/c/claim?nonce={nonce}")).timeout(Duration::from_secs(10)).call() else { continue };
+                let r = match ureq::get(&format!("{h}/ladder/api/c/claim?nonce={nonce}")).timeout(Duration::from_secs(10)).call() {
+                    Ok(r) => r,
+                    Err(e) => { c_log(&format!("browser: claim at {h} failed: {e}")); continue; }
+                };
                 let v: Value = serde_json::from_str(&r.into_string().unwrap_or_default()).unwrap_or_default();
                 if v["ok"].as_bool() == Some(true) {
-                    let st = app2.state::<App>();
-                    let mut s = st.settings.lock().unwrap();
-                    s.c_token = v["token"].as_str().unwrap_or("").into();
-                    s.c_steam = v["steam"].as_str().unwrap_or("").into();
-                    s.c_name = v["name"].as_str().unwrap_or("").into();
-                    s.c_avatar = v["avatar"].as_str().unwrap_or("").into();
-                    save_settings(&s);
-                    return Ok(c_profile(&s));
+                    c_log(&format!("browser: signed in as {}", v["steam"].as_str().unwrap_or("")));
+                    let prof = c_save(&app2, &v);
+                    let _ = c_local_call(v["token"].as_str().unwrap_or(""));   // binds this computer: next time no browser
+                    return Ok(prof);
                 }
-                if let Some(e) = v["error"].as_str() { return Err(e.to_string()); }
+                if let Some(e) = v["error"].as_str() { c_log(&format!("browser: claim error {e}")); return Err(e.to_string()); }
                 break;
             }
         }
+        c_log("browser: no answer from Steam in 5 minutes (the Steam page did not come back - blocked, closed or not signed in)");
         Err("timeout".to_string())
     }).await.map_err(|e| e.to_string())?
 }
@@ -1204,6 +1266,7 @@ async fn c_api(app: AppHandle, path: String, body: Option<Value>) -> Result<Valu
                 Err(e) => last = e.to_string(),
             }
         }
+        if name != "msgs" && name != "online" && name != "hello" { c_log(&format!("api {name}: {last}")); }
         Err(last)
     }).await.map_err(|e| e.to_string())?
 }
@@ -1424,7 +1487,7 @@ fn main() {
             get_status, refresh, set_channel, switch_to, send_logs, set_comp_option, set_setting, set_component, remove_conflicts, pick_game_dir, open_url, set_comp_value, open_game_dir, start_update, cancel_update, play,
             fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels, launcher_check, launcher_install, online_live,
             hotkeys_get, hotkeys_save, hotkeys_reset, uninstall_elite,
-            c_status, c_login, c_logout, c_api
+            c_status, c_login, c_login_local, c_logout, c_api
         ])
         .run(tauri::generate_context!())
         .expect("error while running Elite Launcher");

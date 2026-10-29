@@ -81,3 +81,109 @@ pub fn find_game(folder: &str, marker: &str) -> Option<PathBuf> {
 pub fn steam_installed() -> bool {
     !steam_roots().is_empty()
 }
+
+
+/// The Steam account logged in on this computer: (SteamID64, persona name). The running Steam client's user first
+/// (Windows: HKCU\Software\Valve\Steam\ActiveProcess\ActiveUser), else the most recent one in config/loginusers.vdf.
+pub fn steam_local_user() -> Option<(String, String)> {
+    let mut active: Option<u64> = None;
+    #[cfg(windows)]
+    {
+        use winreg::enums::HKEY_CURRENT_USER;
+        use winreg::RegKey;
+        if let Ok(k) = RegKey::predef(HKEY_CURRENT_USER).open_subkey("Software\\Valve\\Steam\\ActiveProcess") {
+            if let Ok(id) = k.get_value::<u32, _>("ActiveUser") {
+                if id != 0 { active = Some(76561197960265728u64 + id as u64); }
+            }
+        }
+    }
+    let mut users: Vec<(String, String, u64)> = Vec::new();
+    for root in steam_roots() {
+        let Ok(t) = std::fs::read_to_string(root.join("config").join("loginusers.vdf")) else { continue };
+        users.extend(parse_loginusers(&t));
+        if !users.is_empty() { break; }
+    }
+    if let Some(a) = active {
+        let id = a.to_string();
+        let name = users.iter().find(|u| u.0 == id).map(|u| u.1.clone()).unwrap_or_default();
+        return Some((id, name));
+    }
+    users.iter().max_by_key(|u| u.2).map(|u| (u.0.clone(), u.1.clone()))
+}
+
+/// loginusers.vdf: "users" { "7656119…" { "PersonaName" ".." "MostRecent" "1" "timestamp" "…" … } … } -> (id, name, rank):
+/// rank = the last sign-in time; MostRecent "1" (older Steam clients) ranks above everything.
+pub fn parse_loginusers(t: &str) -> Vec<(String, String, u64)> {
+    let mut out = Vec::new();
+    let mut toks: Vec<String> = Vec::new();
+    let mut it = t.chars().peekable();
+    while let Some(c) = it.next() {
+        match c {
+            '"' => { let mut s = String::new(); while let Some(c) = it.next() { if c == '\\' { if let Some(n) = it.next() { s.push(n); } continue; } if c == '"' { break; } s.push(c); } toks.push(s); }
+            '{' => toks.push("{".into()),
+            '}' => toks.push("}".into()),
+            _ => {}
+        }
+    }
+    let mut i = 0;
+    while i + 1 < toks.len() {
+        let id = &toks[i];
+        if id.len() == 17 && id.starts_with("7656119") && id.bytes().all(|b| b.is_ascii_digit()) && toks[i + 1] == "{" {
+            let (mut name, mut recent, mut ts) = (String::new(), false, 0u64);
+            let mut j = i + 2;
+            while j + 1 < toks.len() && toks[j] != "}" {
+                let k = toks[j].to_ascii_lowercase();
+                if k == "personaname" { name = toks[j + 1].clone(); }
+                if k == "mostrecent" { recent = toks[j + 1] == "1"; }
+                if k == "timestamp" { ts = toks[j + 1].parse().unwrap_or(0); }
+                j += 2;
+            }
+            out.push((id.clone(), name, if recent { u64::MAX } else { ts }));
+            i = j;
+        }
+        i += 1;
+    }
+    out
+}
+
+/// A stable id of this computer, hashed (the raw one never leaves the machine). Empty if none is found.
+pub fn machine_id() -> String {
+    let mut raw = String::new();
+    #[cfg(windows)]
+    {
+        use winreg::enums::{HKEY_LOCAL_MACHINE, KEY_READ, KEY_WOW64_64KEY};
+        use winreg::RegKey;
+        if let Ok(k) = RegKey::predef(HKEY_LOCAL_MACHINE).open_subkey_with_flags("SOFTWARE\\Microsoft\\Cryptography", KEY_READ | KEY_WOW64_64KEY) {
+            raw = k.get_value::<String, _>("MachineGuid").unwrap_or_default();
+        }
+    }
+    #[cfg(target_os = "linux")]
+    { raw = std::fs::read_to_string("/etc/machine-id").or_else(|_| std::fs::read_to_string("/var/lib/dbus/machine-id")).unwrap_or_default(); }
+    #[cfg(target_os = "macos")]
+    {
+        if let Ok(o) = std::process::Command::new("ioreg").args(["-rd1", "-c", "IOPlatformExpertDevice"]).output() {
+            let t = String::from_utf8_lossy(&o.stdout);
+            if let Some(l) = t.lines().find(|l| l.contains("IOPlatformUUID")) { raw = l.split('"').nth(3).unwrap_or("").to_string(); }
+        }
+    }
+    let raw = raw.trim();
+    if raw.is_empty() { return String::new(); }
+    use sha2::{Digest, Sha256};
+    let h = Sha256::digest(format!("elite-launcher:{raw}").as_bytes());
+    h.iter().take(16).map(|b| format!("{b:02x}")).collect()
+}
+
+#[cfg(test)]
+mod steam_user_tests {
+    #[test]
+    fn loginusers() {
+        let t = "\"users\"\n{\n\t\"76561198000000001\"\n\t{\n\t\t\"AccountName\"\t\t\"a\"\n\t\t\"PersonaName\"\t\t\"Old \\\"one\\\"\"\n\t\t\"MostRecent\"\t\t\"0\"\n\t}\n\t\"76561198000000002\"\n\t{\n\t\t\"PersonaName\"\t\t\"Новый\"\n\t\t\"MostRecent\"\t\t\"1\"\n\t}\n}\n";
+        let u = super::parse_loginusers(t);
+        assert_eq!(u.len(), 2);
+        assert_eq!(u[0], ("76561198000000001".into(), "Old \"one\"".into(), 0));
+        assert_eq!(u[1], ("76561198000000002".into(), "Новый".into(), u64::MAX));
+        // newer Steam: no MostRecent, the latest timestamp wins
+        let n = super::parse_loginusers("\"users\" { \"76561198000000003\" { \"PersonaName\" \"a\" \"timestamp\" \"100\" } \"76561198000000004\" { \"PersonaName\" \"b\" \"timestamp\" \"200\" } }");
+        assert_eq!(n.iter().max_by_key(|u| u.2).unwrap().1, "b");
+    }
+}

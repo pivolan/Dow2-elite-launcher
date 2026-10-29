@@ -7,6 +7,10 @@ const $ = id => document.getElementById(id);
 
 const T = {
   en: {
+    "chNeedBrowser": "This Steam account signed in from another computer: confirm once in the browser.",
+    "chNoSteam": "Steam is not running here: signing in through the browser.",
+    "chLoginFail": "Could not sign in. Press “Send logs” in Settings so we can see why.",
+    "chLoginAs": "Sign in as {name}",
     "chAll": "General",
     "chDev": "Developers",
     "chLogin": "Sign in with Steam",
@@ -174,6 +178,10 @@ const T = {
     "onInMatchH": "In a match"
   },
   ru: {
+    "chNeedBrowser": "Этот Steam-аккаунт уже входил с другого компьютера — подтвердите один раз в браузере.",
+    "chNoSteam": "Steam на этом компьютере не запущен — входим через браузер.",
+    "chLoginFail": "Не получилось войти. Нажмите «Отправить логи» в настройках — разберёмся.",
+    "chLoginAs": "Войти как {name}",
     "chAll": "Общий",
     "chDev": "Разработчикам",
     "chLogin": "Войти через Steam",
@@ -341,6 +349,10 @@ const T = {
     "onInMatchH": "В матче"
   },
   es: {
+    "chNeedBrowser": "Esta cuenta de Steam entró desde otro ordenador: confírmalo una vez en el navegador.",
+    "chNoSteam": "Steam no está abierto aquí: entrando por el navegador.",
+    "chLoginFail": "No se pudo entrar. Pulsa «Enviar registros» en Ajustes.",
+    "chLoginAs": "Entrar como {name}",
     "chAll": "General",
     "chDev": "Desarrolladores",
     "chLogin": "Entrar con Steam",
@@ -503,6 +515,10 @@ const T = {
     "onInMatchH": "En partida"
   },
   fr: {
+    "chNeedBrowser": "Ce compte Steam s'est connecté depuis un autre ordinateur : confirmez une fois dans le navigateur.",
+    "chNoSteam": "Steam n'est pas lancé ici : connexion par le navigateur.",
+    "chLoginFail": "Connexion impossible. Appuyez sur « Envoyer les journaux » dans les réglages.",
+    "chLoginAs": "Se connecter en tant que {name}",
     "chAll": "Général",
     "chDev": "Développeurs",
     "chLogin": "Se connecter avec Steam",
@@ -665,6 +681,10 @@ const T = {
     "onInMatchH": "En partie"
   },
   de: {
+    "chNeedBrowser": "Dieses Steam-Konto war an einem anderen PC angemeldet: einmal im Browser bestätigen.",
+    "chNoSteam": "Steam läuft hier nicht: Anmeldung über den Browser.",
+    "chLoginFail": "Anmeldung fehlgeschlagen. In den Einstellungen „Logs senden“ drücken.",
+    "chLoginAs": "Anmelden als {name}",
     "chAll": "Allgemein",
     "chDev": "Entwickler",
     "chLogin": "Mit Steam anmelden",
@@ -1384,7 +1404,7 @@ function chMe() {
   const me = CH.me && CH.me.signed_in ? CH.me : null;
   $('meChip').innerHTML = me
     ? (me.avatar ? `<img src="${esc(me.avatar)}" alt="">` : '') + `<span class="nm" title="${esc(t('chSignedIn', { name: me.name }))}">${esc(me.name || me.steam)}</span><button class="out" id="chOut">${esc(t('chLogout'))}</button>`
-    : (CH.me && CH.me.configured === false ? '' : `<button class="btn gold small" id="chIn">${esc(t('chLogin'))}</button>`);
+    : (CH.me && CH.me.configured === false ? '' : `<button class="btn gold small" id="chIn">${esc(CH.me && CH.me.local_name ? t('chLoginAs', { name: CH.me.local_name }) : t('chLogin'))}</button>`);
   if ($('chOut')) $('chOut').onclick = chLogout;
   if ($('chIn')) $('chIn').onclick = chLogin;
   $('chLoginRow').classList.toggle('hidden', !!me);
@@ -1392,9 +1412,16 @@ function chMe() {
 }
 async function chLogin() {
   document.querySelectorAll('#chIn,#chIn2').forEach(b => b.disabled = true);
-  toast(t('chWaitLogin'));
-  try { CH.me = await invoke('c_login'); chMe(); chHello(); toast(t('chSignedIn', { name: CH.me.name })); }
-  catch (e) { toast(e, true); }
+  try {
+    // the Steam account of this computer first: no browser (the Steam page does not open everywhere)
+    let r = null;
+    try { r = await invoke('c_login_local'); } catch (e) { r = { error: String(e) }; }
+    if (r && r.signed_in) { CH.me = r; chMe(); chHello(); toast(t('chSignedIn', { name: CH.me.name })); }
+    else {
+      toast(r && r.need_browser ? t('chNeedBrowser') : r && r.no_steam ? t('chNoSteam') : t('chWaitLogin'));
+      CH.me = await invoke('c_login'); chMe(); chHello(); toast(t('chSignedIn', { name: CH.me.name }));
+    }
+  } catch (e) { toast(t('chLoginFail') + ' ' + e, true); }
   document.querySelectorAll('#chIn,#chIn2').forEach(b => b.disabled = false);
 }
 async function chLogout() { try { CH.me = await invoke('c_logout'); } catch (e) {} chMe(); }
