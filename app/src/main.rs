@@ -189,10 +189,9 @@ fn mirrors(s: &Settings, cfg: Option<&LauncherConfig>) -> Mirrors {
         v.extend(c.mirrors.iter().cloned());
     }
     v.extend(BUILTIN_MIRRORS.split(';').map(str::trim).filter(|x| !x.is_empty()).map(String::from));
-    if !s.last_mirror.is_empty() && v.iter().any(|m| m == &s.last_mirror) {
-        v.retain(|m| m != &s.last_mirror);
-        v.insert(0, s.last_mirror.clone());
-    }
+    // the order is ours (owner, 29.10: Moscow, then Germany, then the rest): the mirror that worked last time is no longer
+    // moved to the front - it kept players on one mirror for good; a mirror that fails is still skipped for the next one
+    let _ = &s.last_mirror;
     let mut seen = std::collections::HashSet::new();
     v.retain(|m| seen.insert(m.trim_end_matches('/').to_ascii_lowercase()));
     Mirrors::new(v)

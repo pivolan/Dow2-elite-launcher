@@ -1,1 +1,2 @@
+- The mirror that worked last time is no longer moved to the front: the order is the same for everybody.
 - Launcher updates and game files come from Moscow first, then Germany, then the other mirrors; every mirror gives the update with its own download links, so a mirror that does not answer is skipped as a whole.
