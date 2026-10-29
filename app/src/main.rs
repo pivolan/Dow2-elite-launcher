@@ -64,6 +64,11 @@ struct Settings {
     tray_on_play: Option<bool>,
     /// Hotkeys the player changed: "scope:name" -> "Control+A" ("grid:AB_key_1" for Grid Hotkeys); see elite_core::hotkeys.
     hotkeys: BTreeMap<String, String>,
+    /// Community (chat, who is online): the session token from the Steam sign-in and the profile it belongs to.
+    c_token: String,
+    c_steam: String,
+    c_name: String,
+    c_avatar: String,
 }
 
 struct App {
@@ -1095,6 +1100,91 @@ async fn fb_thread(app: AppHandle) -> Result<Value, String> {
     }).await.map_err(|e| e.to_string())?
 }
 
+// ---------- Community: Steam sign-in, the players' chat, who has the launcher open ----------
+// The ladder service (/ladder/api/c/*, ladder/community.py in dow2-ladder) on the log hosts. Reading is open; writing needs
+// a Steam sign-in: the browser goes through Steam's own OpenID page (the launcher never sees the password), the server
+// checks the answer with Steam and hands the launcher a session token for the random nonce it made.
+fn c_profile(s: &Settings) -> Value {
+    json!({"signed_in": !s.c_token.is_empty(), "steam": s.c_steam, "name": s.c_name, "avatar": s.c_avatar, "configured": !fb_hosts().is_empty()})
+}
+
+#[tauri::command]
+fn c_status(app: State<'_, App>) -> Value { c_profile(&app.settings.lock().unwrap()) }
+
+#[tauri::command]
+async fn c_login(app: AppHandle) -> Result<Value, String> {
+    let host = fb_hosts().into_iter().next().ok_or("the server is not configured in this build")?;
+    let mut b = [0u8; 24];
+    getrandom::getrandom(&mut b).map_err(|e| e.to_string())?;
+    let nonce: String = b.iter().map(|x| format!("{x:02x}")).collect();
+    app.opener().open_url(format!("{host}/ladder/api/c/login?nonce={nonce}"), None::<&str>).map_err(|e| e.to_string())?;
+    let app2 = app.clone();
+    tauri::async_runtime::spawn_blocking(move || {
+        // the player signs in in the browser: ask for the token every 2 s, for up to 5 minutes
+        for _ in 0..150 {
+            std::thread::sleep(Duration::from_secs(2));
+            for h in fb_hosts() {
+                let Ok(r) = ureq::get(&format!("{h}/ladder/api/c/claim?nonce={nonce}")).timeout(Duration::from_secs(10)).call() else { continue };
+                let v: Value = serde_json::from_str(&r.into_string().unwrap_or_default()).unwrap_or_default();
+                if v["ok"].as_bool() == Some(true) {
+                    let st = app2.state::<App>();
+                    let mut s = st.settings.lock().unwrap();
+                    s.c_token = v["token"].as_str().unwrap_or("").into();
+                    s.c_steam = v["steam"].as_str().unwrap_or("").into();
+                    s.c_name = v["name"].as_str().unwrap_or("").into();
+                    s.c_avatar = v["avatar"].as_str().unwrap_or("").into();
+                    save_settings(&s);
+                    return Ok(c_profile(&s));
+                }
+                if let Some(e) = v["error"].as_str() { return Err(e.to_string()); }
+                break;
+            }
+        }
+        Err("timeout".to_string())
+    }).await.map_err(|e| e.to_string())?
+}
+
+#[tauri::command]
+fn c_logout(app: State<'_, App>) -> Value {
+    let mut s = app.settings.lock().unwrap();
+    let token = std::mem::take(&mut s.c_token);
+    s.c_steam.clear(); s.c_name.clear(); s.c_avatar.clear();
+    save_settings(&s);
+    let body = json!({"token": token}).to_string();
+    std::thread::spawn(move || for h in fb_hosts() {
+        if ureq::post(&format!("{h}/ladder/api/c/logout")).timeout(Duration::from_secs(10)).set("Content-Type", "application/json").send_string(&body).is_ok() { break; }
+    });
+    c_profile(&s)
+}
+
+/// One call to the community API: "msgs?room=ru&after=5" and "online" are read (GET); "hello", "say", "me" are sent
+/// (POST) with the session token added here, so the page never holds it.
+#[tauri::command]
+async fn c_api(app: AppHandle, path: String, body: Option<Value>) -> Result<Value, String> {
+    let name = path.split('?').next().unwrap_or("").to_string();
+    if !["msgs", "online", "hello", "say", "me"].contains(&name.as_str()) { return Err("unknown call".into()); }
+    let post = body.map(|mut b| {
+        if !b.is_object() { b = json!({}); }
+        b["token"] = json!(app.state::<App>().settings.lock().unwrap().c_token.clone());
+        b.to_string()
+    });
+    tauri::async_runtime::spawn_blocking(move || {
+        let mut last = "the server is not configured in this build".to_string();
+        for h in fb_hosts() {
+            let url = format!("{h}/ladder/api/c/{path}");
+            let r = match &post {
+                Some(b) => ureq::post(&url).timeout(Duration::from_secs(15)).set("Content-Type", "application/json").send_string(b),
+                None => ureq::get(&url).timeout(Duration::from_secs(15)).call(),
+            };
+            match r {
+                Ok(r) => return serde_json::from_str::<Value>(&r.into_string().unwrap_or_default()).map_err(|e| e.to_string()),
+                Err(e) => last = e.to_string(),
+            }
+        }
+        Err(last)
+    }).await.map_err(|e| e.to_string())?
+}
+
 // ---------- Online: who is looking for a game, the matches being set up or played ----------
 /// The same list the ladder page shows (/ladder/api/mm/live of the ladder service on the log hosts), plus the host
 /// that answered, for links to its ladder page.
@@ -1310,7 +1400,8 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             get_status, refresh, set_channel, switch_to, send_logs, set_comp_option, set_setting, set_component, remove_conflicts, pick_game_dir, open_url, open_game_dir, start_update, cancel_update, play,
             fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels, launcher_check, launcher_install, online_live,
-            hotkeys_get, hotkeys_save, hotkeys_reset, uninstall_elite
+            hotkeys_get, hotkeys_save, hotkeys_reset, uninstall_elite,
+            c_status, c_login, c_logout, c_api
         ])
         .run(tauri::generate_context!())
         .expect("error while running Elite Launcher");

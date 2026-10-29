@@ -11,6 +11,7 @@
   <header>
     <div class="brand"><span class="logo">ELITE Launcher</span><span class="hdr-ver" id="hdrVer"></span><span class="sub" id="subtitle">Dawn of War II · Retribution</span></div>
     <div class="launcher-banner hidden" id="launcherBanner"><span id="launcherText"></span><button class="btn gold small hidden" id="launcherBtn"></button></div>
+    <div class="me-chip" id="meChip"></div>
     <nav><button class="tab on" data-view="home" data-t="home"></button><button class="tab" data-view="addons" data-t="components"></button><button class="tab" data-view="hotkeys" data-t="hotkeys"></button><button class="tab" data-view="settings" data-t="settings"></button></nav>
   </header>
 
@@ -31,7 +32,16 @@
       <div id="announcements"></div>
       <div id="setup" class="setup hidden"></div>
       <div id="newsBox" class="panel fb">
-        <div class="h"><span data-t="fbTitle"></span><button class="btn gold logs-btn" id="sendLogsHome" data-t="sendLogs"></button></div>
+        <div class="h ch-head"><div class="ch-tabs" id="chTabs"><button class="ch-tab on" data-room="all" data-t="chAll"></button><button class="ch-tab" data-room="ru">RU</button><button class="ch-tab" data-room="en">EN</button><button class="ch-tab" data-room="dev" data-t="chDev"></button></div><button class="btn gold logs-btn" id="sendLogsHome" data-t="sendLogs"></button></div>
+        <div class="ch-pane" id="chatPane">
+          <div class="ch-body">
+            <div class="ch-msgs" id="chMsgs"></div>
+            <div class="ch-members"><div class="ch-mh" id="chMembersH"></div><div class="ch-ulist" id="chMembers"></div></div>
+          </div>
+          <div class="ch-login hidden" id="chLoginRow"><span data-t="chSignInToWrite"></span><button class="btn gold small" id="chIn2" data-t="chLogin"></button></div>
+          <div class="ch-send" id="chSendRow"><textarea id="chText" rows="2" maxlength="500" data-tp="chPlaceholder"></textarea><button class="btn-gold" id="chSend" data-t="fbSend"></button></div>
+        </div>
+        <div class="dev-pane hidden" id="devPane">
         <div class="fb-who"><span data-t="fbName"></span> <input id="fbName" maxlength="48"><span class="fb-id" id="fbId"></span></div>
         <div id="fbMsgs" class="fb-msgs"></div>
         <div id="fbPics" class="fb-pics"></div>
@@ -40,6 +50,7 @@
           <div class="fb-btns"><button class="link-btn" id="fbAttach" data-t="fbAttach"></button><button class="btn-gold" id="fbSend" data-t="fbSend"></button></div>
         </div>
         <input type="file" id="fbFile" accept="image/*" multiple class="hidden">
+        </div>
       </div>
     </section>
 
