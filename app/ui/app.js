@@ -864,6 +864,20 @@ function compVer(c) {
     : c.latest ? t('addonVer', { v: v(c.latest) }) : '';
 }
 
+// an add-on's options: ticks, or a list when the option has choices; the options of one group in a block under its heading
+function optsHtml(c, lock) {
+  const one = o => {
+    const data = `data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${lock ? 'disabled' : ''}`;
+    return (o.choices || []).length
+      ? `<label class="addon-opt pick"><span>${esc(L(o.name) || o.id)}</span><select ${data}>`
+        + o.choices.map(ch => `<option value="${esc(ch.value)}" ${ch.value === o.value ? 'selected' : ''}>${esc(L(ch.name) || ch.value)}</option>`).join('') + '</select></label>'
+      : `<label class="addon-opt"><input type="checkbox" ${data} ${o.on ? 'checked' : ''}>${esc(L(o.name) || o.id)}</label>`;
+  };
+  const parts = [];
+  c.options.forEach(o => { const g = L(o.group), last = parts[parts.length - 1]; last && last.g === g ? last.list.push(o) : parts.push({ g, list: [o] }); });
+  return parts.map(p => p.g ? `<div class="addon-sub"><div class="addon-grp">${esc(p.g)}</div>${p.list.map(one).join('')}</div>` : p.list.map(one).join('')).join('');
+}
+
 // add-on rows: a switch each and its own options under it once it is on; the details behind "?" on the home screen,
 // written out on the Add-ons tab (full)
 function compList(box, list, full) {
@@ -877,11 +891,13 @@ function compList(box, list, full) {
       + (full ? (L(c.description) ? `<p class="addon-desc">${esc(L(c.description))}</p>` : '')
           + `<div class="addon-ver">${esc([compVer(c), t('addonLater')].filter(Boolean).join(' · '))}</div>`
           + (c.enabled && (c.conflicts || []).length ? `<div class="addon-note">${esc(t('conflictActive'))}</div>` : '') : '')
-      + (c.enabled && (c.options || []).length ? '<div class="addon-opts">' + c.options.map(o => `<label class="addon-opt"><input type="checkbox" data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${o.on ? 'checked' : ''} ${lock ? 'disabled' : ''}>${esc(L(o.name) || o.id)}</label>`).join('') + '</div>' : '')
+      + (c.enabled && (c.options || []).length ? '<div class="addon-opts">' + optsHtml(c, lock) + '</div>' : '')
       + '</div>').join('');
   box.querySelectorAll('.qm').forEach(b => b.onclick = e => { e.stopPropagation(); popAddon(b, list.find(c => c.id === b.dataset.info)); });
   box.querySelectorAll('input[data-opt]').forEach(cb => cb.onchange = () =>
     invoke('set_comp_option', { comp: cb.dataset.comp, opt: cb.dataset.opt, on: cb.checked }).then(reload).catch(e => toast(e, true)));
+  box.querySelectorAll('select[data-opt]').forEach(sel => sel.onchange = () =>
+    invoke('set_comp_value', { comp: sel.dataset.comp, opt: sel.dataset.opt, value: sel.value }).then(reload).catch(e => toast(e, true)));
   box.querySelectorAll('input[data-id]').forEach(cb => cb.onchange = async () => {
     const comp = list.find(c => c.id === cb.dataset.id);
     if (cb.checked && comp && (comp.conflicts || []).length) {
@@ -967,8 +983,8 @@ function render() {
   syncTrayLabels();
   document.querySelectorAll('[data-t]').forEach(e => e.textContent = t(e.dataset.t));
   document.querySelectorAll('[data-tp]').forEach(e => e.placeholder = t(e.dataset.tp));
+  document.querySelectorAll('[data-ta]').forEach(e => { e.title = t(e.dataset.ta); e.setAttribute('aria-label', e.title); });   // icon buttons
   const cfg = S.config || {};
-  $('subtitle').textContent = L(cfg.subtitle) || 'Dawn of War II · Retribution';
 
   renderLauncherBanner();
 
@@ -1017,7 +1033,7 @@ function render() {
     $('pick').onclick = pickDir; $('rescan').onclick = reload;
   } else setup.classList.add('hidden');
 
-  // versions: a picker above Play; the main one marked, the installed one ticked, any other one switches in one click
+  // versions: a picker next to Play at the bottom; the main one marked, the installed one ticked, any other one switches in one click
   const chans = cfg.channels || [];
   const activeCh = chans.find(c => c.version === S.installed_version && c.id === S.installed_channel) || chans.find(c => c.version === S.installed_version);
   const mainCh = chans.find(c => c.id === S.main_channel);
@@ -1046,10 +1062,10 @@ function render() {
   $('verWarn').classList.toggle('hidden', !notMain);
   if (notMain) $('verWarn').textContent = t('youPlay', { name: L(activeCh.name) }) + ' ' + t('notMain', { name: L(mainCh.name) });
 
-  // add-ons: the ones players switch most on the home screen (launcher.json "home"), all of them on the Add-ons tab
+  // add-ons: only the game server on the home screen (or what launcher.json marks "home"), all of them on the Add-ons tab
   const comps = S.components || [];
   const pinned = comps.some(c => c.home) ? comps.filter(c => c.home)
-    : comps.filter(c => /automatch|relay/i.test(c.id));   // until launcher.json marks them
+    : comps.filter(c => c.id === 'relay');   // until launcher.json marks them
   $('compBox').classList.toggle('hidden', !pinned.length);
   compList($('components'), pinned, false);
   compList($('allCompList'), comps, true);
@@ -1065,7 +1081,7 @@ function render() {
   else { play.textContent = t('play'); play.disabled = false; }
   play.onclick = () => (S.installed_version ? doPlay() : switchTo(S.main_channel || S.channel));
 
-  // a newer version of the installed one: offered right above the version picker, never forced
+  // a newer version of the installed one: offered at the bottom of the home screen's right column, never forced
   const target = channelOf(S.installed_channel) || channelOf(S.channel);
   const showUpd = !!(S.game_found && target && S.installed_version && target.version !== S.installed_version && !S.busy && !S.game_running && !S.last_error);
   $('updBox').classList.toggle('hidden', !showUpd);

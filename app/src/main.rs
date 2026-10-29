@@ -47,6 +47,8 @@ struct Settings {
     components: BTreeMap<String, bool>,
     /// "component.option" → ticked by the player (missing = option default).
     comp_options: BTreeMap<String, bool>,
+    /// "component.option" → the player's pick for an option with choices (missing = option default).
+    comp_values: BTreeMap<String, String>,
     /// Channel the player switched away from — the quick "back to …" button.
     prev_channel: Option<String>,
     /// Mirror that worked last time — tried first (R2 is blocked in some countries, our server in others).
@@ -410,10 +412,14 @@ fn get_status(app: State<'_, App>) -> Value {
             "enabled": s.components.get(&c.id).copied().unwrap_or(c.default),
             "conflicts": dir.as_ref().map(|d| found_conflicts(d, c)).unwrap_or_default(),
             "installed": dir.as_ref().map(|d| update::Game::component(d, &c.id).load_state().version).unwrap_or_default(),
-            "options": c.options.iter().map(|o| json!({
-                "id": o.id, "name": o.name,
-                "on": s.comp_options.get(&format!("{}.{}", c.id, o.id)).copied().unwrap_or(o.default),
-            })).collect::<Vec<_>>(),
+            "options": c.opts().iter().map(|o| {
+                let k = format!("{}.{}", c.id, o.id);
+                json!({
+                    "id": o.id, "name": o.name, "group": o.group,
+                    "on": s.comp_options.get(&k).copied().unwrap_or(o.default),
+                    "choices": o.choices, "value": if o.choices.is_empty() { String::new() } else { o.ini_value(false, s.comp_values.get(&k)) },
+                })
+            }).collect::<Vec<_>>(),
         })).collect::<Vec<_>>(),
         "usage_stats": s.usage_stats.unwrap_or(true),
         "tray_on_play": s.tray_on_play.unwrap_or(true),
@@ -513,10 +519,11 @@ fn set_component(app: State<'_, App>, id: String, on: bool) -> Result<(), String
 fn apply_options(dir: &std::path::Path, cfg: &LauncherConfig, s: &Settings) {
     for c in &cfg.components {
         if update::Game::component(dir, &c.id).load_state().version.is_empty() { continue; }
-        for o in &c.options {
+        for o in c.opts() {
             if o.ini.is_empty() || o.ini.contains("..") { continue; }
-            let on = s.comp_options.get(&format!("{}.{}", c.id, o.id)).copied().unwrap_or(o.default);
-            let _ = elite::set_ini_value(&dir.join(&o.ini), &o.section, &o.key, if on { "1" } else { "0" });
+            let k = format!("{}.{}", c.id, o.id);
+            let on = s.comp_options.get(&k).copied().unwrap_or(o.default);
+            let _ = elite::set_ini_value(&dir.join(&o.ini), &o.section, &o.key, &o.ini_value(on, s.comp_values.get(&k)));
         }
     }
 }
@@ -528,6 +535,22 @@ fn set_comp_option(app: State<'_, App>, comp: String, opt: String, on: bool) -> 
     let s = {
         let mut s = app.settings.lock().unwrap();
         s.comp_options.insert(format!("{comp}.{opt}"), on);
+        save_settings(&s);
+        s.clone()
+    };
+    if let (Some(dir), Some(cfg)) = (game_dir(&app), app.config.lock().unwrap().clone()) {
+        apply_options(&dir, &cfg, &s);
+    }
+    Ok(())
+}
+
+/// Pick one of an option's choices (e.g. where the match timer sits): saved and written like a tick.
+#[tauri::command]
+fn set_comp_value(app: State<'_, App>, comp: String, opt: String, value: String) -> Result<(), String> {
+    ensure_game_closed(&app)?;
+    let s = {
+        let mut s = app.settings.lock().unwrap();
+        s.comp_values.insert(format!("{comp}.{opt}"), value);
         save_settings(&s);
         s.clone()
     };
@@ -1398,7 +1421,7 @@ fn main() {
             }
         })
         .invoke_handler(tauri::generate_handler![
-            get_status, refresh, set_channel, switch_to, send_logs, set_comp_option, set_setting, set_component, remove_conflicts, pick_game_dir, open_url, open_game_dir, start_update, cancel_update, play,
+            get_status, refresh, set_channel, switch_to, send_logs, set_comp_option, set_setting, set_component, remove_conflicts, pick_game_dir, open_url, set_comp_value, open_game_dir, start_update, cancel_update, play,
             fb_info, fb_set_name, fb_send, fb_thread, set_tray_labels, launcher_check, launcher_install, online_live,
             hotkeys_get, hotkeys_save, hotkeys_reset, uninstall_elite,
             c_status, c_login, c_logout, c_api
