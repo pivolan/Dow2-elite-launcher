@@ -147,7 +147,7 @@ jobs:
           # when it is released there by hand after a check (owner, 29.10) - CI only builds and stages.
           # Read into a variable: without the file the step stops here, not after the whole build with an empty key
           pubkey="$(tr -d '[:space:]' < ../keys/updater.pub)"
-          printf '{"bundle":{"createUpdaterArtifacts":true},"plugins":{"updater":{"pubkey":"%s","endpoints":["https://dow2.fintebtc.de/elite/dl/updater.json","https://dow2ru.fintebtc.de/elite/dl/updater.json","https://rts.fintebtc.de/elite/dl/updater.json"]}}}' \
+          printf '{"bundle":{"createUpdaterArtifacts":true},"plugins":{"updater":{"pubkey":"%s","endpoints":["https://dow2ru.fintebtc.de/elite/dl/updater.json","https://dow2.fintebtc.de/elite/dl/updater.json","https://rts.fintebtc.de/elite/dl/updater.json"]}}}' \
             "$pubkey" > "$RUNNER_TEMP/updater.conf.json"
           # on failure the last lines go into the run's annotations: readable without access to the logs
           set -o pipefail
