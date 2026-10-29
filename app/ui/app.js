@@ -7,6 +7,8 @@ const $ = id => document.getElementById(id);
 
 const T = {
   en: {
+    "chToday": "Today",
+    "chYesterday": "Yesterday",
     "chNeedBrowser": "This Steam account signed in from another computer: confirm once in the browser.",
     "chNoSteam": "Steam is not running here: signing in through the browser.",
     "chLoginFail": "Could not sign in. Press “Send logs” in Settings so we can see why.",
@@ -178,6 +180,8 @@ const T = {
     "onInMatchH": "In a match"
   },
   ru: {
+    "chToday": "Сегодня",
+    "chYesterday": "Вчера",
     "chNeedBrowser": "Этот Steam-аккаунт уже входил с другого компьютера — подтвердите один раз в браузере.",
     "chNoSteam": "Steam на этом компьютере не запущен — входим через браузер.",
     "chLoginFail": "Не получилось войти. Нажмите «Отправить логи» в настройках — разберёмся.",
@@ -349,6 +353,8 @@ const T = {
     "onInMatchH": "В матче"
   },
   es: {
+    "chToday": "Hoy",
+    "chYesterday": "Ayer",
     "chNeedBrowser": "Esta cuenta de Steam entró desde otro ordenador: confírmalo una vez en el navegador.",
     "chNoSteam": "Steam no está abierto aquí: entrando por el navegador.",
     "chLoginFail": "No se pudo entrar. Pulsa «Enviar registros» en Ajustes.",
@@ -515,6 +521,8 @@ const T = {
     "onInMatchH": "En partida"
   },
   fr: {
+    "chToday": "Aujourd'hui",
+    "chYesterday": "Hier",
     "chNeedBrowser": "Ce compte Steam s'est connecté depuis un autre ordinateur : confirmez une fois dans le navigateur.",
     "chNoSteam": "Steam n'est pas lancé ici : connexion par le navigateur.",
     "chLoginFail": "Connexion impossible. Appuyez sur « Envoyer les journaux » dans les réglages.",
@@ -681,6 +689,8 @@ const T = {
     "onInMatchH": "En partie"
   },
   de: {
+    "chToday": "Heute",
+    "chYesterday": "Gestern",
     "chNeedBrowser": "Dieses Steam-Konto war an einem anderen PC angemeldet: einmal im Browser bestätigen.",
     "chNoSteam": "Steam läuft hier nicht: Anmeldung über den Browser.",
     "chLoginFail": "Anmeldung fehlgeschlagen. In den Einstellungen „Logs senden“ drücken.",
@@ -1426,25 +1436,36 @@ async function chLogin() {
   document.querySelectorAll('#chIn,#chIn2').forEach(b => b.disabled = false);
 }
 async function chLogout() { try { localStorage.setItem('chNoAuto', '1'); } catch (e) {} try { CH.me = await invoke('c_logout'); } catch (e) {} chMe(); }
-async function chLoad() {
-  const r = CH.room; if (r === 'dev') return;
+async function chLoad(room) {
+  const r = room || CH.room; if (r === 'dev') return;
   let d; try { d = await invoke('c_api', { path: `msgs?room=${r}&after=${CH.last[r] || 0}` }); } catch (e) { return; }
   const list = CH.msgs[r] || (CH.msgs[r] = []);
   let changed = false;
   for (const m of d.msgs || []) if (!list.some(x => x.id === m.id)) { list.push(m); changed = true; }
   if ((d.deleted || []).length) { const n = list.length; CH.msgs[r] = list.filter(m => !d.deleted.includes(m.id)); changed = changed || n !== CH.msgs[r].length; }
-  const l2 = CH.msgs[r]; if (l2.length > 300) l2.splice(0, l2.length - 300);
+  const l2 = CH.msgs[r]; if (l2.length > 2000) l2.splice(0, l2.length - 2000);
   if (l2.length) CH.last[r] = Math.max(CH.last[r] || 0, l2[l2.length - 1].id);
   if (r === CH.room && (changed || !CH.shown)) chRender();
 }
 function chRender(force) {
   const box = $('chMsgs'), list = CH.msgs[CH.room] || [];
   const atEnd = box.scrollTop + box.clientHeight > box.scrollHeight - 30;
-  const when = ts => new Date(ts * 1000).toLocaleString(lang, { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+  const time = ts => new Date(ts * 1000).toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' });
+  // a heading for every day: Today, Yesterday, 29 October (with the year when it is not this one)
+  const dayKey = ts => { const d = new Date(ts * 1000); return d.getFullYear() * 10000 + d.getMonth() * 100 + d.getDate(); };
+  const dayName = ts => {
+    const d = new Date(ts * 1000), now = new Date(), y = new Date(now); y.setDate(now.getDate() - 1);
+    if (d.toDateString() === now.toDateString()) return t('chToday');
+    if (d.toDateString() === y.toDateString()) return t('chYesterday');
+    return d.toLocaleDateString(lang, d.getFullYear() === now.getFullYear() ? { day: 'numeric', month: 'long' } : { day: 'numeric', month: 'long', year: 'numeric' });
+  };
   const mine = CH.me && CH.me.signed_in ? CH.me.steam : '';
-  box.innerHTML = list.length ? list.map(m => `<div class="ch-m ${m.steam === mine ? 'mine' : ''}">` + (m.avatar ? `<img class="av" src="${esc(m.avatar)}" alt="">` : '<i class="av"></i>')
-    + `<div><div class="w"><b data-steam="${esc(m.steam)}">${esc(m.name)}</b>${when(m.ts)}</div><div class="tx">${esc(m.text)}</div></div></div>`).join('')
-    : `<div class="ch-empty">${esc(t('chEmpty'))}</div>`;
+  let prev = null;
+  box.innerHTML = list.length ? list.map(m => {
+    const k = dayKey(m.ts), head = k !== prev ? `<div class="ch-day"><span>${esc(dayName(m.ts))}</span></div>` : ''; prev = k;
+    return head + `<div class="ch-m ${m.steam === mine ? 'mine' : ''}">` + (m.avatar ? `<img class="av" src="${esc(m.avatar)}" alt="">` : '<i class="av"></i>')
+      + `<div><div class="w"><b data-steam="${esc(m.steam)}">${esc(m.name)}</b><span title="${esc(new Date(m.ts * 1000).toLocaleString(lang))}">${time(m.ts)}</span></div><div class="tx">${esc(m.text)}</div></div></div>`;
+  }).join('') : `<div class="ch-empty">${esc(t('chEmpty'))}</div>`;
   box.querySelectorAll('b[data-steam]').forEach(b => b.onclick = () => open('https://steamcommunity.com/profiles/' + b.dataset.steam));
   if (atEnd || force || !CH.shown) box.scrollTop = box.scrollHeight; CH.shown = true;
 }
@@ -1481,7 +1502,8 @@ async function chInit() {
     try { const r = await invoke('c_login_local'); if (r && r.signed_in) { CH.me = r; chMe(); } } catch (e) {}
   }
   chHello();
-  setInterval(chLoad, 5000); setInterval(chHello, 30000);
+  ['all', 'ru', 'en'].forEach(r => r !== CH.room && chLoad(r));          // every room's history at once: switching tabs is instant
+  setInterval(() => chLoad(), 5000); setInterval(chHello, 30000);
 }
 chInit();
 

@@ -1,0 +1,2 @@
+- Chat: every message has its time and the days are marked (Today, Yesterday, 29 October).
+- Chat: the whole history of every room loads when the launcher opens; switching rooms is instant.
