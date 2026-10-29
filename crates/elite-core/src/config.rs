@@ -65,6 +65,9 @@ pub struct Component {
     pub inject: String,
     /// Switches the player can tick under the component; each one is written to an ini file in the game folder.
     pub options: Vec<ComponentOption>,
+    /// The newer form of `options` (own values, choices, groups): used instead of `options` when present. Launchers
+    /// older than 1.3 know only 1/0 ticks and keep reading `options`, so a choice never reaches them as a tick.
+    pub settings: Vec<ComponentOption>,
     /// Files (relative to the game folder) of a hand-installed copy of the same patch, e.g. "dow2-patches/ObsFix.dll"
     /// from the stand-alone package. While any of them exists the launcher keeps its own copy off.
     pub conflicts: Vec<String>,
@@ -80,6 +83,42 @@ pub struct ComponentOption {
     pub section: String,
     pub key: String,
     pub default: bool,
+    /// Heading the option sits under in the add-on's card, e.g. "Match timer" inside Lobby rating.
+    pub group: Text,
+    /// Values written for a tick and for no tick; empty = "1" and "0".
+    pub on: String,
+    pub off: String,
+    /// A pick from a list instead of a tick: the value of the chosen one is written.
+    pub choices: Vec<OptionChoice>,
+    /// The choice for new players; empty = the first one.
+    pub default_value: String,
+}
+
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct OptionChoice {
+    pub value: String,
+    pub name: Text,
+}
+
+impl Component {
+    /// The switches the player sees: `settings` when the config has them, else `options`.
+    pub fn opts(&self) -> &[ComponentOption] {
+        if self.settings.is_empty() { &self.options } else { &self.settings }
+    }
+}
+
+impl ComponentOption {
+    /// What goes into the ini: the player's pick (a known one, else the default), or the tick's value.
+    pub fn ini_value(&self, on: bool, picked: Option<&String>) -> String {
+        if !self.choices.is_empty() {
+            let known = |v: &String| self.choices.iter().any(|c| &c.value == v);
+            return picked.filter(|v| known(v)).or(Some(&self.default_value).filter(|v| known(v)))
+                .unwrap_or(&self.choices[0].value).clone();
+        }
+        let (v, d) = if on { (&self.on, "1") } else { (&self.off, "0") };
+        if v.is_empty() { d.to_string() } else { v.clone() }
+    }
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
@@ -203,4 +242,22 @@ pub struct LauncherUpdate {
 pub fn version_newer(a: &str, b: &str) -> bool {
     let p = |s: &str| s.split(|c: char| !c.is_ascii_digit()).filter(|x| !x.is_empty()).map(|x| x.parse::<u64>().unwrap_or(0)).collect::<Vec<_>>();
     p(a) > p(b)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn option_values() {
+        let o: ComponentOption = serde_json::from_str(r#"{"id":"box","on":"2","off":"1"}"#).unwrap();
+        assert_eq!((o.ini_value(true, None), o.ini_value(false, None)), ("2".into(), "1".into()));
+        let tick: ComponentOption = serde_json::from_str(r#"{"id":"t"}"#).unwrap();
+        assert_eq!((tick.ini_value(true, None), tick.ini_value(false, None)), ("1".into(), "0".into()));
+        let pick: ComponentOption = serde_json::from_str(r#"{"id":"at","choices":[{"value":"0"},{"value":"1"},{"value":"2"}],"default_value":"2"}"#).unwrap();
+        assert_eq!(pick.ini_value(false, None), "2");
+        assert_eq!(pick.ini_value(false, Some(&"1".to_string())), "1");
+        assert_eq!(pick.ini_value(false, Some(&"7".to_string())), "2");   // a choice the config dropped: back to the default
+        let c: Component = serde_json::from_str(r#"{"options":[{"id":"a"}],"settings":[{"id":"b"},{"id":"c"}]}"#).unwrap();
+        assert_eq!(c.opts().len(), 2);
+    }
 }

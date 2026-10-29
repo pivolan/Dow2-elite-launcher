@@ -794,6 +794,20 @@ function compVer(c) {
     : c.latest ? t('addonVer', { v: v(c.latest) }) : '';
 }
 
+// an add-on's options: ticks, or a list when the option has choices; options of one group under its heading
+function optsHtml(c, lock) {
+  let grp = '';
+  return c.options.map(o => {
+    const g = L(o.group), head = g && g !== grp ? `<div class="addon-grp">${esc(g)}</div>` : '';
+    grp = g;
+    const data = `data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${lock ? 'disabled' : ''}`;
+    return head + ((o.choices || []).length
+      ? `<label class="addon-opt pick">${esc(L(o.name) || o.id)}<select ${data}>`
+        + o.choices.map(ch => `<option value="${esc(ch.value)}" ${ch.value === o.value ? 'selected' : ''}>${esc(L(ch.name) || ch.value)}</option>`).join('') + '</select></label>'
+      : `<label class="addon-opt"><input type="checkbox" ${data} ${o.on ? 'checked' : ''}>${esc(L(o.name) || o.id)}</label>`);
+  }).join('');
+}
+
 // add-on rows: a switch each and its own options under it once it is on; the details behind "?" on the home screen,
 // written out on the Add-ons tab (full)
 function compList(box, list, full) {
@@ -807,11 +821,13 @@ function compList(box, list, full) {
       + (full ? (L(c.description) ? `<p class="addon-desc">${esc(L(c.description))}</p>` : '')
           + `<div class="addon-ver">${esc([compVer(c), t('addonLater')].filter(Boolean).join(' · '))}</div>`
           + (c.enabled && (c.conflicts || []).length ? `<div class="addon-note">${esc(t('conflictActive'))}</div>` : '') : '')
-      + (c.enabled && (c.options || []).length ? '<div class="addon-opts">' + c.options.map(o => `<label class="addon-opt"><input type="checkbox" data-comp="${esc(c.id)}" data-opt="${esc(o.id)}" ${o.on ? 'checked' : ''} ${lock ? 'disabled' : ''}>${esc(L(o.name) || o.id)}</label>`).join('') + '</div>' : '')
+      + (c.enabled && (c.options || []).length ? '<div class="addon-opts">' + optsHtml(c, lock) + '</div>' : '')
       + '</div>').join('');
   box.querySelectorAll('.qm').forEach(b => b.onclick = e => { e.stopPropagation(); popAddon(b, list.find(c => c.id === b.dataset.info)); });
   box.querySelectorAll('input[data-opt]').forEach(cb => cb.onchange = () =>
     invoke('set_comp_option', { comp: cb.dataset.comp, opt: cb.dataset.opt, on: cb.checked }).then(reload).catch(e => toast(e, true)));
+  box.querySelectorAll('select[data-opt]').forEach(sel => sel.onchange = () =>
+    invoke('set_comp_value', { comp: sel.dataset.comp, opt: sel.dataset.opt, value: sel.value }).then(reload).catch(e => toast(e, true)));
   box.querySelectorAll('input[data-id]').forEach(cb => cb.onchange = async () => {
     const comp = list.find(c => c.id === cb.dataset.id);
     if (cb.checked && comp && (comp.conflicts || []).length) {
