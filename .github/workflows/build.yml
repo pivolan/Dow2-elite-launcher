@@ -143,11 +143,12 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: |
           # the public key is keys/updater.pub in the repository root, one level up from app/ (the launcher compiles
-          # it in too); updates come from the releases of the repository that builds it, so a fork can test the whole cycle.
+          # it in too). Updates come from our mirrors (dl/updater.json), not from GitHub: a build reaches the players only
+          # when it is released there by hand after a check (owner, 29.10) - CI only builds and stages.
           # Read into a variable: without the file the step stops here, not after the whole build with an empty key
           pubkey="$(tr -d '[:space:]' < ../keys/updater.pub)"
-          printf '{"bundle":{"createUpdaterArtifacts":true},"plugins":{"updater":{"pubkey":"%s","endpoints":["https://github.com/%s/releases/latest/download/updater.json"]}}}' \
-            "$pubkey" "$GITHUB_REPOSITORY" > "$RUNNER_TEMP/updater.conf.json"
+          printf '{"bundle":{"createUpdaterArtifacts":true},"plugins":{"updater":{"pubkey":"%s","endpoints":["https://dow2.fintebtc.de/elite/dl/updater.json","https://dow2ru.fintebtc.de/elite/dl/updater.json","https://rts.fintebtc.de/elite/dl/updater.json"]}}}' \
+            "$pubkey" > "$RUNNER_TEMP/updater.conf.json"
           # on failure the last lines go into the run's annotations: readable without access to the logs
           set -o pipefail
           cargo tauri build ${{ matrix.args }} --config "$RUNNER_TEMP/updater.conf.json" 2>&1 | tee "$RUNNER_TEMP/build.log" || {

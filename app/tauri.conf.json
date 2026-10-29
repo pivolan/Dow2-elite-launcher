@@ -24,7 +24,7 @@
   "plugins": {
     "updater": {
       "pubkey": "",
-      "endpoints": ["https://github.com/pivolan/Dow2-elite-launcher/releases/latest/download/updater.json"]
+      "endpoints": ["https://dow2.fintebtc.de/elite/dl/updater.json", "https://dow2ru.fintebtc.de/elite/dl/updater.json", "https://rts.fintebtc.de/elite/dl/updater.json"]
     }
   }
 }
