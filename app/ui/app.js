@@ -1416,6 +1416,7 @@ async function chLogin() {
     // the Steam account of this computer first: no browser (the Steam page does not open everywhere)
     let r = null;
     try { r = await invoke('c_login_local'); } catch (e) { r = { error: String(e) }; }
+    try { localStorage.removeItem('chNoAuto'); } catch (e) {}
     if (r && r.signed_in) { CH.me = r; chMe(); chHello(); toast(t('chSignedIn', { name: CH.me.name })); }
     else {
       toast(r && r.need_browser ? t('chNeedBrowser') : r && r.no_steam ? t('chNoSteam') : t('chWaitLogin'));
@@ -1424,7 +1425,7 @@ async function chLogin() {
   } catch (e) { toast(t('chLoginFail') + ' ' + e, true); }
   document.querySelectorAll('#chIn,#chIn2').forEach(b => b.disabled = false);
 }
-async function chLogout() { try { CH.me = await invoke('c_logout'); } catch (e) {} chMe(); }
+async function chLogout() { try { localStorage.setItem('chNoAuto', '1'); } catch (e) {} try { CH.me = await invoke('c_logout'); } catch (e) {} chMe(); }
 async function chLoad() {
   const r = CH.room; if (r === 'dev') return;
   let d; try { d = await invoke('c_api', { path: `msgs?room=${r}&after=${CH.last[r] || 0}` }); } catch (e) { return; }
@@ -1472,7 +1473,14 @@ async function chInit() {
   $('chIn2').onclick = chLogin;
   $('chSend').onclick = chSay;
   $('chText').onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); chSay(); } };
-  chMe(); chShowRoom(); chHello();
+  chMe(); chShowRoom();
+  // signed in by itself with the Steam account of this computer (no button, no browser, quiet on failure);
+  // not after the player pressed "Sign out" - until they sign in again by hand
+  let noAuto = false; try { noAuto = localStorage.getItem('chNoAuto') === '1'; } catch (e) {}
+  if (!(CH.me && CH.me.signed_in) && CH.me && CH.me.local_found && CH.me.configured !== false && !noAuto) {
+    try { const r = await invoke('c_login_local'); if (r && r.signed_in) { CH.me = r; chMe(); } } catch (e) {}
+  }
+  chHello();
   setInterval(chLoad, 5000); setInterval(chHello, 30000);
 }
 chInit();

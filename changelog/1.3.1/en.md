@@ -1,2 +1,3 @@
+- The launcher signs in by itself with the Steam account of this computer when it starts (not after "Sign out").
 - Steam sign-in without the browser: the launcher takes the Steam account logged in on this computer ("Sign in as <name>"). The Steam web page does not open everywhere (it is blocked in Russia), so the browser sign-in never finished for some players. The account is bound to the first computer it signs in from; another computer confirms once through the browser.
 - Sign-in and chat problems are written to community.log in the launcher folder and go with "Send logs".
