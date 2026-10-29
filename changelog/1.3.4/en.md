@@ -1,0 +1,1 @@
+- Windows: the launcher update no longer stops with "Failed to close Elite Launcher": the installer starts a few seconds after the launcher has closed (it used to catch it half-way through closing).

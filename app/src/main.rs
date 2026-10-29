@@ -345,16 +345,35 @@ async fn launcher_install(app: AppHandle) -> Result<(), String> {
     let upd = app.state::<App>().launcher_update.lock().unwrap().clone().ok_or("no launcher update found")?;
     let h = app.clone();
     let mut done = 0u64;
-    upd.download_and_install(
-        move |n, total| {
-            done += n as u64;
-            let _ = h.emit("launcher_progress", json!({"done": done, "total": total}));
-        },
-        || {},
-    )
-    .await
-    .map_err(|e| e.to_string())?;
-    app.restart()
+    let progress = move |n: usize, total: Option<u64>| {
+        done += n as u64;
+        let _ = h.emit("launcher_progress", json!({"done": done, "total": total}));
+    };
+    #[cfg(windows)]
+    {
+        // The NSIS installer checks first thing that the launcher is closed, and gives up with "Failed to close Elite
+        // Launcher" when it catches it half-way through closing (siritos 29.10: the plugin starts the installer and only
+        // then exits). So: download (the signature is checked there), then the installer is started 3 s after this
+        // process is gone, with the plugin's own arguments (passive, update, restart). The plugin's way if that fails.
+        let bytes = upd.download(progress, || {}).await.map_err(|e| e.to_string())?;
+        let path = std::env::temp_dir().join(format!("EliteLauncher-{}-setup.exe", upd.version));
+        if std::fs::write(&path, &bytes).is_ok() {
+            use std::os::windows::process::CommandExt;
+            let line = format!("ping -n 4 127.0.0.1 >NUL & start \"\" \"{}\" /P /UPDATE /R /ARGS", path.display());
+            let started = std::process::Command::new("cmd").arg("/C").raw_arg(&line)
+                .creation_flags(0x0800_0000 /* CREATE_NO_WINDOW */ | 0x0000_0200 /* CREATE_NEW_PROCESS_GROUP */)
+                .stdin(std::process::Stdio::null()).stdout(std::process::Stdio::null()).stderr(std::process::Stdio::null())
+                .spawn().is_ok();
+            if started { std::process::exit(0); }
+        }
+        upd.install(bytes).map_err(|e| e.to_string())?;
+        app.restart()
+    }
+    #[cfg(not(windows))]
+    {
+        upd.download_and_install(progress, || {}).await.map_err(|e| e.to_string())?;
+        app.restart()
+    }
 }
 
 fn ensure_game_closed(app: &App) -> Result<(), String> {
