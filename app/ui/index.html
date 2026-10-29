@@ -11,12 +11,12 @@
   <header>
     <div class="brand"><span class="logo">ELITE Launcher</span><span class="hdr-ver" id="hdrVer"></span></div>
     <div class="launcher-banner hidden" id="launcherBanner"><span id="launcherText"></span><button class="btn gold small hidden" id="launcherBtn"></button></div>
-    <div class="me-chip" id="meChip"></div>
-    <nav><button class="tab on" data-view="home" data-t="home"></button><button class="tab" data-view="addons" data-t="components"></button><button class="tab" data-view="hotkeys" data-t="hotkeys"></button><button class="tab tab-ico" data-view="settings" data-ta="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></nav>
+    <nav><button class="tab on" data-view="home" data-t="home"></button><button class="tab" data-view="addons" data-t="components"></button><button class="tab tab-ico" data-view="settings" data-ta="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></nav>
   </header>
 
   <main id="home" class="view home">
     <aside class="col">
+      <section class="panel me-box hidden" id="meBox"></section>
       <section class="panel news-panel">
         <div class="h" data-t="news"></div>
         <div id="news" class="news-list"></div>
@@ -34,10 +34,7 @@
       <div id="newsBox" class="panel fb">
         <div class="h ch-head"><div class="ch-tabs" id="chTabs"><button class="ch-tab on" data-room="all" data-t="chAll"></button><button class="ch-tab" data-room="ru">RU</button><button class="ch-tab" data-room="en">EN</button><button class="ch-tab" data-room="dev" data-t="chDev"></button></div><button class="btn gold logs-btn" id="sendLogsHome" data-t="sendLogs"></button></div>
         <div class="ch-pane" id="chatPane">
-          <div class="ch-body">
-            <div class="ch-msgs" id="chMsgs"></div>
-            <div class="ch-members"><div class="ch-mh" id="chMembersH"></div><div class="ch-ulist" id="chMembers"></div></div>
-          </div>
+          <div class="ch-msgs" id="chMsgs"></div>
           <div class="ch-login hidden" id="chLoginRow"><span data-t="chSignInToWrite"></span><button class="btn gold small" id="chIn2" data-t="chLogin"></button></div>
           <div class="ch-send" id="chSendRow"><textarea id="chText" rows="2" maxlength="500" data-tp="chPlaceholder"></textarea><button class="btn-gold" id="chSend" data-t="fbSend"></button></div>
         </div>
@@ -76,26 +73,10 @@
     </section>
   </main>
 
-  <main id="hotkeys" class="view hidden">
-    <section class="panel hk">
-      <div class="h"><span data-t="hotkeys"></span><span class="hk-note" id="hkState"></span></div>
-      <div class="hk-top">
-        <label class="chk"><input type="checkbox" id="hkGrid"><span data-t="hkGrid"></span></label>
-        <span class="note" data-t="hkGridNote"></span>
-      </div>
-      <div class="hk-grid" id="hkGridBox"></div>
-      <div class="h small" data-t="hkMain"></div>
-      <div class="hk-list" id="hkMain"></div>
-      <details class="hk-all"><summary data-t="hkAll"></summary>
-        <input id="hkSearch" data-tp="hkSearch"><div class="hk-list" id="hkAllList"></div></details>
-      <div class="row hk-act"><button class="btn gold" id="hkSave" data-t="save"></button><button class="btn" id="hkReset" data-t="hkReset"></button>
-        <span class="note" data-t="hkHow"></span></div>
-    </section>
-  </main>
-
   <main id="settings" class="view hidden">
-    <section class="panel settings">
-      <div class="h" data-t="settings"></div>
+    <div class="set-wrap">
+    <nav class="set-tabs"><button class="set-tab on" data-set="setMain"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><span data-t="setGeneral"></span></button><button class="set-tab" data-set="hotkeys"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg><span data-t="hotkeys"></span></button></nav>
+    <section class="panel settings" id="setMain">
       <label data-t="gameFolder"></label>
       <div class="row"><div class="path" id="gameDir"></div><button class="btn" id="browse" data-t="browse"></button><button class="btn" id="openDir" data-t="open"></button></div>
       <label data-t="language"></label>
@@ -119,6 +100,20 @@
       <div class="row"><button class="btn red" id="uninstall" data-t="unBtn"></button><span class="note" data-t="unNote"></span></div>
       <div class="about" id="about"></div>
     </section>
+    <section class="panel hk hidden" id="hotkeys">
+      <div class="h hk-head"><span data-t="hotkeys"></span><span class="hk-note" id="hkState"></span><div class="hk-act"><button class="btn small" id="hkReset" data-t="hkReset"></button><button class="btn gold small" id="hkSave" data-t="save"></button></div></div>
+      <div class="hk-top">
+        <label class="chk"><input type="checkbox" id="hkGrid"><span data-t="hkGrid"></span></label>
+        <span class="note" data-t="hkGridNote"></span>
+      </div>
+      <div class="hk-grid" id="hkGridBox"></div>
+      <div class="h small" data-t="hkMain"></div>
+      <div class="hk-list" id="hkMain"></div>
+      <details class="hk-all"><summary data-t="hkAll"></summary>
+        <input id="hkSearch" data-tp="hkSearch"><div class="hk-list" id="hkAllList"></div></details>
+      <div class="note hk-how" data-t="hkHow"></div>
+    </section>
+    </div>
   </main>
 
   <footer>
