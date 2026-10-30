@@ -1367,6 +1367,8 @@ const onAv = p => {
   const u = [...ON.users, ...me].find(u => String(u.steam) === String(p.steam));
   return u ? u.avatar : '';
 };
+// the 1v1 rating; none yet (no ladder games this season) - a dash, so the dots after it stay in one column
+const onRt = r => r ? `<span class="rt">${Number(r) | 0}</span>` : `<span class="rt none" title="${esc(t('prNoGames'))}">—</span>`;
 const onWho = p => `<button class="nm" data-steam="${esc(p.steam || '')}" title="${esc(p.steam ? 'Steam ' + p.steam : '')}">${esc(p.name || 'Player')}</button>`;
 
 function onRender() {
@@ -1397,7 +1399,7 @@ function onRender() {
     const users = ON.users.filter(u => !shown.has(sid(u)));
     if (users.length) html += group('launcher', t('chMembers'), users.length, users.map(u => '<div class="on-p on-u">'
       + avatar(u.avatar) + onWho(u)
-      + (u.rating ? `<span class="rt">${Number(u.rating) | 0}</span>` : '') + `<span class="st st-${esc(u.state)}" title="${esc(t('st_' + u.state))}"></span></div>`).join(''));
+      + onRt(u.rating) + `<span class="st st-${esc(u.state)}" title="${esc(t('st_' + u.state))}"></span></div>`).join(''));
     // the last group, only a number: games that talked to the ladder server in the last minute (the number on the ladder
     // page) minus those looking for a game or watching, those in a match and those already named above with the game on
     const inMatches = matches.reduce((n, m) => n + (m.team1 || []).length + (m.team2 || []).length + (m.watchers || []).length, 0);
@@ -1405,7 +1407,7 @@ function onRender() {
     const named = users.filter(u => u.state === 'game' && !counted.has(sid(u))).length;   // not subtracted twice
     html += group('idle', t('onIdle'), Math.max(0, (Number(d.online) || 0) - (d.searching || []).length - inMatches - named), '');
     // in a match, the last group and the biggest: a card per match - mode, map, how long - and who plays which race, team against team
-    const pl = p => `<div class="on-p">${avatar(onAv(p))}${onWho(p)}${raceImg(p.race)}${p.rating ? `<span class="rt">${Number(p.rating) | 0}</span>` : ''}</div>`;
+    const pl = p => `<div class="on-p">${avatar(onAv(p))}${onWho(p)}${raceImg(p.race)}${onRt(p.rating)}</div>`;
     const map = m => String(m || '').replace(/^\d+p_/i, '').replace(/_/g, ' ');
     if (matches.length) html += group('match', t('onInMatchH'), matches.reduce((n, m) => n + (m.team1 || []).length + (m.team2 || []).length, 0),
       matches.map(m => `<div class="on-mc"><div class="on-mh"><span class="tag ${esc(m.state)}">${esc(m.mode)}</span><span class="map">${esc(map(m.map))}</span>`

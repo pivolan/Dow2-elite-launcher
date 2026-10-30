@@ -375,6 +375,7 @@ input[type=checkbox]:not([role=switch]):disabled{opacity:.45;cursor:default}
 .on-p .race{margin-right:auto}
 .on-u .rt{margin-left:auto}
 .on-p .rt{flex:none;font-size:11px;color:var(--dim)}
+.on-p .rt.none{opacity:.6}
 /* a launcher player's dot has the colour of the group they would be in: launcher open - yellow, in the game - gold, looking - green, in a match - red */
 .on-u .st{flex:none;width:8px;height:8px;border-radius:50%;background:var(--yellow)}
 .on-u .st-game{background:var(--gold)}
