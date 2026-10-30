@@ -1482,9 +1482,7 @@ fbInit();
 // ---------- players' chat, Steam sign-in and the player's card (ladder service /ladder/api/c/*) ----------
 // Rooms General / RU / EN (the server's all / ru / en) next to the developers' chat.
 const CH = { room: 'all', last: {}, msgs: {}, me: null, prof: null, waiting: false, timer: null };
-// one room for now (the RU / EN rooms are hidden): a saved ru / en tab opens the common one
 try { CH.room = localStorage.getItem('chRoom') || 'all'; } catch (e) {}
-if (CH.room !== 'dev') CH.room = 'all';
 function chShowRoom() {
   document.querySelectorAll('.ch-tab').forEach(b => b.classList.toggle('on', b.dataset.room === CH.room));
   $('chatPane').classList.toggle('hidden', CH.room === 'dev');
@@ -1602,7 +1600,7 @@ async function chInit() {
     try { const r = await invoke('c_login_local'); if (r && r.signed_in) { CH.me = r; chMe(); } } catch (e) {}
   }
   chHello(); chProfile();
-  if (CH.room !== 'all') chLoad('all');          // the common room's history at once: switching tabs is instant
+  ['all', 'ru', 'en'].forEach(r => r !== CH.room && chLoad(r));          // every room's history at once: switching tabs is instant
   setInterval(() => chLoad(), 5000); setInterval(chHello, 30000); setInterval(chProfile, 10 * 60 * 1000);
 }
 chInit();
