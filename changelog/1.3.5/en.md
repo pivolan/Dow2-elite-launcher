@@ -1,0 +1,1 @@
+- Chat: Enter now sends your message and clears the box right away. Pressing Enter several times no longer posts the same message more than once (the send waits for moderation and translation, and a rejected message is put back in the box).
