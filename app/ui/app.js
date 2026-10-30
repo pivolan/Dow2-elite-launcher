@@ -1360,6 +1360,13 @@ const raceImg = r => {
   if (r === 'random') return `<span class="race race-rnd" role="img" aria-label="${esc(t('race_random'))}" title="${esc(t('race_random'))}">?</span>`;
   return RACES.includes(r) ? `<img class="race" src="races/${r}.png" alt="${esc(t('race_' + r))}" title="${esc(t('race_' + r))}">` : '<span class="race"></span>';
 };
+// the ladder server knows no avatars: take it from the launcher list (the chat "hello") or the signed-in card, by SteamID
+const onAv = p => {
+  if (p.avatar || !p.steam) return p.avatar || '';
+  const me = CH.me && CH.me.signed_in ? [CH.me] : [];
+  const u = [...ON.users, ...me].find(u => String(u.steam) === String(p.steam));
+  return u ? u.avatar : '';
+};
 const onWho = p => `<button class="nm" data-steam="${esc(p.steam || '')}" title="${esc(p.steam ? 'Steam ' + p.steam : '')}">${esc(p.name || 'Player')}</button>`;
 
 function onRender() {
@@ -1380,7 +1387,7 @@ function onRender() {
     if (ON.err) html += `<div class="on-stale">${esc(t('onOffline'))}</div>`;   // the last list stays, marked as old
     // looking for a game: avatar, name, race, the mode on the right
     if (look.length) html += group('look', t('onSearching'), look.length,
-      look.map(p => `<div class="on-p">${avatar(p.avatar)}${onWho(p)}${raceImg(p.race)}<span class="tag">${esc(p.mode)}</span></div>`).join(''));
+      look.map(p => `<div class="on-p">${avatar(onAv(p))}${onWho(p)}${raceImg(p.race)}<span class="tag">${esc(p.mode)}</span></div>`).join(''));
     if (!look.length && !matches.length) html += `<div class="on-empty">${esc(t('onNobody'))}</div>`;
     // who has the launcher open (signed in with Steam): the avatar, the 1v1 rating and a dot for menu / game / search / match;
     // those already named above (looking for a game) or below (playing in a match) are not named twice
@@ -1398,7 +1405,7 @@ function onRender() {
     const named = users.filter(u => u.state === 'game' && !counted.has(sid(u))).length;   // not subtracted twice
     html += group('idle', t('onIdle'), Math.max(0, (Number(d.online) || 0) - (d.searching || []).length - inMatches - named), '');
     // in a match, the last group and the biggest: a card per match - mode, map, how long - and who plays which race, team against team
-    const pl = p => `<div class="on-p">${avatar(p.avatar)}${onWho(p)}${raceImg(p.race)}${p.rating ? `<span class="rt">${Number(p.rating) | 0}</span>` : ''}</div>`;
+    const pl = p => `<div class="on-p">${avatar(onAv(p))}${onWho(p)}${raceImg(p.race)}${p.rating ? `<span class="rt">${Number(p.rating) | 0}</span>` : ''}</div>`;
     const map = m => String(m || '').replace(/^\d+p_/i, '').replace(/_/g, ' ');
     if (matches.length) html += group('match', t('onInMatchH'), matches.reduce((n, m) => n + (m.team1 || []).length + (m.team2 || []).length, 0),
       matches.map(m => `<div class="on-mc"><div class="on-mh"><span class="tag ${esc(m.state)}">${esc(m.mode)}</span><span class="map">${esc(map(m.map))}</span>`
