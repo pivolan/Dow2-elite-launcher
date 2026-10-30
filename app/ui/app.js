@@ -1546,13 +1546,16 @@ function chRender(force) {
   if (atEnd || force || !CH.shown) box.scrollTop = box.scrollHeight; CH.shown = true;
 }
 async function chSay() {
-  const text = $('chText').value.trim(); if (!text || CH.room === 'dev') return;
-  $('chSend').disabled = true;
+  if (CH.sending || CH.room === 'dev') return;                 // one send at a time: extra Enter presses do nothing (no duplicates)
+  const el = $('chText'), text = el.value.trim(); if (!text) return;
+  CH.sending = true; $('chSend').disabled = true;
+  el.value = '';                                               // clear at once: the message leaves the box the moment you press Enter
   try {
     const r = await invoke('c_api', { path: 'say', body: { room: CH.room, text } });
-    if (r.ok) { $('chText').value = ''; await chLoad(); chRender(true); } else toast(r.error || 'error', true);
-  } catch (e) { toast(e, true); }
-  $('chSend').disabled = false;
+    if (r.ok) { await chLoad(); chRender(true); }
+    else { el.value = text; toast(r.error || 'error', true); } // rejected by moderation: put the text back, nothing is lost
+  } catch (e) { el.value = text; toast(e, true); }
+  CH.sending = false; $('chSend').disabled = false;
 }
 async function chHello() {
   let d; try { d = await invoke('c_api', { path: 'hello', body: { state: S && S.game_running ? 'game' : 'menu' } }); } catch (e) { return; }
