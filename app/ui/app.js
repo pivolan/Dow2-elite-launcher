@@ -1382,15 +1382,20 @@ function onRender() {
     if (look.length) html += group('look', t('onSearching'), look.length,
       look.map(p => `<div class="on-p">${avatar(p.avatar)}${onWho(p)}${raceImg(p.race)}<span class="tag">${esc(p.mode)}</span></div>`).join(''));
     if (!look.length && !matches.length) html += `<div class="on-empty">${esc(t('onNobody'))}</div>`;
-    // who has the launcher open (signed in with Steam): the avatar, the 1v1 rating and a dot for menu / game / search / match
-    const users = ON.users;
+    // who has the launcher open (signed in with Steam): the avatar, the 1v1 rating and a dot for menu / game / search / match;
+    // those already named above (looking for a game) or below (playing in a match) are not named twice
+    const sid = p => String(p.steam || '');
+    const players = matches.flatMap(m => [...(m.team1 || []), ...(m.team2 || [])]);
+    const shown = new Set([...look, ...players].map(sid).filter(Boolean));
+    const users = ON.users.filter(u => !shown.has(sid(u)));
     if (users.length) html += group('launcher', t('chMembers'), users.length, users.map(u => '<div class="on-p on-u">'
       + avatar(u.avatar) + onWho(u)
       + (u.rating ? `<span class="rt">${Number(u.rating) | 0}</span>` : '') + `<span class="st st-${esc(u.state)}" title="${esc(t('st_' + u.state))}"></span></div>`).join(''));
     // the last group, only a number: games that talked to the ladder server in the last minute (the number on the ladder
     // page) minus those looking for a game or watching, those in a match and those already named above with the game on
     const inMatches = matches.reduce((n, m) => n + (m.team1 || []).length + (m.team2 || []).length + (m.watchers || []).length, 0);
-    const named = users.filter(u => u.state === 'game').length;
+    const counted = new Set([...(d.searching || []), ...matches.flatMap(m => m.watchers || []), ...players].map(sid).filter(Boolean));
+    const named = users.filter(u => u.state === 'game' && !counted.has(sid(u))).length;   // not subtracted twice
     html += group('idle', t('onIdle'), Math.max(0, (Number(d.online) || 0) - (d.searching || []).length - inMatches - named), '');
     // in a match, the last group and the biggest: a card per match - mode, map, how long - and who plays which race, team against team
     const pl = p => `<div class="on-p">${avatar(p.avatar)}${onWho(p)}${raceImg(p.race)}${p.rating ? `<span class="rt">${Number(p.rating) | 0}</span>` : ''}</div>`;
