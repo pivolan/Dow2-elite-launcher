@@ -1510,13 +1510,11 @@ fn main() {
             });
             Ok(())
         })
-        // minimising hides to the tray (setting "tray_on_play", on by default; off = an ordinary window in the taskbar);
-        // the tray icon (or its "Open" item) brings the window back
+        // the close button hides to the tray, only the tray's "Quit" ends the launcher; minimising is an ordinary
+        // minimise to the taskbar. The tray icon (or its "Open" item, or starting the launcher again) brings it back
         .on_window_event(|window, event| {
-            if matches!(event, tauri::WindowEvent::Resized(_) | tauri::WindowEvent::Focused(false))
-                && window.is_minimized().unwrap_or(false)
-                && window.state::<App>().settings.lock().unwrap().tray_on_play.unwrap_or(true)
-            {
+            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                api.prevent_close();
                 let _ = window.hide();
             }
         })
@@ -1526,6 +1524,13 @@ fn main() {
             hotkeys_get, hotkeys_save, hotkeys_reset, uninstall_elite,
             c_status, c_login, c_login_local, c_login_cancel, c_logout, c_api
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running Elite Launcher");
+        .build(tauri::generate_context!())
+        .expect("error while running Elite Launcher")
+        .run(|_app, _event| {
+            // macOS: a click on the Dock icon brings back the window the close button hid
+            #[cfg(target_os = "macos")]
+            if let tauri::RunEvent::Reopen { .. } = _event {
+                show_window(_app);
+            }
+        });
 }
