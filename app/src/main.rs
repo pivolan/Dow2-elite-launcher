@@ -225,7 +225,9 @@ fn current_channel(app: &App, cfg: &LauncherConfig, installed: &update::State) -
 /// Hotkeys: every binding of the game (defaults + the player's changes) and the Grid Hotkeys setting.
 #[tauri::command]
 fn hotkeys_get(app: State<'_, App>) -> Result<Value, String> {
-    let o = app.settings.lock().unwrap().hotkeys.clone();
+    // what the game uses now (keydefaults.lua), with the launcher's own list on top
+    let mut o = elite_core::hotkeys::file_overrides();
+    o.extend(app.settings.lock().unwrap().hotkeys.clone());
     elite_core::hotkeys::load(&o)
 }
 
@@ -234,8 +236,11 @@ fn hotkeys_get(app: State<'_, App>) -> Result<Value, String> {
 fn hotkeys_save(app: State<'_, App>, changes: BTreeMap<String, String>, grid: bool) -> Result<Value, String> {
     ensure_game_closed(&app)?;     // the game rewrites configuration.lua when it closes
     let mut s = app.settings.lock().unwrap();
+    // changes already in keydefaults.lua but not in our list (see hotkeys_get) are kept, not dropped by the rewrite
+    for (k, v) in elite_core::hotkeys::file_overrides() { s.hotkeys.entry(k).or_insert(v); }
+    // system keys (menu, camera) are not reassigned, campaign / "plain letters" ones are not shown: changes to them are ignored
     let defaults: BTreeMap<String, String> = elite_core::hotkeys::load(&BTreeMap::new())?["bindings"].as_array().cloned().unwrap_or_default()
-        .iter().map(|b| (format!("{}:{}", b["scope"].as_str().unwrap_or(""), b["name"].as_str().unwrap_or("")), b["default"].as_str().unwrap_or("").to_string())).collect();
+        .iter().filter(|b| !matches!(b["group"].as_str(), Some("system" | "campaign" | "letters"))).map(|b| (format!("{}:{}", b["scope"].as_str().unwrap_or(""), b["name"].as_str().unwrap_or("")), b["default"].as_str().unwrap_or("").to_string())).collect();
     for (k, v) in changes {
         if defaults.get(&k) == Some(&v) { s.hotkeys.remove(&k); } else if defaults.contains_key(&k) { s.hotkeys.insert(k, v); }
     }
@@ -1429,6 +1434,9 @@ fn main() {
     let settings = load_settings();
     let config = cached_config();
     tauri::Builder::default()
+        // one launcher at a time: starting it again (shortcut, Start menu) brings the running one back, also from the
+        // tray. Two copies also broke the self-update: the installer could not close the one hidden in the tray.
+        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| show_window(app)))
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_updater::Builder::new().pubkey(UPDATER_PUBKEY.trim()).build())
@@ -1502,10 +1510,12 @@ fn main() {
             });
             Ok(())
         })
-        // minimising always hides to the tray; the tray icon (or its "Open" item) brings the window back
+        // minimising hides to the tray (setting "tray_on_play", on by default; off = an ordinary window in the taskbar);
+        // the tray icon (or its "Open" item) brings the window back
         .on_window_event(|window, event| {
             if matches!(event, tauri::WindowEvent::Resized(_) | tauri::WindowEvent::Focused(false))
                 && window.is_minimized().unwrap_or(false)
+                && window.state::<App>().settings.lock().unwrap().tray_on_play.unwrap_or(true)
             {
                 let _ = window.hide();
             }

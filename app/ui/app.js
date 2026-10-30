@@ -52,10 +52,13 @@ const T = {
     "hkGridNote": "abilities and unit building by position on the keyboard instead of first letters; the same switch as Options → Grid Hotkeys in the game",
     "hkMain": "Main commands",
     "hkAll": "All keys",
+    "hkGridShadow": "Not used with Grid Hotkeys on: the grid keys above apply",
+    "hkGrpObserver": "Observer and replays",
     "hkSearch": "Search: command or key",
     "hkReset": "Game defaults",
     "hkHow": "click a key, then press the new one (with Ctrl / Shift / Alt if you want); Esc cancels. Applies at the next game start.",
     "hkSaved": "Hotkeys saved — they apply at the next game start",
+    "hkUnsaved": "Not saved: close the game, then press Save",
     "hkDup": "Same key twice: {k}",
     "hkCustom": "your changes: {n}",
     "hkNone": "game defaults",
@@ -184,6 +187,7 @@ const T = {
     "race_t_tau": "Tau",
     "race_z_unecron": "Necrons",
     "race_ordo_malleus": "Ordo Malleus",
+    "race_random": "Random race",
     "allAddons": "All ›",
     "onInMatchH": "In a match"
   },
@@ -233,10 +237,13 @@ const T = {
     "hkGridNote": "способности и постройка юнитов по положению на клавиатуре, а не по первым буквам; тот же переключатель, что «Параметры → Grid Hotkeys» в игре",
     "hkMain": "Основные команды",
     "hkAll": "Все клавиши",
+    "hkGridShadow": "При включённой сетке не действуют: работают клавиши сетки выше",
+    "hkGrpObserver": "Наблюдатель и повторы",
     "hkSearch": "Поиск: команда или клавиша",
     "hkReset": "Как в игре по умолчанию",
     "hkHow": "нажмите на клавишу, затем новую (можно с Ctrl / Shift / Alt); Esc — отмена. Действует со следующего запуска игры.",
     "hkSaved": "Клавиши сохранены — заработают при следующем запуске игры",
+    "hkUnsaved": "Не сохранено: закройте игру и нажмите «Сохранить»",
     "hkDup": "Одна клавиша дважды: {k}",
     "hkCustom": "ваших изменений: {n}",
     "hkNone": "как в игре по умолчанию",
@@ -365,6 +372,7 @@ const T = {
     "race_t_tau": "Тау",
     "race_z_unecron": "Некроны",
     "race_ordo_malleus": "Ордо Маллеус",
+    "race_random": "Случайная раса",
     "allAddons": "Все ›",
     "onInMatchH": "В матче"
   },
@@ -414,10 +422,13 @@ const T = {
     "hkGridNote": "abilities and unit building by position on the keyboard instead of first letters; the same switch as Options → Grid Hotkeys in the game",
     "hkMain": "Main commands",
     "hkAll": "All keys",
+    "hkGridShadow": "Sin efecto con la cuadrícula activada: se usan las teclas de arriba",
+    "hkGrpObserver": "Observador y repeticiones",
     "hkSearch": "Search: command or key",
     "hkReset": "Game defaults",
     "hkHow": "click a key, then press the new one (with Ctrl / Shift / Alt if you want); Esc cancels. Applies at the next game start.",
     "hkSaved": "Hotkeys saved — they apply at the next game start",
+    "hkUnsaved": "Sin guardar: cierra el juego y pulsa Guardar",
     "hkDup": "Same key twice: {k}",
     "hkCustom": "your changes: {n}",
     "hkNone": "game defaults",
@@ -541,6 +552,7 @@ const T = {
     "race_t_tau": "Tau",
     "race_z_unecron": "Necrones",
     "race_ordo_malleus": "Ordo Malleus",
+    "race_random": "Raza aleatoria",
     "allAddons": "Todos ›",
     "onInMatchH": "En partida"
   },
@@ -590,10 +602,13 @@ const T = {
     "hkGridNote": "abilities and unit building by position on the keyboard instead of first letters; the same switch as Options → Grid Hotkeys in the game",
     "hkMain": "Main commands",
     "hkAll": "All keys",
+    "hkGridShadow": "Sans effet avec la grille activée : les touches de grille ci-dessus s'appliquent",
+    "hkGrpObserver": "Observateur et replays",
     "hkSearch": "Search: command or key",
     "hkReset": "Game defaults",
     "hkHow": "click a key, then press the new one (with Ctrl / Shift / Alt if you want); Esc cancels. Applies at the next game start.",
     "hkSaved": "Hotkeys saved — they apply at the next game start",
+    "hkUnsaved": "Non enregistré : fermez le jeu puis cliquez sur Enregistrer",
     "hkDup": "Same key twice: {k}",
     "hkCustom": "your changes: {n}",
     "hkNone": "game defaults",
@@ -717,6 +732,7 @@ const T = {
     "race_t_tau": "Tau",
     "race_z_unecron": "Nécrons",
     "race_ordo_malleus": "Ordo Malleus",
+    "race_random": "Race aléatoire",
     "allAddons": "Tous ›",
     "onInMatchH": "En partie"
   },
@@ -766,10 +782,13 @@ const T = {
     "hkGridNote": "abilities and unit building by position on the keyboard instead of first letters; the same switch as Options → Grid Hotkeys in the game",
     "hkMain": "Main commands",
     "hkAll": "All keys",
+    "hkGridShadow": "Ohne Wirkung bei aktivem Raster: es gelten die Raster-Tasten oben",
+    "hkGrpObserver": "Beobachter und Wiederholungen",
     "hkSearch": "Search: command or key",
     "hkReset": "Game defaults",
     "hkHow": "click a key, then press the new one (with Ctrl / Shift / Alt if you want); Esc cancels. Applies at the next game start.",
     "hkSaved": "Hotkeys saved — they apply at the next game start",
+    "hkUnsaved": "Nicht gespeichert: Spiel schließen, dann Speichern drücken",
     "hkDup": "Same key twice: {k}",
     "hkCustom": "your changes: {n}",
     "hkNone": "game defaults",
@@ -893,6 +912,7 @@ const T = {
     "race_t_tau": "Tau",
     "race_z_unecron": "Necrons",
     "race_ordo_malleus": "Ordo Malleus",
+    "race_random": "Zufällige Rasse",
     "allAddons": "Alle ›",
     "onInMatchH": "Im Spiel"
   },
@@ -1113,11 +1133,11 @@ function render() {
   const item = c => {
     const isActive = activeCh && c.id === activeCh.id, isMain = c.id === S.main_channel;
     const cost = (S.costs || {})[c.version];
-    const hint = isActive ? '✓ ' + t('installedTag') : cost === undefined ? t('needDl') : cost === 0 ? t('instant') : t('upTo', { s: mb(cost) });
+    const hint = isActive ? '✓' : cost === undefined ? t('needDl') : cost === 0 ? t('instant') : t('upTo', { s: mb(cost) });
     const tags = (isMain ? `<span class="tag main">${esc(t('main'))}</span>` : '') + (L(c.badge) && !isMain ? `<span class="tag beta">${esc(L(c.badge))}</span>` : '');
     const note = isMain ? t('mainNote') : L(c.description);
     return `<button class="vi ${isActive ? 'act' : ''}" data-id="${esc(c.id)}" ${isActive || locked ? 'disabled' : ''}><span class="nm"><b>${esc(L(c.name) || c.id)}</b>${tags}`
-      + `${note ? `<small>${esc(note)}</small>` : ''}</span><span class="cost ${isActive || cost === 0 ? 'ok' : ''}">${esc(hint)}</span></button>`;
+      + `${note ? `<small>${esc(note)}</small>` : ''}</span><span class="cost ${isActive || cost === 0 ? 'ok' : ''}"${isActive ? ` title="${esc(t('installedTag'))}"` : ''}>${esc(hint)}</span></button>`;
   };
   const live = chans.filter(c => !c.archive), arch = chans.filter(c => c.archive);
   $('verList').innerHTML = `<div class="lh">${esc(t('versions'))}</div>` + live.map(item).join('')
@@ -1333,7 +1353,13 @@ const ON = { d: null, err: false, timer: null, shut: new Set(), users: [] };   /
 // the groups the player folded stay folded (only a convenience: without storage everything opens)
 try { ON.shut = new Set(JSON.parse(localStorage.getItem('onShut') || '[]')); } catch (e) {}
 const RACES = ['space_marines', 'chaos_marines', 'eldar', 'orks', 'tyranids', 'imperial_guard', 't_tau', 'z_unecron', 'ordo_malleus'];
-const raceImg = r => RACES.includes(r) ? `<img class="race" src="races/${r}.png" alt="${esc(t('race_' + r))}" title="${esc(t('race_' + r))}">` : '<span class="race"></span>';
+// MMFind sends these three under their own names (the server passes the searching list on as is); "random" - a random race
+const RACE_ALIAS = { chaos_space_marines: 'chaos_marines', tau: 't_tau', necron: 'z_unecron' };
+const raceImg = r => {
+  r = RACE_ALIAS[r] || r;
+  if (r === 'random') return `<span class="race race-rnd" role="img" aria-label="${esc(t('race_random'))}" title="${esc(t('race_random'))}">?</span>`;
+  return RACES.includes(r) ? `<img class="race" src="races/${r}.png" alt="${esc(t('race_' + r))}" title="${esc(t('race_' + r))}">` : '<span class="race"></span>';
+};
 const onWho = p => `<button class="nm" data-steam="${esc(p.steam || '')}" title="${esc(p.steam ? 'Steam ' + p.steam : '')}">${esc(p.name || 'Player')}</button>`;
 
 function onRender() {
@@ -1456,7 +1482,9 @@ fbInit();
 // ---------- players' chat, Steam sign-in and the player's card (ladder service /ladder/api/c/*) ----------
 // Rooms General / RU / EN (the server's all / ru / en) next to the developers' chat.
 const CH = { room: 'all', last: {}, msgs: {}, me: null, prof: null, waiting: false, timer: null };
+// one room for now (the RU / EN rooms are hidden): a saved ru / en tab opens the common one
 try { CH.room = localStorage.getItem('chRoom') || 'all'; } catch (e) {}
+if (CH.room !== 'dev') CH.room = 'all';
 function chShowRoom() {
   document.querySelectorAll('.ch-tab').forEach(b => b.classList.toggle('on', b.dataset.room === CH.room));
   $('chatPane').classList.toggle('hidden', CH.room === 'dev');
@@ -1574,22 +1602,40 @@ async function chInit() {
     try { const r = await invoke('c_login_local'); if (r && r.signed_in) { CH.me = r; chMe(); } } catch (e) {}
   }
   chHello(); chProfile();
-  ['all', 'ru', 'en'].forEach(r => r !== CH.room && chLoad(r));          // every room's history at once: switching tabs is instant
+  if (CH.room !== 'all') chLoad('all');          // the common room's history at once: switching tabs is instant
   setInterval(() => chLoad(), 5000); setInterval(chHello, 30000); setInterval(chProfile, 10 * 60 * 1000);
 }
 chInit();
 
 // ---------------- hotkeys ----------------
-const HK = { data: null, edits: {}, grid: false, wait: null };
+const HK = { data: null, edits: {}, grid: false, wait: null, dirty: false, open: new Set() };
+const HK_GROUPS = ['space_marines', 'chaos_marines', 'eldar', 'orks', 'tyranids', 'imperial_guard', 'ordo_malleus', 't_tau', 'observer'];
 const AB = [1, 2, 3, 4, 5, 6, 7].map(i => 'grid:AB_key_' + i);
 const UC = r => [1, 2, 3, 4, 5, 6, 7].map(c => `grid:UC_Row${r}_Col${c}`);
 const MAIN = ['attack', 'retreat', 'retreat_queue', 'repair', 'reinforce', 'overwatch', 'attackground', 'attackmelee', 'halt', 'stance', 'rally', 'unload',
-  'retire', 'select_all', 'select_hq', 'select_hero', 'retreat_hero', 'retreat_all', 'retreat_beacon', 'next_primary_selection', 'event_cue_cycle', 'systemmenu'];
+  'retire', 'select_all', 'select_hq', 'select_hero', 'retreat_hero', 'retreat_all', 'retreat_beacon', 'next_primary_selection'];   // no system keys (menu, event cue)
 const hkKey = b => b.scope + ':' + b.name;
-const HK_RU = { attack: 'Атака', retreat: 'Отступление', retreat_queue: 'Отступление в очередь', repair: 'Ремонт', reinforce: 'Подкрепление', overwatch: 'Наблюдение (overwatch)',
+const HK_RU = { attack: 'Атака', retreat: 'Отступление', retreat_queue: 'Отступление в очередь', repair: 'Ремонт', reinforce: 'Подкрепление', overwatch: 'Автоподкрепление',
   attackground: 'Атака по земле', attackmelee: 'Рукопашная атака', halt: 'Стоп', stance: 'Стойка', rally: 'Точка сбора', unload: 'Высадить', retire: 'Распустить',
   select_all: 'Выбрать всех', select_hq: 'Выбрать штаб', select_hero: 'Выбрать героя', retreat_hero: 'Отступление героя', retreat_all: 'Отступление всех',
   retreat_beacon: 'Маяк отступления', next_primary_selection: 'Следующий выбранный', event_cue_cycle: 'К последнему событию', systemmenu: 'Меню' };
+const HK_EN = { overwatch: 'auto-reinforce' };   // the game's name says overwatch, the command is auto-reinforce
+// A main command that each race also has as its own ability: the game's global "repair" is E, but every race's units
+// repair with their own ability on P. The main row shows the key the races share and sets the global command and every
+// race that follows it; a race changed on its own (in its group) keeps its key.
+const HK_LINK = { repair: [':sm_repair_pvp', ':ork_repair', ':eld_repair', ':tau_repair'] };
+const hkLinked = n => (HK_LINK[n] || []).filter(k => HK.data.map[k]);
+// the key most of the linked races use: the shared one
+function hkLinkVal(n) {
+  const c = {}; hkLinked(n).forEach(k => { const v = hkVal(k); c[v] = (c[v] || 0) + 1; });
+  return Object.keys(c).sort((a, b) => c[b] - c[a])[0];
+}
+// the keys a new key of the main row goes to: the global command and the races that still follow the shared key
+function hkMulti(n) {
+  const r = hkLinked(n); if (!r.length) return [];
+  const v = hkLinkVal(n);
+  return [':' + n].filter(k => HK.data.map[k]).concat(r.filter(k => hkVal(k) === v));
+}
 function hkVal(k) { const b = HK.data.map[k]; return k in HK.edits ? HK.edits[k] : b ? b.value : ''; }
 function hkPretty(name) { return name.replace(/_/g, ' ').replace(/^AB key /, '').replace(/^UC Row(\d) Col(\d)/, 'row $1 · $2'); }
 async function hkLoad() {
@@ -1597,7 +1643,7 @@ async function hkLoad() {
   catch (e) { $('hkGridBox').innerHTML = `<div class="note">${esc(String(e))}</div>`; }
 }
 // with Grid Hotkeys on, the grid table re-assigns some commands (reinforce, melee, stance, repair) - those are the ones that work
-function hkMainKey(n) { return HK.grid && HK.data.map['grid:' + n] ? 'grid:' + n : ':' + n; }
+function hkMainKey(n) { const r = hkLinked(n); if (r.length) { const v = hkLinkVal(n); return r.find(k => hkVal(k) === v); } return HK.grid && HK.data.map['grid:' + n] ? 'grid:' + n : ':' + n; }
 function hkDups() {
   // keys used twice among commands that work at the same moment: a selected squad (main commands + abilities with the grid on);
   // building keys work only with a building selected - checked among themselves
@@ -1609,10 +1655,10 @@ function hkDups() {
     Object.values(seen).forEach(ks => { if (ks.length > 1 && ks.some(k => hkVal(k) !== HK.data.map[k].default)) ks.forEach(k => dup.add(k)); }); });
   return dup;
 }
-function hkBtn(k) {
+function hkBtn(k, multi) {
   const b = HK.data.map[k]; if (!b) return '<span></span>';
   const chg = hkVal(k) !== b.default;
-  return `<button class="kk${chg ? ' chg' : ''}" data-k="${esc(k)}" title="${esc(b.name)} — ${esc(t('hkNone'))}: ${esc(b.default)}">${esc(hkVal(k))}</button>`;
+  return `<button class="kk${chg ? ' chg' : ''}" data-k="${esc(k)}"${multi && multi.length > 1 ? ` data-multi="${esc(multi.join(','))}"` : ''} title="${esc(b.name)} — ${esc(t('hkNone'))}: ${esc(b.default)}">${esc(hkVal(k))}</button>`;
 }
 function hkRender() {
   if (!HK.data) return;
@@ -1620,18 +1666,38 @@ function hkRender() {
   const g = $('hkGridBox'); g.classList.toggle('off', !HK.grid);
   g.innerHTML = [[t('hkAb'), AB], [t('hkUc1'), UC(1)], [t('hkUc2'), UC(2)], [t('hkUc3'), UC(3)]]
     .map(([l, ks]) => `<span class="lbl">${esc(l)}</span>` + ks.map(hkBtn).join('')).join('');
-  $('hkMain').innerHTML = MAIN.filter(n => HK.data.map[':' + n]).map(n => `<div class="hk-row"><span title="${esc(n)}">${esc(lang === 'ru' && HK_RU[n] || hkPretty(n))}</span>${hkBtn(hkMainKey(n))}</div>`).join('');
-  const q = ($('hkSearch').value || '').toLowerCase(); let sec = '';
-  $('hkAllList').innerHTML = HK.data.bindings.filter(b => !q || b.name.toLowerCase().includes(q) || hkVal(hkKey(b)).toLowerCase() === q || b.section.toLowerCase().includes(q)).slice(0, 400)
-    .map(b => (b.section !== sec ? `<div class="hk-sec">${esc(sec = b.section)}</div>` : '') + `<div class="hk-row"><span>${esc(hkPretty(b.name))}</span>${hkBtn(hkKey(b))}</div>`).join('');
+  const label = n => lang === 'ru' && HK_RU[n] || HK_EN[n] || hkPretty(n);   // the full name (and the game's) on hover: long ones are cut
+  $('hkMain').innerHTML = MAIN.filter(n => HK.data.map[hkMainKey(n)]).map(n => `<div class="hk-row"><span title="${esc(label(n) + '\n' + n)}">${esc(label(n))}</span>${hkBtn(hkMainKey(n), hkMulti(n))}</div>`).join('');
+  // every key by group: each race and observer (the common orders and the grid are shown above). System keys (menu,
+  // camera) are not to be reassigned,
+  // campaign abilities and the "plain letters" table do nothing in multiplayer: not shown. A group opens on a click;
+  // a search opens every group with a match.
+  const q = ($('hkSearch').value || '').toLowerCase();
+  const hit = b => !q || b.name.toLowerCase().includes(q) || hkVal(hkKey(b)).toLowerCase() === q || b.section.toLowerCase().includes(q);
+  $('hkAllList').innerHTML = HK_GROUPS.map(gr => {
+    const bs = HK.data.bindings.filter(b => b.group === gr && hit(b));
+    if (!bs.length) return '';
+    const open = q || HK.open.has(gr); let sec = '';
+    // with Grid Hotkeys on the game takes these by the button's place (the grid keys above), not by the unit: dimmed and said so
+    const shadow = s => HK.grid && /unit creation|unit abilities|hero abilities|unit upgrades|hero upgrades|hero wargear/i.test(s);
+    const rows = !open ? '' : bs.map(b => (b.section !== sec ? `<div class="hk-sec${shadow(b.section) ? ' off' : ''}">${esc(sec = b.section)}`
+        + (shadow(b.section) ? `<small>${esc(t('hkGridShadow'))}</small>` : '') + '</div>' : '')
+      + `<div class="hk-row${shadow(b.section) ? ' off' : ''}"><span title="${esc(hkPretty(b.name) + '\n' + b.name)}">${esc(hkPretty(b.name))}</span>${hkBtn(hkKey(b))}</div>`).join('');
+    const race = RACES.includes(gr), title = race ? t('race_' + gr) : t('hkGrpObserver');
+    return `<div class="hk-grp${open ? ' open' : ''}"><button class="hk-gh" data-g="${gr}" aria-expanded="${!!open}">${race ? raceImg(gr) : ''}`
+      + `<b>${esc(title)}</b><span>${bs.length}</span></button>${open ? `<div class="hk-list">${rows}</div>` : ''}</div>`;
+  }).join('');
+  $('hkAllList').querySelectorAll('.hk-gh').forEach(b => b.onclick = () => { const g = b.dataset.g; HK.open.has(g) ? HK.open.delete(g) : HK.open.add(g); hkRender(); });
   const dup = hkDups();
   document.querySelectorAll('#hotkeys .kk').forEach(el => { el.classList.toggle('dup', dup.has(el.dataset.k)); el.onclick = () => hkWait(el); });
   const n = Object.keys(HK.edits).filter(k => HK.edits[k] !== HK.data.map[k].value).length + HK.data.bindings.filter(b => b.value !== b.default && !(hkKey(b) in HK.edits)).length;
-  $('hkState').textContent = n ? t('hkCustom', { n }) : '';   // nothing changed: the Reset button next to it already says "as in the game"
+  $('hkState').textContent = HK.dirty ? t('hkUnsaved') : n ? t('hkCustom', { n }) : '';   // nothing changed: the Reset button next to it already says "as in the game"
+  $('hkState').classList.toggle('warn', !!HK.dirty);
+  $('hkSave').classList.toggle('hidden', !HK.dirty);   // only to retry a save that failed (the game was running)
 }
 function hkWait(el) {
   document.querySelectorAll('#hotkeys .kk.wait').forEach(x => { x.classList.remove('wait'); x.textContent = hkVal(x.dataset.k); });
-  HK.wait = el.dataset.k; el.classList.add('wait'); el.textContent = t('hkPress');
+  HK.wait = el.dataset.k; HK.waitAll = el.dataset.multi ? el.dataset.multi.split(',') : null; el.classList.add('wait'); el.textContent = t('hkPress');
 }
 const KEYMAP = { Space: 'Space', Tab: 'Tab', Enter: 'Enter', Backspace: 'Backspace', Comma: 'Comma', Period: 'Period', Slash: 'Slash', Semicolon: 'Semicolon',
   Quote: 'Apostrophe', BracketLeft: 'LBracket', BracketRight: 'RBracket', Backslash: 'Backslash', Minus: 'Minus', Equal: 'Equal', Backquote: 'Grave',
@@ -1649,20 +1715,25 @@ document.addEventListener('keydown', e => {
   if (!HK.wait) return;
   if (['ControlLeft', 'ControlRight', 'ShiftLeft', 'ShiftRight', 'AltLeft', 'AltRight', 'MetaLeft', 'MetaRight'].includes(e.code)) return;
   e.preventDefault(); e.stopPropagation();
-  const k = HK.wait; HK.wait = null;
-  if (e.code !== 'Escape') { const v = dowKey(e); if (v) HK.edits[k] = v; }
+  const ks = HK.waitAll || [HK.wait]; HK.wait = HK.waitAll = null;
+  if (e.code !== 'Escape') { const v = dowKey(e); if (v) { ks.forEach(k => HK.edits[k] = v); HK.dirty = true; } }
   hkRender();
+  if (HK.dirty) hkCommit();
 }, true);
-$('hkGrid').onchange = e => { HK.grid = e.target.checked; hkRender(); };
+$('hkGrid').onchange = e => { HK.grid = e.target.checked; HK.dirty = true; hkRender(); hkCommit(); };
 $('hkSearch').oninput = () => hkRender();
-$('hkSave').onclick = async () => {
+// every change is written at once: changes kept only in the window were lost on Play or on closing the launcher, while
+// "your changes: N" already counted them (siritos 30.10). With the game running the file can't be written: the
+// changes wait, marked, and the Save button retries.
+async function hkCommit() {
   const dup = hkDups();
-  try { const d = await invoke('hotkeys_save', { changes: HK.edits, grid: HK.grid }); HK.data = d; HK.data.map = {}; d.bindings.forEach(b => HK.data.map[hkKey(b)] = b); HK.grid = d.grid; HK.edits = {}; hkRender();
+  try { const d = await invoke('hotkeys_save', { changes: HK.edits, grid: HK.grid }); HK.data = d; HK.data.map = {}; d.bindings.forEach(b => HK.data.map[hkKey(b)] = b); HK.grid = d.grid; HK.edits = {}; HK.dirty = false; hkRender();
     toast(dup.size ? t('hkSaved') + '. ' + t('hkDup', { k: [...dup].map(k => hkVal(k)).filter((v, i, a) => a.indexOf(v) === i).join(', ') }) : t('hkSaved'), !!dup.size); }
-  catch (e) { toast(String(e), true); }
-};
+  catch (e) { hkRender(); toast(String(e), true); }
+}
+$('hkSave').onclick = hkCommit;
 $('hkReset').onclick = async () => {
-  try { const d = await invoke('hotkeys_reset'); HK.data = d; HK.data.map = {}; d.bindings.forEach(b => HK.data.map[hkKey(b)] = b); HK.grid = d.grid; HK.edits = {}; hkRender(); toast(t('hkSaved')); }
+  try { const d = await invoke('hotkeys_reset'); HK.data = d; HK.data.map = {}; d.bindings.forEach(b => HK.data.map[hkKey(b)] = b); HK.grid = d.grid; HK.edits = {}; HK.dirty = false; hkRender(); toast(t('hkSaved')); }
   catch (e) { toast(String(e), true); }
 };
 // Settings has two tabs, General and Hotkeys (the bindings are read when the tab is first opened)

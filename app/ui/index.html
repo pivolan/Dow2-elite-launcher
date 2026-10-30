@@ -32,7 +32,7 @@
       <div id="announcements"></div>
       <div id="setup" class="setup hidden"></div>
       <div id="newsBox" class="panel fb">
-        <div class="h ch-head"><div class="ch-tabs" id="chTabs"><button class="ch-tab on" data-room="all" data-t="chAll"></button><button class="ch-tab" data-room="ru">RU</button><button class="ch-tab" data-room="en">EN</button><button class="ch-tab" data-room="dev" data-t="chDev"></button></div><button class="btn gold logs-btn" id="sendLogsHome" data-t="sendLogs"></button></div>
+        <div class="h ch-head"><div class="ch-tabs" id="chTabs"><button class="ch-tab on" data-room="all" data-t="chAll"></button><button class="ch-tab" data-room="dev" data-t="chDev"></button></div><button class="btn gold logs-btn" id="sendLogsHome" data-t="sendLogs"></button></div>
         <div class="ch-pane" id="chatPane">
           <div class="ch-msgs" id="chMsgs"></div>
           <div class="ch-login hidden" id="chLoginRow"><span data-t="chSignInToWrite"></span><button class="btn gold small" id="chIn2" data-t="chLogin"></button></div>
@@ -101,7 +101,7 @@
       <div class="about" id="about"></div>
     </section>
     <section class="panel hk hidden" id="hotkeys">
-      <div class="h hk-head"><span data-t="hotkeys"></span><span class="hk-note" id="hkState"></span><div class="hk-act"><button class="btn small" id="hkReset" data-t="hkReset"></button><button class="btn gold small" id="hkSave" data-t="save"></button></div></div>
+      <div class="h hk-head"><span data-t="hotkeys"></span><span class="hk-note" id="hkState"></span><div class="hk-act"><button class="btn small" id="hkReset" data-t="hkReset"></button><button class="btn gold small hidden" id="hkSave" data-t="save"></button></div></div>
       <div class="hk-top">
         <label class="chk"><input type="checkbox" id="hkGrid"><span data-t="hkGrid"></span></label>
         <span class="note" data-t="hkGridNote"></span>
@@ -110,7 +110,7 @@
       <div class="h small" data-t="hkMain"></div>
       <div class="hk-list" id="hkMain"></div>
       <details class="hk-all"><summary data-t="hkAll"></summary>
-        <input id="hkSearch" data-tp="hkSearch"><div class="hk-list" id="hkAllList"></div></details>
+        <input id="hkSearch" data-tp="hkSearch"><div class="hk-groups" id="hkAllList"></div></details>
       <div class="note hk-how" data-t="hkHow"></div>
     </section>
     </div>
