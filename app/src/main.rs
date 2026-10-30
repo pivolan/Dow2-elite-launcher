@@ -62,8 +62,6 @@ struct Settings {
     /// Feedback chat: random id that ties the player's messages together (kept across restarts), and the name they gave.
     fb_uid: String,
     fb_name: String,
-    /// Hide the window to the tray once the game starts. None = on.
-    tray_on_play: Option<bool>,
     /// Hotkeys the player changed: "scope:name" -> "Control+A" ("grid:AB_key_1" for Grid Hotkeys); see elite_core::hotkeys.
     hotkeys: BTreeMap<String, String>,
     /// Community (chat, who is online): the session token from the Steam sign-in and the profile it belongs to.
@@ -445,7 +443,6 @@ fn get_status(app: State<'_, App>) -> Value {
             }).collect::<Vec<_>>(),
         })).collect::<Vec<_>>(),
         "usage_stats": s.usage_stats.unwrap_or(true),
-        "tray_on_play": s.tray_on_play.unwrap_or(true),
         "release_news": app.release_news.lock().unwrap().clone(),
         "costs": app.costs.lock().unwrap().clone(),
         "prev_channel": s.prev_channel.filter(|p| p != &channel && cfgd.channels.iter().any(|c| &c.id == p)),
@@ -518,7 +515,6 @@ fn set_setting(app: State<'_, App>, key: String, value: Value) {
         "extra_mirror" => s.extra_mirror = value.as_str().unwrap_or("").to_string(),
         "cache_mb" => s.cache_mb = value.as_u64(),
         "usage_stats" => s.usage_stats = value.as_bool(),
-        "tray_on_play" => s.tray_on_play = value.as_bool(),
         "dismiss" => {
             if let Some(id) = value.as_str() {
                 s.dismissed.push(id.to_string());
@@ -1006,14 +1002,8 @@ async fn send_logs(app: AppHandle, who: String) -> Result<String, String> {
 
 /// Start the game. Never blocked by a pending update.
 #[tauri::command]
-fn play(app: State<'_, App>, handle: AppHandle) -> Result<(), String> {
-    start_game(&app)?;
-    if app.settings.lock().unwrap().tray_on_play.unwrap_or(true) {
-        if let Some(w) = handle.get_webview_window("main") {
-            let _ = w.hide();
-        }
-    }
-    Ok(())
+fn play(app: State<'_, App>) -> Result<(), String> {
+    start_game(&app)
 }
 
 fn start_game(app: &App) -> Result<(), String> {
