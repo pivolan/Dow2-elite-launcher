@@ -43,6 +43,8 @@
 .tag.rp-in{color:var(--gd);border-color:var(--ln2)}
 .tag.rp-sim{color:#f3d77a;border-color:#8a7330;display:inline-flex;align-items:center;padding:0 4px}
 .tag.rp-sim svg{width:22px;height:15px;display:block}
+.rp-views{display:inline-flex;align-items:center;gap:3px;font-size:12px;color:var(--mu);white-space:nowrap}
+.rp-views svg{width:16px;height:11px}
 .rp-more{align-self:center;margin:6px 0}
 .rp-pick{padding:20px 4px}
 .rp-dtop{display:flex;gap:12px;align-items:flex-start}

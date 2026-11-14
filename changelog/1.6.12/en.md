@@ -1,0 +1,1 @@
+- Replays: an eye with the number of views of the match on the map next to the detailed-analysis mark in the list.
