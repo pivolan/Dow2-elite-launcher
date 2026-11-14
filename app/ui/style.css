@@ -1648,3 +1648,150 @@ header .brand.dow-d{align-items:center;gap:10px;flex:none;overflow:visible}
 .ch-rbar button:hover{color:#fff}
 .ch-rbar:not(.hidden)+.ch-send{margin-top:0}
 @media (prefers-reduced-motion:reduce){.ch-m.flash{animation:none}}
+/* ================= 1.6.11 (owner 14.11.2026): round 6 ================= */
+/* icon buttons without a frame: a close cross */
+.x-btn{flex:none;display:grid;place-items:center;width:26px;height:26px;padding:0;border:0;background:none;color:var(--mu);cursor:pointer}
+.x-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.x-btn:hover,.x-btn:focus-visible{color:#eafff8;filter:drop-shadow(0 0 5px rgba(69,224,192,.7))}
+/* the headings of the scrolling blocks: a band over the panel's width with a line under it, as the Add-ons' groups; the groups
+   of Online the same, smaller and sticky (the open group's heading stays on top while its list scrolls) */
+.panel.bandp{padding-top:0}
+.bandp>.h,.bandp>.ev-head{margin:0 -10px 6px;padding:7px 12px 6px;background:rgba(0,0,0,.3);border-bottom:1px solid var(--ln);font:700 19px var(--fh);color:#d8f6ea;display:flex;align-items:center;gap:8px}
+.ev-box.bandp{padding-top:0}
+.ev-box.bandp>.ev-head{margin:0 -4px 6px}
+.bandp>.h em,.bandp .on-total{font:500 12.5px var(--fb);font-style:normal;color:var(--mu);text-shadow:none;margin:0;order:1}
+.bandp .on-gh{position:sticky;top:0;z-index:2;margin:0 -14px 4px;padding:5px 14px;background:rgba(9,18,19,.97);border-bottom:1px solid var(--ln);font:700 15px var(--fh)}
+.bandp .on-g+.on-g{margin-top:6px}
+.bandp .on-gh span{font:500 12px var(--fb)}
+/* the useful links in Online's heading: E (the Elite Discord), Discord, the stats, the ladder */
+.on-links{order:3;margin-left:auto;display:flex;align-items:center;gap:1px}
+.on-links .foot-link svg{width:18px;height:18px}
+.lnk-e{display:block;font:700 18px/18px Cinzel,Spectral,serif;color:currentColor;text-shadow:none}
+/* (i) after the version: the news dropdown; a gold dot while something is unread */
+header .brand.dow-d{position:relative}
+header .brand.dow-d .dd-st{flex-direction:row;align-items:center;gap:3px}
+.hdr-info{position:relative;display:grid;place-items:center;width:24px;height:24px;padding:0;border:0;background:none;color:var(--mu);cursor:pointer}
+.hdr-info svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
+.hdr-info:hover,.hdr-info.on,.hdr-info:focus-visible{color:#eafff8;filter:drop-shadow(0 0 5px rgba(69,224,192,.7))}
+.hdr-info .dot{position:absolute;top:2px;right:2px;width:7px;height:7px;border-radius:50%;background:#e2b86a;box-shadow:0 0 0 2px #071011,0 0 8px rgba(226,184,106,.9);display:none}
+.hdr-info.unread{color:#e8d8ae}
+.hdr-info.unread .dot{display:block;animation:newsdot 1.8s ease-in-out infinite}
+@keyframes newsdot{50%{box-shadow:0 0 0 2px #071011,0 0 14px rgba(226,184,106,1)}}
+.news-dd{left:-6px;right:auto;top:calc(100% + 4px);width:440px;max-width:calc(100vw - 30px);max-height:calc(100vh - 150px);padding:0;display:flex;flex-direction:column}
+.news-dd.hidden{display:none}
+.nd-h{display:flex;align-items:baseline;gap:10px;padding:7px 10px 6px 14px;border-bottom:1px solid var(--ln);background:rgba(0,0,0,.3)}
+.nd-h b{font:700 18px var(--fh);color:#f3ead8}
+.nd-h span{flex:1;font-size:12px;color:var(--mu)}
+.nd-h .x-btn{align-self:center}
+.news-dd .news-list{flex:1;min-height:0;overflow-y:auto;margin:0;padding:4px 14px;white-space:normal}
+.news-dd li,.news-dd .t{white-space:normal;overflow-wrap:anywhere}
+.nd-f{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 14px;border-top:1px solid var(--ln);font-size:12px;color:var(--mu)}
+.nd-new{display:inline-block;vertical-align:2px;margin-left:4px;padding:0 6px;font:700 10.5px/17px var(--fb);letter-spacing:.5px;text-transform:uppercase;color:#1a1204;background:#e2b86a}
+.news-item.is-new{box-shadow:inset 3px 0 0 #e2b86a;padding-left:10px}
+/* "launcher updated": the aquila of the High Lords of Terra, gold */
+.ubar.upd-done{background:linear-gradient(90deg,rgba(70,56,24,.55),rgba(40,34,18,.42) 55%,rgba(20,20,14,.3));border-bottom-color:rgba(226,184,106,.45)}
+.upd-done .ub-ico{--sig:var(--sig-terra);width:58px;height:30px;border:0;box-shadow:none;background-color:#e2c47c;filter:drop-shadow(0 0 6px rgba(226,184,106,.45))}
+.upd-done .ub-it b{flex:none;color:#f6ecd2}
+.upd-done .ub-it{min-width:0;flex:1}
+.upd-done .ub-it small{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.upd-done .bn-act,.err-bar .bn-act{display:flex;align-items:center;gap:8px}
+/* the errors: red strips on top, the skull in the star of Chaos; the seconds left and a line running out under the strip */
+.err-bars{display:flex;flex-direction:column;flex:none;position:relative;z-index:3}
+.ubar.err-bar{min-height:44px;background:linear-gradient(90deg,rgba(118,24,19,.72),rgba(78,16,13,.6) 55%,rgba(44,11,10,.5));border-top:1px solid rgba(255,140,120,.1);border-bottom:1px solid rgba(229,80,63,.6);color:#ffd9d1;box-shadow:0 2px 10px rgba(0,0,0,.4),inset 0 0 18px rgba(229,80,63,.12)}
+.err-bar .ub-ico{--sig:var(--sig-damned);width:28px;height:28px;border:0;box-shadow:none;background-color:#ff6a55;filter:drop-shadow(0 0 5px rgba(255,80,60,.75));animation:errsig 2.4s ease-in-out infinite}
+@keyframes errsig{50%{background-color:#ff8c78;filter:drop-shadow(0 0 10px rgba(255,80,60,1))}}
+.err-bar .ub-it b{white-space:normal;color:#ffe3dc;font-weight:500}
+.eb-n{flex:none;font:500 12px var(--fb);color:#e39a8c;font-variant-numeric:tabular-nums;min-width:34px;text-align:right}
+.err-bar .x-btn{color:#e8a597}
+.err-bar .x-btn:hover{color:#fff;filter:drop-shadow(0 0 5px rgba(255,120,100,.8))}
+.eb-tm{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#ff8f7d;box-shadow:0 0 6px rgba(255,120,100,.8);transform-origin:left;animation:ebtm 30s linear forwards}
+.err-bar:hover .eb-tm{animation-play-state:paused}
+@keyframes ebtm{to{transform:scaleX(0)}}
+/* the chat's header: the players' rooms and the language on the left; the developers (gold, the Mechanicus) and the logs right */
+.ch-tab{gap:6px}
+.ch-tab svg{flex:none;width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ch-tabs{align-items:center}
+.ch-devg{display:flex;align-items:center;gap:6px;margin-left:auto;padding-left:12px;border-left:1px solid var(--ln)}
+.ch-tab.ch-dev{border-top-color:#6d5a2c;color:#e8d8ae}
+.ch-tab.ch-dev .sig{--sig:var(--sig-mech);width:15px;height:15px}
+.ch-tab.ch-dev.on{border-color:var(--gold);background:linear-gradient(#4a3f22,#2a2414);color:#fff3d6}
+.ch-lang{position:relative;margin-left:6px}
+.ch-lang.off{visibility:hidden}
+.ch-lbtn{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 6px;border:0;background:none;color:#cfe3dc;font:600 13px var(--fb);cursor:pointer;white-space:nowrap}
+.ch-lbtn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ch-lbtn svg.chev{width:13px;height:13px;opacity:.7}
+.ch-lbtn.tr #chLangCur{color:var(--gd)}
+.ch-lbtn:hover,.ch-lbtn[aria-expanded="true"]{color:#eafff8;filter:drop-shadow(0 0 5px rgba(69,224,192,.6))}
+.ch-lmenu{top:calc(100% + 6px);left:-6px;right:auto;width:240px;padding:4px 0;z-index:45}
+.ch-lmenu.hidden{display:none}
+.ch-lmh{padding:6px 12px 4px;font:600 11px var(--fb);letter-spacing:.6px;text-transform:uppercase;color:var(--mu)}
+.ch-lmenu button{display:flex;align-items:baseline;justify-content:space-between;gap:8px;width:100%;padding:7px 12px;border:0;background:none;color:#d6eee7;font:500 14px var(--fb);text-align:left;cursor:pointer}
+.ch-lmenu button small{color:var(--mu);font-size:11.5px}
+.ch-lmenu button:hover{background:rgba(69,224,192,.1);color:#fff}
+.ch-lmenu button.on{color:#eafff8;box-shadow:inset 3px 0 0 var(--gd);background:linear-gradient(90deg,rgba(69,224,192,.16),transparent)}
+/* the Hall of Fame's tab: the skull crowned with laurel */
+.set-tab .sig-crown{--sig:var(--sig-crown);width:19px;height:19px;margin:-1px}
+/* the left menu of Lobbies and Replays narrower, no counts (the page's heading has them); a lobby card keeps its teams side by
+   side down to 440 px (a smaller map picture in two columns) - on 1240-1600 windows they no longer go one under the other */
+.rnav{width:166px}
+.rnb{gap:8px;padding:8px 10px;font-size:16px}
+.rnb .n{display:none}
+.rleg{font-size:11.5px}
+@media (max-width:1000px){.rnav{width:52px}}
+@container (min-width:960px) and (max-width:1239px){.room{grid-template-columns:92px minmax(0,1fr)}.room .mmap span{font-size:12px}}
+@container rcard (min-width:440px){
+  .room .teams{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+  .room .team+.team{padding-top:0;border-top:0}
+  .room .team+.team .th{flex-direction:row-reverse}
+  .room .team+.team .rp{flex-direction:row-reverse;text-align:right}
+  .room .team+.team .rp .nm{text-align:right}
+  .room .team .th{justify-content:space-between;gap:6px}
+}
+@container rcard (min-width:440px) and (max-width:599px){.room .rp{font-size:12px}.room .rp .rt{font-size:11px}.room .team .th{font-size:10px}}
+.room .rh .tag.van{flex:none}
+/* a lobby picked on Home: lit until the mouse comes to it */
+.room.hl-lit{position:relative;z-index:1}
+.room.hl-lit::after{content:"";position:absolute;inset:-6px;border:2px solid #45e0c0;box-shadow:0 0 20px rgba(69,224,192,.85),inset 0 0 26px rgba(69,224,192,.3);pointer-events:none;animation:hllit 1.4s ease-in-out 3}
+@keyframes hllit{50%{border-color:#c8fff0;box-shadow:0 0 34px rgba(69,224,192,1),inset 0 0 40px rgba(69,224,192,.45)}}
+/* Home: the open lobbies (hlobby.js) */
+.hl-box{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:0}
+.hl-box>.h .h-link{margin-left:auto;font-size:13px}
+.hl-list{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin:0 -6px;padding:0 6px 8px}
+.hl-c{flex:none;display:flex;flex-direction:column;gap:5px;padding:6px 8px;border:4px solid transparent;border-image:var(--art-plate-sq) var(--art-plate-slice) / 4px;background:linear-gradient(rgba(5,10,11,.55),rgba(5,10,11,.55)),var(--art-card) center/cover padding-box;cursor:pointer;container:hlc / inline-size}
+.hl-c:hover,.hl-c:focus-visible{filter:drop-shadow(0 0 6px rgba(69,224,192,.5));outline:0}
+.hl-c.dim{opacity:.55}
+.hl-h{display:grid;grid-template-columns:38px minmax(0,1fr);gap:8px;align-items:center}
+.hl-mm{width:38px;height:38px;background:#061011 var(--mm) center/cover;border:1px solid var(--ln2)}
+.hl-hb{min-width:0;display:flex;flex-direction:column;gap:3px}
+.hl-n{display:flex;align-items:center;gap:5px;min-width:0}
+.hl-n b{min-width:0;font:700 15.5px/1.2 var(--fh);color:#eef7f2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hl-lock{display:inline-grid;color:var(--mu)}
+.hl-lock .ico{width:13px;height:13px}
+.hl-tags{display:flex;align-items:center;flex-wrap:wrap;gap:4px;min-width:0}
+.hl-tags .tag{flex:none;font-size:10.5px;line-height:15px;padding:0 4px}
+.hl-teams{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding-top:5px;border-top:1px dashed rgba(69,224,192,.2)}
+.hl-team{display:flex;flex-direction:column;gap:1px;min-width:0;padding-right:7px}
+.hl-team.r{padding:0 0 0 7px;border-left:1px solid rgba(69,224,192,.18)}
+.hl-team.r .hl-p{flex-direction:row-reverse;text-align:right}
+.hl-p{display:flex;align-items:center;gap:5px;font-size:12px;line-height:19px;min-width:0}
+.hl-p img,.hl-p .race-rnd{width:16px;height:16px;flex:none;object-fit:contain;font-size:11px}
+.hl-p .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;color:#e4f3ed}
+.hl-p.host .nm{color:var(--gold2)}
+.hl-p .rt{flex:none;font-size:11px;color:var(--mu);font-variant-numeric:tabular-nums}
+@container hlc (max-width:250px){.hl-p .rt{display:none}}
+.hl-p.free .nm{font-weight:400;font-style:italic;color:var(--mu)}
+.hl-p .sk{width:16px;height:16px}
+.hl-names{font-size:12px;color:var(--sf);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hl-f{display:flex;align-items:center;gap:6px;min-height:28px}
+.hl-f>span:first-child{flex:1}
+.hl-obs{flex:1;display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--mu);min-width:0}
+.hl-obs svg{flex:none;width:14px;height:14px;fill:none;stroke:var(--gd);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hl-obs span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hl-acts{display:flex;align-items:center;gap:4px;margin-left:auto}
+.hl-acts:empty{display:none}
+.hl-acts .tag{font-size:10.5px;line-height:15px;padding:0 4px;white-space:nowrap}
+.hl-eye{display:grid;place-items:center;width:28px;height:28px;padding:0;border:0;background:none;color:var(--gd);cursor:pointer}
+.hl-eye svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hl-eye:hover,.hl-eye:focus-visible{color:#eafff8;filter:drop-shadow(0 0 5px rgba(69,224,192,.7))}
+.hl-none{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:8px 2px;color:var(--mu);font-size:13px}
+@media (prefers-reduced-motion:reduce){.hdr-info.unread .dot,.room.hl-lit::after,.eb-tm,.err-bar .ub-ico{animation:none}}

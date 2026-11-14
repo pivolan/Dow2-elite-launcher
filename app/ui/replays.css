@@ -143,3 +143,26 @@
 /* Reset in the header, by the (i): not pushed to the right as the header's other buttons */
 .rp-page .h>.rp-reset{order:0;margin-left:4px}
 .rp-f1 .rp-q input{text-overflow:ellipsis}   /* a narrow window: the search's hint cut with "…" */
+/* 1.6.11 (owner 14.11.2026): the actions - one plate each, a row of their own under the map (Watch first, "soon" until the
+   launcher can start a replay); the report - a band at the bottom (as the Add-ons' headings), its tables scroll by themselves */
+.rp-det .rp-acts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:10px 0 2px}
+.rp-ab{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:7px;height:32px;padding:0 10px;font:600 13px var(--fb);white-space:nowrap;min-width:0}
+.rp-ab span{overflow:hidden;text-overflow:ellipsis}
+.rp-ab .ico{flex:none;width:16px;height:16px}
+.rp-ab.done{color:var(--ok);opacity:1;cursor:default}
+.rp-ab.rp-soon:disabled{opacity:1;color:var(--mu);cursor:default}
+.rp-ab.rp-soon .ico,.rp-ab.rp-soon span{opacity:.6}
+.rp-soon em{position:absolute;top:-7px;right:-3px;font:700 9px var(--fb);font-style:normal;letter-spacing:.6px;text-transform:uppercase;color:#1a1204;background:var(--gold);padding:0 4px;line-height:13px}
+.rp-sec.rp-repsec{border-top:0;padding-top:0;margin-top:12px}
+.rp-band{display:flex;align-items:center;gap:10px;width:100%;padding:7px 12px;border:0;border-top:1px solid var(--ln);border-bottom:1px solid var(--ln);background:rgba(0,0,0,.3);text-align:left;cursor:pointer;font:700 17px var(--fh);color:#d8f6ea;text-shadow:0 2px 2px #000}
+.rp-band small{margin-left:auto;font:500 12px var(--fb);color:var(--mu);text-shadow:none}
+.rp-band .chev{flex:none;width:7px;height:7px;border:solid var(--gd);border-width:0 1.5px 1.5px 0;transform:rotate(-45deg);margin:0 2px 0 4px;transition:transform .15s}
+.rp-band.on .chev{transform:rotate(45deg);margin-bottom:3px}
+.rp-band:hover{color:#fff}
+.rp-repsec .rp-rep{overflow:visible;margin-top:0;border-top:0}
+.rp-tw{overflow-x:auto;margin:6px 0;border:1px solid var(--ln);scrollbar-color:var(--gd) rgba(0,0,0,.4)}
+.rp-tw::-webkit-scrollbar{height:10px}
+.rp-tw::-webkit-scrollbar-thumb{background:var(--gd)}
+.rp-tw table{margin:0}
+.rp-tw th:first-child,.rp-tw td:first-child{position:sticky;left:0;z-index:1;background:#0a1718;box-shadow:1px 0 0 var(--ln)}
+.rp-tw td,.rp-tw th{font-variant-numeric:tabular-nums}

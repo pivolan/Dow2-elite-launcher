@@ -142,7 +142,7 @@ const T = {
     "uiScaleSet": "Apply",
     "uiScaleDone": "applies at the next game start",
     "mirror": "Extra mirror (optional)",
-    "netTitle": "Our servers from this computer", "netCheck": "Check again", "netChecking": "Checking…", "netFiles": "Files (Elite and add-on updates)", "netApi": "Chat, Online, rooms, launcher updates", "netMoscow": "Moscow", "netGermany": "Germany", "netR2": "Cloudflare (storage)", "netMs": "{n} ms", "netNone": "no answer", "netUsed": "in use", "netWait": "Checking our servers…", "netNoteDone": "Checked at the start; again when a server stops answering. No ping - one small download from each.", "netNoteOld": "The order of the last start; this one is being checked.",
+    "netTitle": "Our servers from this computer", "netCheck": "Check again", "netChecking": "Checking…", "netFiles": "Files (Elite and add-on updates)", "netApi": "Chat, Online, lobbies, launcher updates", "netMoscow": "Moscow", "netGermany": "Germany", "netR2": "Cloudflare (storage)", "netMs": "{n} ms", "netNone": "no answer", "netUsed": "in use", "netWait": "Checking our servers…", "netNoteDone": "Checked at the start; again when a server stops answering. No ping - one small download from each.", "netNoteOld": "The order of the last start; this one is being checked.",
     "save": "Save",
     "repairTitle": "Repair",
     "repair": "Check & repair files",
@@ -362,7 +362,7 @@ const T = {
     "usageTitle": "Анонимная статистика",
     "usage": "Учитывать меня в числе пользователей лаунчера",
     "usageNote": "Раз в сутки лаунчер отправляет хеш, который каждый день новый, плюс свою версию, ОС и версию Elite. Никаких ников, Steam или данных о компьютере; связать дни между собой нельзя.",
-    "onTag": "Упомянуть в чате", "roomsTab": "Комнаты", "roomsJoin": "Войти", "roomsJoinStart": "Запускаю игру и вхожу в {name}...", "roomsJoinRunning": "Игра уже запущена: переключитесь в неё, вход начнётся там", "roomsJoinBusy": "Идёт поиск автоматча или вы в матче: остановите поиск (или доиграйте матч) и нажмите «Войти» ещё раз", "roomsVerAsk": "Другая версия Elite", "roomsVerOther": "Эта игра создана на Elite {v}, а у вас Elite {mine}. С другой версией в неё не войти.", "roomsVerUp": "Обновить до Elite {v}", "roomsVerSw": "Перейти на Elite {v}", "roomsVerClose": "Закрыть", "rjSwitchAsk": "Перейти в другое лобби?", "rjSwitchText": "Вы сейчас в лобби «{a}». Выйти из него и войти в «{b}»?", "rjSwitchHost": "Вы хост этого лобби: если выйти, оно закроется для всех игроков в нём.", "rjSwitchGo": "Выйти и войти", "rjSwitchOld": "Вы в лобби «{a}». Чтобы переходить из лобби в лобби, нужно новое дополнение «Lobby join» — пока выйдите из лобби сами.", "rjLeaving": "Выхожу из текущего лобби, потом вхожу в {name}…", "rjCurLobby": "текущее лобби", "roomsHere": "Вы здесь", "roomsInOther": "Вы уже в лобби {name} — сначала выйдите из него в игре.", "roomsVerAfter": "Переключаю на Elite {v}. Когда закончится, нажмите «Войти» ещё раз.", "roomsVerNoCh": "Elite {v} нет в лаунчере — переключиться на неё нельзя.", "roomsVerGame": "Чтобы переключить версию, сначала закройте игру.", "roomsVerBusy": "Лаунчер сейчас обновляет игру — дождитесь, пока закончит.", "rjCancel": "Отмена", "rjStarting": "Запускаю игру, чтобы войти в {name}…", "rjWaitGame": "Жду, пока запустится игра…", "rjAccepted": "Игра приняла запрос: {name}", "rjWalking": "Игра переходит в главное меню…", "rjJoining": "Подключаюсь к {name}…", "rjInLobby": "Вы в лобби {name}", "rjFailed": "Не удалось войти в {name}: {why}", "rjCancelled": "Вход отменён", "rjNoPipe": "Игра запущена без дополнения «Lobby join». Включите его во вкладке «Дополнения» и перезапустите игру.", "rjOnlyWin": "Вход из лаунчера работает только на Windows и Linux.", "rjAddonOff": "Чтобы входить по ссылке, включите дополнение «Lobby join» во вкладке «Дополнения» и нажмите ссылку ещё раз.", "rjWhy_full": "комната заполнена", "rjWhy_closed": "комнаты больше нет или её игра уже стартует", "rjWhy_password": "нужен пароль", "rjWhy_version": "другая версия игры или мода", "rjWhy_timeout": "комната не ответила", "rjWhy_busy_search": "идёт поиск в Find a Game — сначала остановите его", "rjWhy_busy_match": "вы в матче", "rjWhy_busy_join": "игра уже входит в другую комнату", "rjWhy_not_menu": "игра не в главном меню — сначала перейдите туда", "rjWhy_other_lobby": "вы в другом лобби — сначала выйдите из него", "rjWhy_cancelled": "отменено", "rjWhy_game_closed": "игра закрылась", "rjWhy_no_answer": "игра не ответила", "rjWhy_no_game": "игра не запустилась", "rjWhy_no_pipe": "в игре нет дополнения «Lobby join» — включите его и перезапустите игру", "rjWhy_error": "игре не удалось войти", "roomsTitle": "Открытые лобби", "roomsNote": "Кастомки, которые сейчас собираются, — тот же список, что в браузере игр. Elite или ваниль — по расам, значкам армий и карте.", "roomsNone": "Сейчас никто не собирает игру.", "roomsErr": "Список сейчас недоступен.", "roomsFree": "свободно", "roomsVan": "ваниль", "roomsOther": "другой мод", "roomsObs": "наблюдатели", "roomsPw": "с паролем", "behTitle": "Чат и окно", "muteMention": "Без звука, когда меня упоминают (@ник) в чате", "closeQuits": "Крестик закрывает лаунчер (а не сворачивает в трей)",
+    "onTag": "Упомянуть в чате", "roomsTab": "Лобби", "roomsJoin": "Войти", "roomsJoinStart": "Запускаю игру и вхожу в {name}...", "roomsJoinRunning": "Игра уже запущена: переключитесь в неё, вход начнётся там", "roomsJoinBusy": "Идёт поиск автоматча или вы в матче: остановите поиск (или доиграйте матч) и нажмите «Войти» ещё раз", "roomsVerAsk": "Другая версия Elite", "roomsVerOther": "Эта игра создана на Elite {v}, а у вас Elite {mine}. С другой версией в неё не войти.", "roomsVerUp": "Обновить до Elite {v}", "roomsVerSw": "Перейти на Elite {v}", "roomsVerClose": "Закрыть", "rjSwitchAsk": "Перейти в другое лобби?", "rjSwitchText": "Вы сейчас в лобби «{a}». Выйти из него и войти в «{b}»?", "rjSwitchHost": "Вы хост этого лобби: если выйти, оно закроется для всех игроков в нём.", "rjSwitchGo": "Выйти и войти", "rjSwitchOld": "Вы в лобби «{a}». Чтобы переходить из лобби в лобби, нужно новое дополнение «Lobby join» — пока выйдите из лобби сами.", "rjLeaving": "Выхожу из текущего лобби, потом вхожу в {name}…", "rjCurLobby": "текущее лобби", "roomsHere": "Вы здесь", "roomsInOther": "Вы уже в лобби {name} — сначала выйдите из него в игре.", "roomsVerAfter": "Переключаю на Elite {v}. Когда закончится, нажмите «Войти» ещё раз.", "roomsVerNoCh": "Elite {v} нет в лаунчере — переключиться на неё нельзя.", "roomsVerGame": "Чтобы переключить версию, сначала закройте игру.", "roomsVerBusy": "Лаунчер сейчас обновляет игру — дождитесь, пока закончит.", "rjCancel": "Отмена", "rjStarting": "Запускаю игру, чтобы войти в {name}…", "rjWaitGame": "Жду, пока запустится игра…", "rjAccepted": "Игра приняла запрос: {name}", "rjWalking": "Игра переходит в главное меню…", "rjJoining": "Подключаюсь к {name}…", "rjInLobby": "Вы в лобби {name}", "rjFailed": "Не удалось войти в {name}: {why}", "rjCancelled": "Вход отменён", "rjNoPipe": "Игра запущена без дополнения «Lobby join». Включите его во вкладке «Дополнения» и перезапустите игру.", "rjOnlyWin": "Вход из лаунчера работает только на Windows и Linux.", "rjAddonOff": "Чтобы входить по ссылке, включите дополнение «Lobby join» во вкладке «Дополнения» и нажмите ссылку ещё раз.", "rjWhy_full": "лобби заполнено", "rjWhy_closed": "лобби больше нет или его игра уже стартует", "rjWhy_password": "нужен пароль", "rjWhy_version": "другая версия игры или мода", "rjWhy_timeout": "лобби не ответило", "rjWhy_busy_search": "идёт поиск в Find a Game — сначала остановите его", "rjWhy_busy_match": "вы в матче", "rjWhy_busy_join": "игра уже входит в другое лобби", "rjWhy_not_menu": "игра не в главном меню — сначала перейдите туда", "rjWhy_other_lobby": "вы в другом лобби — сначала выйдите из него", "rjWhy_cancelled": "отменено", "rjWhy_game_closed": "игра закрылась", "rjWhy_no_answer": "игра не ответила", "rjWhy_no_game": "игра не запустилась", "rjWhy_no_pipe": "в игре нет дополнения «Lobby join» — включите его и перезапустите игру", "rjWhy_error": "игре не удалось войти", "roomsTitle": "Открытые лобби", "roomsNote": "Кастомки, которые сейчас собираются, — тот же список, что в браузере игр. Elite или ваниль — по расам, значкам армий и карте.", "roomsNone": "Сейчас никто не собирает игру.", "roomsErr": "Список сейчас недоступен.", "roomsFree": "свободно", "roomsVan": "ваниль", "roomsOther": "другой мод", "roomsObs": "наблюдатели", "roomsPw": "с паролем", "behTitle": "Чат и окно", "muteMention": "Без звука, когда меня упоминают (@ник) в чате", "closeQuits": "Крестик закрывает лаунчер (а не сворачивает в трей)",
     "lanTitle": "Локальная сеть",
     "lanShare": "Качать Elite с других лаунчеров в локальной сети и раздавать им (быстрее; каждый файл сверяется с подписанной версией)",
     "trayOpen": "Открыть DoW Launcher",
@@ -373,7 +373,7 @@ const T = {
     "uiScaleSet": "Применить",
     "uiScaleDone": "применится при следующем запуске игры",
     "mirror": "Дополнительное зеркало (необязательно)",
-    "netTitle": "Наши серверы с этого компьютера", "netCheck": "Проверить заново", "netChecking": "Проверяю…", "netFiles": "Файлы (обновления Elite и дополнений)", "netApi": "Чат, онлайн, комнаты, обновление лаунчера", "netMoscow": "Москва", "netGermany": "Германия", "netR2": "Cloudflare (хранилище)", "netMs": "{n} мс", "netNone": "нет ответа", "netUsed": "используется", "netWait": "Проверяю наши серверы…", "netNoteDone": "Проверено при запуске; заново — если сервер перестал отвечать. Без пинга: по одной маленькой загрузке с каждого.", "netNoteOld": "Порядок с прошлого запуска, сейчас проверяется.",
+    "netTitle": "Наши серверы с этого компьютера", "netCheck": "Проверить заново", "netChecking": "Проверяю…", "netFiles": "Файлы (обновления Elite и дополнений)", "netApi": "Чат, онлайн, лобби, обновление лаунчера", "netMoscow": "Москва", "netGermany": "Германия", "netR2": "Cloudflare (хранилище)", "netMs": "{n} мс", "netNone": "нет ответа", "netUsed": "используется", "netWait": "Проверяю наши серверы…", "netNoteDone": "Проверено при запуске; заново — если сервер перестал отвечать. Без пинга: по одной маленькой загрузке с каждого.", "netNoteOld": "Порядок с прошлого запуска, сейчас проверяется.",
     "save": "Сохранить",
     "repairTitle": "Починка",
     "repair": "Проверить и починить",
@@ -1444,9 +1444,21 @@ function newsFolds() {
 try { new ResizeObserver(() => newsFolds()).observe(document.getElementById('news')); } catch (e) {}
 if (document.fonts) document.fonts.ready.then(() => newsFolds());
 // the footer links' icons, by where they lead: Discord, ModDB (the mod's news), our stats / ladder (a chart), else a link
+// 1.6.11: the useful links in Online's heading, in this order; launcher.json's own addresses win, ModDB is left out
+const ON_LINKS = [['elite', /discord\.gg\//i, 'https://discord.gg/elitemod', 'lnkElite'], ['discord', /discord\.com\/channels\//i, 'https://discord.com/channels/285867613953851393/1564310291255140352', 'lnkDiscord'],
+  ['stats', /\/stats\b/i, '/stats/', 'lnkStats'], ['ladder', /\/ladder\b/i, '/ladder/', 'lnkLadder']];
+function onLinks(cfgLinks) {
+  const box = $('onLinks'); if (!box) return;
+  const host = (LIVE.host || 'https://rts.fintebtc.de').replace(/\/$/, '');
+  const ls = ON_LINKS.map(([, re, def, tip]) => ({ url: ((cfgLinks || []).find(l => re.test(l.url || '')) || {}).url || (def[0] === '/' ? host + def : def), tip: t(tip) }));
+  box.innerHTML = ls.map((l, i) => `<button class="foot-link" data-i="${i}" data-tip="${esc(l.tip)}" aria-label="${esc(l.tip)}">${linkIcon(l.url)}</button>`).join('');
+  box.querySelectorAll('button').forEach(b => b.onclick = () => open(ls[+b.dataset.i].url));
+}
 function linkIcon(url) {
   const u = String(url || '').toLowerCase();
   const svg = (body, fill) => `<svg viewBox="0 0 24 24" aria-hidden="true" class="${fill ? 'fill' : ''}">${body}</svg>`;
+  if (u.includes('discord.gg/elitemod')) return '<b class="lnk-e" aria-hidden="true">E</b>';   // 1.6.11: the Elite Discord - its letter
+  if (/\/ladder\b/.test(u)) return svg('<path d="M7.5 4h9v5.5a4.5 4.5 0 0 1-9 0z"/><path d="M7.5 6H4.5a3 3 0 0 0 3.2 4M16.5 6h3a3 3 0 0 1-3.2 4"/><path d="M12 14v3.5M8.5 20.5h7M9.5 17.5h5"/>');
   if (u.includes('discord')) return svg('<path d="M19.6 5.3A17 17 0 0 0 15.4 4l-.5 1.1a15.7 15.7 0 0 0-5.8 0L8.6 4a17 17 0 0 0-4.2 1.3C1.7 9.3 1 13.2 1.3 17a17.2 17.2 0 0 0 5.2 2.6l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.4 0l.4.3a11 11 0 0 1-1.7.8l1.1 1.8a17.2 17.2 0 0 0 5.2-2.6c.4-4.4-.6-8.3-3.1-11.7zM8.7 14.7c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1zm6.6 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1z"/>', true);
   if (u.includes('moddb')) return svg('<path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2V5z"/><path d="M19 9h1a1 1 0 0 1 1 1v8a1 1 0 0 1-2 0"/><path d="M7 9h8M7 12h8M7 15h5"/>');
   if (/\/(stats|ladder)\b/.test(u)) return svg('<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>');
@@ -1602,6 +1614,7 @@ function errText(e) {
   return s;
 }
 function toast(msg, err) {
+  if (err && typeof errBar === 'function') return errBar(errText(msg));   // 1.6.11: a red strip on top for 30 s (notes.js)
   const el = $('toast'); el.textContent = err ? errText(msg) : String(msg); el.className = 'toast' + (err ? ' err' : '');
   clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.add('hidden'), 4500);
 }
@@ -2022,10 +2035,10 @@ function render() {
 
   // links (siritos 02.11): no block of their own and no "All news on ModDB" under the news - icons in the footer, where
   // "Elite 3.2 is ready" and the game folder used to stand (the version is on the version button anyway)
-  const links = cfg.links || [];
-  // 1.5.0: icons in the news heading, the name in the tip
-  $('footLinks').innerHTML = links.map((l, i) => `<button class="foot-link" data-i="${i}" data-tip="${esc(L(l.title))}" aria-label="${esc(L(l.title))}">${linkIcon(l.url)}</button>`).join('');
-  $('footLinks').querySelectorAll('button').forEach(b => b.onclick = () => open(links[+b.dataset.i].url));
+  // 1.6.11 (owner 14.11.2026): in Online's heading - E (the Elite Discord), Discord (the Elite Mode channel), the stats, the
+  // ladder (a cup); no ModDB. The addresses from launcher.json "links" when it has them, else ours
+  onLinks(cfg.links || []);
+  if (typeof newsMark === 'function') newsMark();
 
   // game / steam missing → guide the player
   const setup = $('setup');
@@ -2421,7 +2434,7 @@ function roomCard(r) {
   const per = cap ? Math.max(1, Math.round(cap / 2)) : 0;
   // no race in the slot (Relic's slot info has 255 there: Random, or not picked yet): the "?" of the searching list (03.11.2026)
   const pl = p => `<div class="rp${p.host ? ' host' : ''}">`
-    + (p.race ? `<img${p.hero != null ? '' : ' class="race"'} src="${A}${p.hero != null ? 'heroes/' + p.race + '_' + p.hero : 'races/' + p.race}.png" alt="" data-fb="${A}races/${p.race}.png">`
+    + (p.race ? `<img${p.hero != null ? '' : ' class="race"'} src="${esc(A)}${p.hero != null ? 'heroes/' + esc(p.race) + '_' + (p.hero | 0) : 'races/' + esc(p.race)}.png" alt="" data-fb="${esc(A)}races/${esc(p.race)}.png">`
        : raceImg('random'))
     + `${roomFlag(p.country)}<span class="nm" data-steam="${esc(p.steam || '')}" data-name="${esc(p.name || '')}">${esc(p.name)}</span>${p.rating ? `<span class="rt">${p.rating}</span>` : ''}</div>`;
   // observers (03.11.2026, siritos: a slot of their own with its own icon, under the teams): the players the server marks as
@@ -2448,12 +2461,12 @@ function roomCard(r) {
   // 1.5.0: the marks the Rooms tab's filters read (one list with the launcher's rooms, lroom.js rApplyFilter)
   const vok = r.game === 'elite' ? !why : r.game === 'vanilla' ? !!S.vanilla_offered : false;
   const dat = `data-kind="game" data-mode="${esc(r.mode || '')}" data-vok="${vok ? 1 : 0}" data-van="${r.game === 'vanilla' ? 1 : 0}" data-free="${!full && !r.password && (!cap || (r.players || []).filter(p => !isObs(p)).length < cap) ? 1 : 0}"`;
-  return `<div class="room${vok ? '' : ' dim'}" ${dat}>${mmapHtml(r.minimap ? A + r.minimap : '', map)}<div class="rb">`
+  return `<div class="room${vok ? '' : ' dim'}" ${dat} data-id="${esc(String(r.id || ''))}">${mmapHtml(r.minimap ? A + r.minimap : '', map)}<div class="rb">`
     // 1.5.0 (D): the name, a lock, the mode; the teams; the host, vanilla / another mod, seats and Join at the bottom (a lobby
     // in the game carries no mark - only the launcher's are marked)
-    + `<div class="rh"><span class="rn" title="${esc(r.name || '')}">${esc(r.name || '—')}</span>${r.password ? `<span class="mu" title="${esc(t('roomsPw'))}">${ico('lock')}</span>` : ''}${r.mode ? `<span class="tag">${esc(r.mode)}</span>` : ''}</div>`
+    + `<div class="rh">${r.game === 'vanilla' ? `<span class="tag van">${esc(t('roomsVan'))}</span>` : ''}<span class="rn" title="${esc(r.name || '')}">${esc(r.name || '—')}</span>${r.password ? `<span class="mu" title="${esc(t('roomsPw'))}">${ico('lock')}</span>` : ''}${r.mode ? `<span class="tag">${esc(r.mode)}</span>` : ''}</div>`
     + `<div class="teams">${teams}</div>${obs}`
-    + `<div class="rfoot2">${r.game === 'elite' ? (r.exact && r.version ? `<span class="tag ver">Elite ${esc(r.version)}</span>` : '<span class="tag ver">Elite</span>') : tag}`
+    + `<div class="rfoot2">${r.game === 'elite' ? (r.exact && r.version ? `<span class="tag ver">Elite ${esc(r.version)}</span>` : '<span class="tag ver">Elite</span>') : r.game === 'vanilla' ? '' : tag}`
     + `${cap ? `<span class="tag rcount">${(r.players || []).filter(p => !isObs(p)).length}/${cap}</span>` : ''}${join}</div></div></div>`;
 }
 // 1.4.10 (siritos 05.11): the lobby I am in - no Join on it ("You are here"), and Join on another one says "leave it first"
@@ -2630,7 +2643,9 @@ async function roomLink() {
 listen('room_link', roomLink);
 function roomsWatch() {
   clearInterval(RM.timer); RM.timer = 0;
-  if ($('rooms') && !$('rooms').classList.contains('hidden')) { roomsLoad(); RM.timer = setInterval(() => { if (!document.hidden) roomsLoad(); }, 15000); }
+  // 1.6.11: on Home too - its list of the open lobbies (hlobby.js)
+  const shown = id => $(id) && !$(id).classList.contains('hidden');
+  if (shown('rooms') || shown('home')) { roomsLoad(); RM.timer = setInterval(() => { if (!document.hidden) roomsLoad(); }, 15000); }
 }
 document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', roomsWatch));
 $('cancel').onclick = () => invoke('cancel_update');
@@ -2967,8 +2982,6 @@ function onRender() {
   });
   if (typeof rLiveRender === 'function') rLiveRender();   // the Rooms tab's running matches
   tipCut($('onGroups'));
-  $('onLadder').classList.toggle('hidden', !LIVE.host);
-  $('onLadder').onclick = () => open(LIVE.host + '/ladder/');
 }
 setInterval(() => LIVE.ok && onRender(), 30000);   // the minutes go on without any event
 
@@ -3086,10 +3099,22 @@ fbInit();
 
 // ---------- players' chat, Steam sign-in and the player's card (ladder service /ladder/api/c/*) ----------
 // Rooms General / RU / EN (the server's all / ru / en) next to the developers' chat.
-const CH = { room: 'all', msgs: {}, out: [], unread: {}, full: {}, me: null, prof: null, waiting: false, features: [], replyTo: null };
-try { CH.room = localStorage.getItem('chRoom') || 'all'; } catch (e) {}
+// 1.6.11: the chat's header (the language menu, Logs) and Online's links - here, the first render needs them
+Object.assign(T.en, { lnkElite: 'Discord Elite', lnkDiscord: 'Discord: the Elite Mode channel', lnkStats: 'Player stats', lnkLadder: 'Ladder and match history', chLang: 'Language of the messages', chLangH: 'Show the messages', chOrigShort: 'Orig.', chAsWritten: 'as written', chTranslated: 'translated', logsShort: 'Logs' });
+Object.assign(T.ru, { lnkElite: 'Discord Elite', lnkDiscord: 'Discord: канал Elite Mode', lnkStats: 'Статистика игроков', lnkLadder: 'Ладдер и история матчей', chLang: 'Язык сообщений', chLangH: 'Показывать сообщения', chOrigShort: 'Ориг.', chAsWritten: 'как написали', chTranslated: 'перевод', logsShort: 'Логи' });
+Object.assign(T.es, { lnkElite: 'Discord de Elite', lnkDiscord: 'Discord: el canal Elite Mode', lnkStats: 'Estadísticas de jugadores', lnkLadder: 'Ladder e historial de partidas', chLang: 'Idioma de los mensajes', chLangH: 'Mostrar los mensajes', chOrigShort: 'Orig.', chAsWritten: 'tal como se escribió', chTranslated: 'traducido', logsShort: 'Registros' });
+Object.assign(T.fr, { lnkElite: 'Discord d\'Elite', lnkDiscord: 'Discord : le salon Elite Mode', lnkStats: 'Statistiques des joueurs', lnkLadder: 'Ladder et historique des parties', chLang: 'Langue des messages', chLangH: 'Afficher les messages', chOrigShort: 'Orig.', chAsWritten: 'tel qu\'écrit', chTranslated: 'traduit', logsShort: 'Journaux' });
+Object.assign(T.de, { lnkElite: 'Elite-Discord', lnkDiscord: 'Discord: der Kanal Elite Mode', lnkStats: 'Spielerstatistiken', lnkLadder: 'Ladder und Spielverlauf', chLang: 'Sprache der Nachrichten', chLangH: 'Nachrichten anzeigen', chOrigShort: 'Orig.', chAsWritten: 'wie geschrieben', chTranslated: 'übersetzt', logsShort: 'Logs' });
+// 1.6.11 (owner 14.11.2026): one players' tab (General) - RU / EN are the language of its messages (a menu, the original by
+// default: CH.lang), the developers' tab apart on the right
+const CH = { room: 'all', lang: 'all', msgs: {}, out: [], unread: {}, full: {}, me: null, prof: null, waiting: false, features: [], replyTo: null };
+try { CH.lang = localStorage.getItem('chLang') || 'all'; CH.room = localStorage.getItem('chRoom') === 'dev' ? 'dev' : CH.lang; } catch (e) {}
 function chShowRoom() {
-  document.querySelectorAll('.ch-tab').forEach(b => b.classList.toggle('on', b.dataset.room === CH.room));
+  document.querySelectorAll('.ch-tab').forEach(b => b.classList.toggle('on', (b.dataset.room === 'dev') === (CH.room === 'dev')));
+  $('chLangCur').textContent = CH.lang === 'all' ? t('chOrigShort') : CH.lang.toUpperCase();
+  $('chLangBtn').classList.toggle('tr', CH.lang !== 'all');
+  $('chLangBtn').parentElement.classList.toggle('off', CH.room === 'dev');
+  document.querySelectorAll('#chLangMenu [data-lang]').forEach(b => { b.classList.toggle('on', b.dataset.lang === CH.lang); b.setAttribute('aria-checked', String(b.dataset.lang === CH.lang)); });
   $('chatPane').classList.toggle('hidden', CH.room === 'dev');
   $('devPane').classList.toggle('hidden', CH.room !== 'dev');
   if (CH.room !== 'dev') { CH.chatRoom = CH.room; CH.unread[chKey(CH.room)] = 0; chRender(true); if (!CH.msgs[chKey(CH.room)]) chLoad(chKey(CH.room)); }
@@ -3343,9 +3368,9 @@ function chMention(name) {                                     // a click on a n
 function chUnread() {
   // rooms of their own: each tab its own number; one feed: the number on one tab only - the open one, or the last chat
   // tab while the developers' chat is open
-  const at = CH.room === 'dev' ? (CH.chatRoom || 'all') : CH.room;
+  const at = CH.room === 'dev' ? (CH.chatRoom || CH.lang) : CH.room;
   document.querySelectorAll('.ch-tab').forEach(b => {
-    const r = b.dataset.room;
+    const r = b.dataset.room === 'chat' ? at : b.dataset.room;
     b.dataset.n = r === 'dev' ? '' : CH.feed ? (r === at ? (CH.unread.feed || '') : '') : (CH.unread[chKey(r)] || '');
   });
 }
@@ -3448,7 +3473,18 @@ async function chInit() {
   try { CH.out = JSON.parse(localStorage.getItem('chOut') || '[]').map(o => ({ ...o, tries: 0 })).filter(o => o.state !== 'sent' || Date.now() / 1000 - o.ts < 600); } catch (e) {}
   listen('c_ev', e => { const { e: ev, d } = e.payload; onEvent(ev, d); chEvent(ev, d); });
   listen('c_stream', e => { if (e.payload.host) LIVE.host = e.payload.host; streamState(e.payload.up); });
-  document.querySelectorAll('.ch-tab').forEach(b => b.onclick = () => { CH.room = b.dataset.room; try { localStorage.setItem('chRoom', CH.room); } catch (e) {} chShowRoom(); });
+  document.querySelectorAll('.ch-tab').forEach(b => b.onclick = () => { CH.room = b.dataset.room === 'dev' ? 'dev' : CH.lang; try { localStorage.setItem('chRoom', CH.room); } catch (e) {} chShowRoom(); });
+  // the language of the messages: a menu by the players' tab
+  const lb = $('chLangBtn'), lm = $('chLangMenu'), lmShow = on => { lm.classList.toggle('hidden', !on); lb.setAttribute('aria-expanded', String(on)); };
+  lb.onclick = e => { e.stopPropagation(); lmShow(lm.classList.contains('hidden')); };
+  lm.querySelectorAll('[data-lang]').forEach(b => b.onclick = e => {
+    e.stopPropagation(); lmShow(false); CH.lang = b.dataset.lang;
+    if (CH.room !== 'dev') CH.room = CH.lang;
+    try { localStorage.setItem('chLang', CH.lang); localStorage.setItem('chRoom', CH.room); } catch (e2) {}
+    chShowRoom();
+  });
+  document.addEventListener('click', () => lmShow(false));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') lmShow(false); });
   $('chIn2').onclick = chLogin;
   $('chSend').onclick = chSay;
   $('chText').onkeydown = e => {
