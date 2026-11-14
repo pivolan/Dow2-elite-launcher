@@ -15,9 +15,9 @@
 .fame-h{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;min-width:0}
 .fame-h b{font:700 15px var(--fh);color:#f3ead8;overflow-wrap:anywhere}
 .fame-h em{font-style:normal;font-size:12px;color:var(--mu)}
-.fame-o{display:inline-flex;gap:1px}
-.fame-o svg{width:17px;height:20px}
-.fame-o svg.off{opacity:.2;filter:grayscale(1)}
+.fame-o{display:inline-flex;gap:2px;align-items:flex-end}
+.fame-o svg{width:14px;height:21px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.6))}
+.fame-o svg.off{opacity:.18;filter:grayscale(1)}
 .fame-d{font-size:12px;color:var(--mu);white-space:nowrap;padding-top:2px}
 .fame-s{grid-column:2/4;font-size:13px;color:var(--sf)}
 .fame-p ul{list-style:none;margin:0;padding:4px 12px 10px 46px;border-top:1px solid var(--ln)}

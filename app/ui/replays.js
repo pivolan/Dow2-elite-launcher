@@ -440,7 +440,8 @@ function rpSelect(id) {
 function rpMd(md) {
   const inl = s => esc(s).replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/`([^`]+)`/g, '<code>$1</code>');
   const out = []; let tbl = null, list = false;
-  const flush = () => { if (tbl) { out.push(`<table>${tbl.join('')}</table>`); tbl = null; } if (list) { out.push('</ul>'); list = false; } };
+  // 1.6.11: a wide table scrolls by itself, its bar right under it (the pane's own bar was below the whole report)
+  const flush = () => { if (tbl) { out.push(`<div class="rp-tw"><table>${tbl.join('')}</table></div>`); tbl = null; } if (list) { out.push('</ul>'); list = false; } };
   for (const raw of String(md || '').split('\n')) {
     const l = raw.trimEnd();
     if (/^\|/.test(l)) {
@@ -490,32 +491,34 @@ function rpDetail() {
       + `<div class="rp-descr"><h4>${esc(t('rpDescr'))}${canEdit ? ` <button class="btn ghost" id="rpEdit">${esc(t('rpDescrEdit'))}</button>` : ''}</h4>`
       + `<div id="rpDescrBox">${meta.descr ? `<p>${esc(meta.descr)}</p>` : `<p class="note">${esc(t('rpNoDescr'))}</p>`}</div></div></div>`;
   }
-  // 1.6.3 (owner 13.11.2026): no "Open in the pool" - mine: Send to the pool, or the "in the pool" mark; the pool: Download, or
-  // Downloaded once it is in the game's folder (until the launcher can start a replay itself)
-  let acts = '';
-  if (x.remote) acts += `<span class="tag rp-in" data-tip="${esc(t('rpRemoteTip'))}">${esc(t('rpInPool'))}</span>`
-    + (rpGot(x.id) ? `<span class="rp-gotl">${ico('done')}${esc(t('rpHave'))}</span>` : `<button class="btn gold small" id="rpDl">${ico('down')}${esc(t('rpDownload'))}</button>`);
-  else if (mine) {
-    if (pid) acts += `<span class="tag rp-in" data-tip="${esc(t('rpInPoolTip'))}">${esc(t('rpInPool'))}</span>`;
-    else if (rpSigned()) acts += `<button class="btn gold small" id="rpUp">${ico('upload')}${esc(t('rpUpload'))}</button>`;
-    else acts += `<span class="note">${esc(t('rpSignIn'))}</span><button class="btn small" id="rpLogin">${esc(t('rpSignInBtn'))}</button>`;
-  } else if (rpGot(x.id)) acts += `<span class="rp-gotl" data-tip="${esc(t('rpHaveTip'))}">${ico('done')}${esc(t('rpHave'))}</span>`;
-  else acts += `<button class="btn gold small" id="rpDl">${ico('down')}${esc(t('rpDownload'))}</button>`;
-  // 1.6.4 (owner 13.11.2026): the site's match player - every squad second by second from the game's own simulation
+  // 1.6.11 (owner 14.11.2026): every action the same plate, in a row of its own under the map: first Watch (the replay started
+  // from the launcher - not there yet: off, "soon"), then Download / Send to the server / Downloaded, then On the map (the site's
+  // match player). "On the server" is a mark next to the mode and the version, not an action
+  const PLAY = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>';
+  const MAP = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg>';
+  const ab = (id, icon, label, tip, off) => `<button class="btn small rp-ab${off ? ' done' : ''}"${id ? ` id="${id}"` : ''}${tip ? ` data-tip="${esc(tip)}"` : ''}${off ? ' disabled' : ''}>${icon}<span>${esc(label)}</span></button>`;
+  let acts = `<button class="btn small rp-ab rp-soon" disabled data-tip="${esc(t('rpPlayTip'))}">${PLAY}<span>${esc(t('rpPlay'))}</span><em>${esc(t('rpSoon'))}</em></button>`, mark = '';
+  if (x.remote) {
+    mark = `<span class="tag rp-in" data-tip="${esc(t('rpRemoteTip'))}">${esc(t('rpInPool'))}</span>`;
+    acts += rpGot(x.id) ? ab('', ico('done'), t('rpHave'), t('rpHaveTip'), true) : ab('rpDl', ico('down'), t('rpDownload'));
+  } else if (mine) {
+    if (pid) mark = `<span class="tag rp-in" data-tip="${esc(t('rpInPoolTip'))}">${esc(t('rpInPool'))}</span>`;
+    else acts += rpSigned() ? ab('rpUp', ico('upload'), t('rpUpload')) : ab('rpLogin', ico('upload'), t('rpSignInBtn'), t('rpSignIn'));
+  } else acts += rpGot(x.id) ? ab('', ico('done'), t('rpHave'), t('rpHaveTip'), true) : ab('rpDl', ico('down'), t('rpDownload'));
+  // 1.6.4: the site's match player - every squad second by second from the game's own simulation; 1.6.6: not run yet - the site
+  // puts it in the runner's queue (#sim) and shows the match when it is ready
   const sim = !!pid && !!((RP.det && RP.det.pid === pid && RP.det.meta && RP.det.meta.sim) || ((!mine || x.remote) && x.sim));
-  if (sim) acts += `<button class="btn gold small" id="rpSim" data-tip="${esc(t('rpWatchTip'))}">▶ ${esc(t('rpWatch'))}</button>`;
-  // 1.6.6: not run yet - the site puts it in the runner's queue (#sim) and shows the match when it is ready
-  else if (pid && ((RP.det && RP.det.pid === pid && RP.det.meta && RP.det.meta.sim_ok) || ((!mine || x.remote) && x.sim_ok)))
-    acts += `<button class="btn small" id="rpSim" data-tip="${esc(t('rpDeepTip'))}">▶ ${esc(t('rpDeep'))}</button>`;
+  if (sim) acts += ab('rpSim', MAP, t('rpOnMap'), t('rpWatchTip'));
+  else if (pid && ((RP.det && RP.det.pid === pid && RP.det.meta && RP.det.meta.sim_ok) || ((!mine || x.remote) && x.sim_ok))) acts += ab('rpSim', MAP, t('rpOnMap'), t('rpDeepTip'));
   const rep = RP.det && RP.det.pid === pid ? (lang === 'ru' ? RP.det.report : RP.det.report_en) || '' : '';
   const cap = RP.det && RP.det.pid === pid ? (lang === 'ru' ? RP.det.caption : RP.det.caption_en) || '' : (x.caption || '');
-  // the summary right under the map's name (it hung under the author's description with no heading)
+  // the summary right under the map's name; the report a disclosure at the bottom - a band as the Add-ons' group headings
   box.innerHTML = `<div class="rp-dtop">${rpMapImg(x.map)}<div class="rp-dh"><b>${esc(rpMapName(x.map))}</b>${cap ? `<div class="rp-sub">${esc(cap)}</div>` : ''}`
-    + `<div class="rp-tags"><span class="tag">${esc(x.mode || '?')}</span><span class="tag rp-v">${esc(rpVer(x.version))}</span></div>`
-    + `<div class="rp-kvs">${kv('rpLen', rpMin(x.duration))}${kv('rpRecorded', rpDay(x.recorded))}${mine && !x.remote ? kv('rpActions', x.actions ? String(x.actions) : '') : ''}</div>`
-    + `<div class="rp-acts">${acts}</div></div></div>`
+    + `<div class="rp-tags"><span class="tag">${esc(x.mode || '?')}</span><span class="tag rp-v">${esc(rpVer(x.version))}</span>${mark}</div>`
+    + `<div class="rp-kvs">${kv('rpLen', rpMin(x.duration))}${kv('rpRecorded', rpDay(x.recorded))}${mine && !x.remote ? kv('rpActions', x.actions ? String(x.actions) : '') : ''}</div></div></div>`
+    + `<div class="rp-acts">${acts}</div>`
     + `<div class="rp-teams">${teams}</div>${obs}${pool}`
-    + (pid ? (rep ? `<div class="rp-sec"><button class="btn-line small" id="rpRepT">${esc(t('rpReportShow'))}</button><div class="rp-rep hidden" id="rpRep">${rpMd(rep)}</div></div>`
+    + (pid ? (rep ? `<div class="rp-sec rp-repsec"><button class="rp-band" id="rpRepT" aria-expanded="false"><span>${esc(t('rpReport'))}</span><small>${esc(t('rpReportSub'))}</small><b class="chev"></b></button><div class="rp-rep hidden" id="rpRep">${rpMd(rep)}</div></div>`
                   : (RP.det && RP.det.pid === pid && !RP.det.error ? `<div class="note">${esc(t('rpReportWait'))}</div>` : '')) : '');
   const on = (id, fn) => { const e = $(id); if (e) e.onclick = fn; };
   on('rpUp', () => rpUpload(x));
@@ -524,7 +527,7 @@ function rpDetail() {
   on('rpSrc', () => invoke('open_url', { url: meta.src_link }).catch(() => {}));
   on('rpSim', () => invoke('open_url', { url: `https://rts.fintebtc.de/replay/r/${pid}?lang=${lang === 'ru' ? 'ru' : 'en'}#sim` }).catch(() => {}));
   on('rpEdit', () => rpEditDescr(meta, pid));
-  on('rpRepT', () => { const r = $('rpRep'), b = $('rpRepT'); r.classList.toggle('hidden'); b.textContent = t(r.classList.contains('hidden') ? 'rpReportShow' : 'rpReportHide'); });
+  on('rpRepT', () => { const r = $('rpRep'), b = $('rpRepT'), o = r.classList.toggle('hidden') === false; b.setAttribute('aria-expanded', String(o)); b.classList.toggle('on', o); if (o) b.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
 }
 function rpEditDescr(meta, pid) {
   const box = $('rpDescrBox'); if (!box) return;
@@ -581,3 +584,9 @@ function rpShowView(v, sel) {
 document.querySelectorAll('#rpNav .rnb').forEach(b => b.onclick = () => rpShowView(b.dataset.rp));
 const rpTab = document.querySelector('.tab[data-view="replays"]');
 if (rpTab) rpTab.addEventListener('click', () => { if (!RP.loaded) { RP.loaded = true; rpFilters(); rpLoad(); } else if (RP.view === 'mine') rpLoadMine(); });
+// 1.6.11: Watch (the replay started from the launcher - soon), On the map, the report's band
+Object.assign(T.en, { rpPlay: 'Watch', rpPlayTip: 'Soon: the replay started right from the launcher', rpSoon: 'soon', rpOnMap: 'On the map', rpReportSub: 'the course of the match, the players\' table' });
+Object.assign(T.ru, { rpPlay: 'Смотреть', rpPlayTip: 'Скоро: запуск реплея прямо из лаунчера', rpSoon: 'скоро', rpOnMap: 'На карте', rpReportSub: 'ход матча, таблица игроков' });
+Object.assign(T.es, { rpPlay: 'Ver', rpPlayTip: 'Pronto: abrir la repetición directamente desde el launcher', rpSoon: 'pronto', rpOnMap: 'En el mapa', rpReportSub: 'el desarrollo de la partida, la tabla de jugadores' });
+Object.assign(T.fr, { rpPlay: 'Regarder', rpPlayTip: 'Bientôt : lancer le replay directement depuis le launcher', rpSoon: 'bientôt', rpOnMap: 'Sur la carte', rpReportSub: 'le déroulé de la partie, le tableau des joueurs' });
+Object.assign(T.de, { rpPlay: 'Ansehen', rpPlayTip: 'Bald: das Replay direkt aus dem Launcher starten', rpSoon: 'bald', rpOnMap: 'Auf der Karte', rpReportSub: 'der Spielverlauf, die Spielertabelle' });

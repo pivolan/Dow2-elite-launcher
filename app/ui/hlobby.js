@@ -1,0 +1,105 @@
+// 1.6.11 (owner 14.11.2026): the open lobbies on Home instead of the news (the news: (i) after the version, notes.js).
+// Short cards: the name over the whole width, under it the marks (launcher / vanilla, the mode, a version that is not yours),
+// both teams, at the bottom the observers and Watch / Join - the same calls as the Lobbies tab. A running match is no open
+// lobby: not shown. No map name and no "3/4" (the seats are in the teams). A click on a card opens the Lobbies tab, scrolls to
+// that lobby and lights it until the mouse comes to it (or to the tab's menu). The data: LR.list (the launcher's lobbies,
+// lroom.js) and RM.last (the game's, app.js roomsLoad - polled on Home too since 1.6.11).
+Object.assign(T.en, { hlAll: 'All ›', hlOpen: '{n} open', hlNone: 'No open lobbies right now', hlCard: '{name}: open in the Lobbies tab' });
+Object.assign(T.ru, { hlAll: 'Все ›', hlOpen: '{n} открыто', hlNone: 'Сейчас открытых лобби нет', hlCard: '{name}: открыть во вкладке «Лобби»' });
+Object.assign(T.es, { hlAll: 'Todas ›', hlOpen: '{n} abiertas', hlNone: 'Ahora no hay salas abiertas', hlCard: '{name}: abrir en la pestaña Salas' });
+Object.assign(T.fr, { hlAll: 'Tous ›', hlOpen: '{n} ouverts', hlNone: 'Aucun salon ouvert pour le moment', hlCard: '{name} : ouvrir dans l\'onglet Salons' });
+Object.assign(T.de, { hlAll: 'Alle ›', hlOpen: '{n} offen', hlNone: 'Gerade keine offenen Räume', hlCard: '{name}: im Tab Räume öffnen' });
+
+const HL = { lit: '', soon: 0 };
+const HL_EYE = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+// a player's row; the second team mirrored (as on the tab's cards)
+const hlRow = (pic, name, rating, host) => `<div class="rp hl-p${host ? ' host' : ''}">${pic}<span class="nm">${esc(name || '?')}</span>${rating ? `<span class="rt">${Number(rating) | 0}</span>` : ''}</div>`;
+const hlFree = () => `<div class="rp hl-p free"><i class="sk"></i><span class="nm">${esc(t('roomsFree'))}</span></div>`;
+const hlTeams = (a, b) => `<div class="hl-teams"><div class="hl-team">${a}</div><div class="hl-team r">${b}</div></div>`;
+function hlCard(o) {   // o: {kind, id, name, map, mm, lock, tags, teams, obs, acts, dim}
+  return `<div class="hl-c${o.dim ? ' dim' : ''}" tabindex="0" role="button" data-kind="${o.kind}" data-id="${esc(o.id)}" aria-label="${esc(t('hlCard', { name: o.name }))}">`
+    + `<div class="hl-h"><i class="hl-mm"${o.mm ? ` style="--mm:url('${esc(o.mm)}')"` : ''} title="${esc(o.map || '')}"></i><div class="hl-hb"><div class="hl-n"><b>${esc(o.name || '—')}</b>${o.lock ? `<span class="hl-lock">${ico('lock')}</span>` : ''}</div>`
+    + `<div class="hl-tags">${o.tags}</div></div></div>${o.teams}`
+    + (o.obs || o.acts ? `<div class="hl-f">${o.obs ? `<div class="hl-obs">${HL_EYE}<span>${esc(o.obs)}</span></div>` : '<span></span>'}<div class="hl-acts">${o.acts}</div></div>` : '') + '</div>';
+}
+// a launcher lobby (lroom.js lrCardHtml, short)
+function hlLr(x) {
+  const A = lrAssets(), mine = LR.room && LR.room.id === x.id && lrMine(LR.room), free = (x.cap || 0) - (x.players || 0);
+  const vok = x.game === 'vanilla' ? !!(S && S.vanilla_offered) : !x.ver || !S || !/^\d/.test(S.installed_version || '') || verSame(x.ver, S.installed_version);
+  const pic = p => !p.race || p.race === 'random' ? raceImg('random') : p.hero >= 0
+    ? `<img src="${A}heroes/${esc(p.race)}_${p.hero | 0}.png" alt="" data-fb="${A}races/${esc(p.race)}.png">` : raceImg(p.race);
+  const per = Math.max(1, Math.round((x.cap || 2) / 2)), sl = Array.isArray(x.slots) && x.slots.length ? x.slots : null;
+  const team = k => sl.slice(k * per, k * per + per).map(p => p ? hlRow(pic(p), p.name, p.rating, p.steam === x.owner) : hlFree()).join('');
+  const oc = x.obs_cap != null ? x.obs_cap : Math.max(0, 8 - (x.cap || 2)), on = (x.obs || []).length;
+  const acts = mine ? `<span class="tag here">${esc(t('roomsHere'))}</span>` : free <= 0 ? `<span class="tag">${esc(t('lrFull'))}</span>`
+    : (on < oc ? `<button class="hl-eye" data-lr-watch="${esc(x.id)}" data-tip="${esc(t('lrWatchJoin', { n: on, m: oc }))}" aria-label="${esc(t('lrWatchJoin', { n: on, m: oc }))}">${HL_EYE}</button>` : '')
+      + `<button class="rjoin${vok ? ' go' : ''}" data-lr-join="${esc(x.id)}" data-tip="${esc(t('rJoinTip', { name: x.name }))}" aria-label="${esc(t('rJoinTip', { name: x.name }))}">${ico('enter')}</button>`;
+  return hlCard({ kind: 'lr', id: x.id, name: x.name, map: x.map_name || x.map, mm: `${A}maps/${encodeURIComponent(x.map || '')}.png`, dim: !vok,
+    tags: `<span class="tag lr">${esc(t('rTagLr'))}</span>${x.game === 'vanilla' ? `<span class="tag van">${esc(t('roomsVan'))}</span>` : ''}<span class="tag">${esc(x.mode || '')}</span>`
+      + (!vok && x.game !== 'vanilla' && x.ver ? `<span class="tag ver">Elite ${esc(x.ver)}</span>` : ''),
+    teams: sl ? hlTeams(team(0), team(1)) : `<div class="hl-names">${esc((x.names || []).join(', '))}</div>`,
+    obs: (x.obs || []).map(o => o.name).join(', '), acts });
+}
+// a lobby of the game (app.js roomCard, short)
+function hlGame(r) {
+  const A = (RM.host || 'https://rts.fintebtc.de') + '/elite/assets/';
+  const why = r.game === 'elite' ? roomJoinWhy(r) : '', vok = r.game === 'elite' ? !why : r.game === 'vanilla' ? !!(S && S.vanilla_offered) : false;
+  const cap = r.cap || (((r.map || '').match(/^(\d)p_/) || [])[1] | 0) || 0, per = cap ? Math.max(1, Math.round(cap / 2)) : 0;
+  const isObs = p => p.observer || !(p.team === 0 || p.team === 1 || p.team == null);
+  // the race and the hero come from the server's list: escaped, the hero a number
+  const pic = p => { if (!p.race) return raceImg('random'); const r = esc(p.race), h = p.hero != null ? '_' + (p.hero | 0) : null;
+    return `<img${h != null ? '' : ' class="race"'} src="${esc(A)}${h != null ? 'heroes/' + r + h : 'races/' + r}.png" alt="" data-fb="${esc(A)}races/${r}.png">`; };
+  const team = tm => { const ps = (r.players || []).filter(p => !isObs(p) && (p.team | 0) === tm);
+    return ps.map(p => hlRow(pic(p), p.name, p.rating, p.host)).join('') + Array(per ? Math.max(0, per - ps.length) : 0).fill(hlFree()).join(''); };
+  const obsP = (r.players || []).filter(isObs), nObs = Math.max(r.observers | 0, obsP.length);
+  const full = r.free != null ? r.free <= 0 : false, here = RM.mine && String(RM.mine.room) === String(r.id);
+  const acts = here ? `<span class="tag here">${esc(t('roomsHere'))}</span>`
+    : (r.game === 'elite' || r.game === 'vanilla') && roomJoinOn(r.game) && !r.password && !full && r.id
+      ? `<button class="rjoin go${meBusy() ? ' wait' : ''}" data-room="${esc(String(r.id))}" data-name="${esc(r.name || '')}" data-tip="${esc(meBusy() ? t('roomsJoinBusy') : t('rJoinTip', { name: r.name || '' }))}" aria-label="${esc(t('roomsJoin'))}">${ico('enter')}</button>` : '';
+  return hlCard({ kind: 'game', id: String(r.id || ''), name: r.name, map: r.map_title || String(r.map || '').replace(/^\d+p_/i, '').replace(/_/g, ' '), mm: r.minimap ? A + r.minimap : '', lock: r.password, dim: !vok,
+    tags: (r.game === 'vanilla' ? `<span class="tag van">${esc(t('roomsVan'))}</span>` : r.game === 'other' ? `<span class="tag oth">${esc(t('roomsOther'))}</span>` : '') + (r.mode ? `<span class="tag">${esc(r.mode)}</span>` : '')
+      + (r.game === 'elite' && !vok && r.exact && r.version ? `<span class="tag ver">Elite ${esc(r.version)}</span>` : ''),
+    teams: hlTeams(team(0), team(1)), obs: obsP.length ? obsP.map(p => p.name).join(', ') + (nObs > obsP.length ? ` +${nObs - obsP.length}` : '') : nObs ? String(nObs) : '', acts });
+}
+function hlRender() {
+  const box = $('hlList'); if (!box || !S) return;
+  const lrs = (LR.list || []).filter(x => x.state === 'lobby' || x.state === 'countdown'), games = RM.last || [];
+  const n = lrs.length + games.length;
+  $('hlN').textContent = n ? t('hlOpen', { n }) : '';
+  if (!n) {
+    box.innerHTML = `<div class="hl-none"><span>${esc(t('hlNone'))}</span><button class="btn mir small" id="hlNew">${esc(t('lrCreate'))}</button></div>`;
+    $('hlNew').onclick = () => { hlGo(); const c = $('rCreate'); if (c) c.click(); };
+    return;
+  }
+  box.innerHTML = lrs.map(hlLr).join('') + games.map(hlGame).join('');
+  box.querySelectorAll('img[data-fb]').forEach(i => i.onerror = () => { i.onerror = null; i.src = i.dataset.fb; });
+  box.querySelectorAll('[data-lr-join]').forEach(b => b.onclick = e => { e.stopPropagation(); lrCall('join', { id: b.dataset.lrJoin }); });
+  box.querySelectorAll('[data-lr-watch]').forEach(b => b.onclick = e => { e.stopPropagation(); lrCall('join', { id: b.dataset.lrWatch, as: 'obs' }); });
+  box.querySelectorAll('[data-room]').forEach(b => b.onclick = e => { e.stopPropagation(); roomTry(b.dataset.room, b.dataset.name, b); });
+  box.querySelectorAll('.hl-c').forEach(c => {
+    c.onclick = () => hlGo(c.dataset.kind, c.dataset.id);
+    c.onkeydown = e => { if (e.target === c && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); hlGo(c.dataset.kind, c.dataset.id); } };
+  });
+  tipCut(box);
+}
+// the Lobbies tab with that lobby lit
+function hlGo(kind, id) {
+  const tab = document.querySelector('.tab[data-view="rooms"]'); if (tab) tab.click();
+  if (typeof RV !== 'undefined' && RV.view !== 'open') rShow('open');
+  if (!kind) return;
+  HL.lit = kind + ':' + id; hlLit();
+  const c = document.querySelector(`#rCards .room[data-kind="${kind}"][data-id="${CSS.escape(id)}"]`);
+  if (c) setTimeout(() => c.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 60);
+  clearTimeout(HL.soon);
+  HL.soon = setTimeout(() => {   // the mouse that clicked is still somewhere: armed a moment later
+    const off = () => { HL.lit = ''; hlLit(); };
+    document.querySelectorAll('#rCards .room').forEach(x => x.addEventListener('mouseenter', off, { once: true }));
+    const nav = document.querySelector('#rooms .rnav'); if (nav) nav.addEventListener('mouseenter', off, { once: true });
+  }, 700);
+}
+function hlLit() { document.querySelectorAll('#rCards .room').forEach(c => c.classList.toggle('hl-lit', !!HL.lit && `${c.dataset.kind}:${c.dataset.id}` === HL.lit)); }
+// the tab's lists are re-rendered on every change of the lobbies: Home's list and the light follow them
+['lrList', 'roomsList'].forEach(id => { const e = $(id); if (e) new MutationObserver(() => { hlRender(); if (HL.lit) hlLit(); }).observe(e, { childList: true }); });
+$('hlAll').onclick = () => hlGo();
+// Home is the first page: the game's lobbies polled from the start (app.js roomsWatch, once the status is there)
+(function hlStart() { if (S) { roomsWatch(); hlRender(); } else setTimeout(hlStart, 500); })();

@@ -1,0 +1,8 @@
+- Home: the open lobbies instead of the news - the name, the marks, both teams, Watch and Join; a click on a lobby opens it in the Lobbies tab, lit.
+- The news: the (i) next to the launcher's version, a gold dot while something is unread. After an update a "Launcher updated" strip on top with More.
+- Errors: a red strip on top for 30 seconds (the time stops while the mouse is on it), with Send logs.
+- Chat: RU / EN became a language menu (the original by default), the developers and the logs apart on the right.
+- Lobbies: the left menu of Lobbies and Replays narrower, a lobby card keeps its teams side by side on 1280-1440 windows too; the vanilla mark at the start of the name.
+- Replays: the buttons one look in one row (room for a future Watch), the analysis opens at the bottom, a wide table scrolls.
+- The links in Online's heading: E (the Elite Discord), the Elite Mode channel, the stats, the ladder.
+- Hall of Fame: a skull crowned with laurel on its tab, purity seals as the orders.
